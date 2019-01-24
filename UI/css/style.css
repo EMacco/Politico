@@ -334,3 +334,38 @@ footer {
 	}
 
 }
+
+
+
+/* Sign In Page */
+
+#signin-body {
+	background: url("../img/signin-background-light.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	height: calc(100vh - 18px);
+}
+
+.signin-container {
+	width: 320px;
+	margin: auto;
+	
+}
+
+.login-box {
+	background: rgb(66, 121, 70);
+	align-items: center;
+	border-radius: 10px;
+	position: absolute;
+	top: 50%;
+	transform: translate(50%, -50%);
+}
+
+.login-box img {
+	width: 100px;
+	height: 100px;
+	position: relative;
+	top: -50px;
+}
+
