@@ -350,15 +350,19 @@ footer {
 .middle {
     display: table-cell;
     vertical-align: middle;
-    background: purple;
+	background-image: url('../img/signin-background.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	/* display: table; */
 }
 
 .inner {
     margin-left: auto;
     margin-right: auto;
     width: 90vw;
-    height: calc(80vh + 17px);
-    background: #fff;
+    height: calc(80vh);
+    background: rgba(255, 255, 255, 0.98);
     border-radius: 20px;		
 }
 
@@ -372,4 +376,101 @@ footer {
 .signin-header a {
     color: white;
     text-decoration: none;
+}
+
+.signin-footer {
+	background: transparent;
+}
+
+
+.form-attributes {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 400px;
+}
+
+.form-image-div {
+    display: none;
+}
+
+.signin-text-field {
+    width: 100%;
+    height: 100%;
+    font-size: 1.3em;
+    background: transparent;
+    border: none;
+    padding-left: 50px;
+    background: #ccc;
+    border-radius: 20px;
+}
+
+.input-with-icon {
+    margin: 0 auto;
+    height: 50px;
+    width: 80%;
+    margin-top: 10px;
+    display: flex;
+}
+
+.input-with-icon img {
+    width: 20px;
+    height: 20px;
+    margin: 15px 0 0 17px;
+    position: absolute;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+.signin-submit-btn {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    height: 50px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    background: rgb(66, 121, 70);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    margin-top: 40px;
+    display: block;
+}
+
+#reset-password-div {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.create-account-div {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    height: 40px;
+    margin-top: 20px;
+}
+
+.create-account-div img {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+	position: absolute;
+}
+
+.create-account-div a,
+#reset-password-div a  {
+    text-decoration: none;
+	color: rgb(66, 121, 70);
+	font-weight: 700;
+	font-size: 1.1em;
+}
+
+.login-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
