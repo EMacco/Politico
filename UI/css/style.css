@@ -549,3 +549,19 @@ header a {
 	}
 
 }
+
+
+
+/* User Home Page */
+#user-profile-container {
+	/* height: 100px; */
+	margin-top: 70px;
+}
+
+#user-home-main .container {
+	min-height: 85.5vh;
+}
+
+.signed-in-page {
+	/* background: #8ddcd9; */
+}
