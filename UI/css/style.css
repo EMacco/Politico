@@ -240,11 +240,10 @@ main .container {
 	border: 2px solid #ffffff;
 	background-color: transparent;
 	font-size: 1.2em;
-	height: 50px;
 	width: 150px;
 	color: #ffffff;
-	margin-top: 20px;
 	border-radius: 25px;
+	padding: 10px;
 }
 
 #index-register-btn:hover {
@@ -495,7 +494,7 @@ header a {
     .form-image-div img {
         width: 80%;
 		max-height: 80%;
-
+		margin-left: 50px;
 	}
 
     .login-form {
