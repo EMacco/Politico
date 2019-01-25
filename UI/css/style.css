@@ -381,12 +381,16 @@ footer {
 	background: transparent;
 }
 
-
-.form-attributes {
+.form-attributes, 
+.form-attributes-registration {
     width: 100%;
     margin: 0;
     padding: 0;
-    height: 400px;
+    height: 700px;
+}
+
+.form-attributes-registration {
+    height: 600px;
 }
 
 .form-image-div {
@@ -515,4 +519,33 @@ header a {
         width: 80%;
 		margin: 0 auto;
     }
+}
+
+/* Restyle fields for smaller screens iphone 5 and below */ 
+@media only screen and (max-height: 735px) {
+	.signin-submit-btn {
+		height: 40px;
+		margin-top: 10px;
+	}
+
+	.signin-text-field {
+		height: 40px;
+	}
+
+	.input-with-icon {
+		margin-top: 0;
+	}
+
+	.form-attributes-registration {
+		height: 450px;
+	}
+
+	.inner h1 {
+		margin-bottom: 20px;
+	}
+
+	.input-with-icon img {
+		margin: 10px 0 0 17px;
+	}
+
 }
