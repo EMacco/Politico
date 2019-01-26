@@ -635,7 +635,8 @@ label {
 
 .profile-page-section h3 {
 	margin-top: 50px;
-	text-align: center;
+	text-align: left;
+	margin-left: 20px;
 	text-shadow: 1px 1px 2px #ccc;
 	text-transform: uppercase;
 }
