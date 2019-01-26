@@ -15,12 +15,14 @@
 		
 		<input type="checkbox" class="nav-toggle" id="nav-toggle">
 		<nav>
-			<ul>
-				<li><a href="index.html">Political Parties</a></li>
-				<li><a href="about.html">Government Offices</a></li>
-				<li><a href="contact.html">Elections</a></li>
-				<li><a href="index.html">Log out</a></li>
-			</ul>
+            <div class="header-nav">
+                <ul>
+                    <li><a href="political-parties.html">Political Parties</a></li>
+                    <li><a href="government-offices.html">Government Offices</a></li>
+                    <li><a href="elections.html">Elections</a></li>
+                    <li><a href="index.html">Log out</a></li>
+                </ul>
+            </div>
 		</nav>
 
 		<label for="nav-toggle" class="nav-toggle-label">
@@ -29,10 +31,10 @@
 	</header>
 
 	<main id="user-home-main">
-        <div class="container" class="user-home-container">
+        <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="img/profile-image.JPG" />
+                    <img src="img/person-large.png" />
                 </div>
                 <div class="profile-description-text">
                     <label><span class="profile-answers">Emmanuel Okwara</span></label>
@@ -40,12 +42,25 @@
                     <label>Phone: <span class="profile-answers">08124185320</span></label>
                     <a href="resetPassword.html">Reset Password</a>
                 </div>
+                
+                <div class="nav-menu">
+                    <a href="political-parties.html">Political Parties</a>
+                </div>
+                <div class="nav-menu">
+                    <a href="government-offices.html">Government Offices</a>
+                </div>
+                <div class="nav-menu">
+                    <a href="elections.html">Elections</a>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html">Log out</a>
+                </div>
             </section>
     
-            <section>
+            <section id="user-home-content-div">
                 <div class="profile-page-section">
                     <h3>Interested Offices (1)</h3>
-                    <div>
+                    <div class="content-group">
                         <div class="individual-person-container">
                             <div>
                                 <img src="img/apc-logo.JPG" />
@@ -57,11 +72,12 @@
                                 <label><span class="pending-election">Pending</span></label>
                             </div>
                         </div>
+                        
                 </div>
 
                 <div class="profile-page-section">
                     <h3>My Votes (5)</h3>
-                    <div>
+                    <div class="content-group">
                         <div class="individual-person-container">
                             <div>
                                 <img src="img/apc-logo.JPG" />
@@ -135,7 +151,7 @@
             </section>
         </div>
 		
-		<footer>
+		<footer class="user-home-footer">
 			Politico Website Designed by Okwara Emmanuel &copy; 2019
 		</footer>
 	</main>
