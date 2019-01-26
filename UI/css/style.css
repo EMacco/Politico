@@ -561,7 +561,6 @@ header a {
 	background: rgba(141, 220, 217,0.3);
 	box-shadow: 1px 3px 3px #888888;
 	padding: 10px;
-	font-size: 1.3em;
 }
 
 #user-profile-container img {
@@ -578,7 +577,6 @@ header a {
 }
 
 .profile-description-text a {
-	text-decoration: none;
 	color: rgb(66, 121, 70);
 }
 
@@ -599,3 +597,42 @@ label {
 	background: rgba(141, 220, 217,0.3);
 }
 
+.pending-election {
+	color: rgb(218, 131, 19);
+	font-size: 1.5em;
+	text-transform: uppercase;
+}
+
+.won-election {
+	color: green;
+	font-size: 1.5em;
+	text-transform: uppercase;
+}
+
+.lost-election {
+	color: red;
+	text-transform: uppercase;
+	font-size: 1.5em;
+}
+
+.individual-person-container img {
+	width: 60px;
+	height: 60px;
+	border-radius: 50px;
+	border: 3px #fff solid;
+}
+
+.individual-person-container {
+	margin-top: 10px;
+	padding: 10px 0;
+	display: flex; 
+	align-items: center;
+	background: rgba(141, 220, 217,0.3);
+	box-shadow: 1px 3px 3px #888888;
+	padding: 10px;
+}
+
+.profile-page-section h3 {
+	margin-top: 50px;
+	text-align: center;
+}
