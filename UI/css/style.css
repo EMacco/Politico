@@ -3,6 +3,7 @@
 
 :root {
 	--background: rgba(66, 121, 70, 0.85);
+	--solid-background: rgb(66, 121, 70);
 }
 
 *, *::before, *::after {
@@ -291,7 +292,7 @@ hr {
 }
 
 footer {
-	background: rgb(66, 121, 70);
+	background: var(--solid-background);
 	text-align: center;
 	width: 100%;
 	padding: 10px;
@@ -435,7 +436,7 @@ header a {
     height: 50px;
     font-size: 1.2em;
     text-transform: uppercase;
-    background: rgb(66, 121, 70);
+    background: var(--solid-background);
     color: white;
     border: none;
     border-radius: 20px;
@@ -466,7 +467,7 @@ header a {
 .create-account-div a,
 #reset-password-div a  {
     text-decoration: none;
-	color: rgb(66, 121, 70);
+	color: var(--solid-background);
 	font-weight: 700;
 	font-size: 1.1em;
 }
@@ -577,7 +578,7 @@ header a {
 }
 
 .profile-description-text a {
-	color: rgb(66, 121, 70);
+	color: var(--solid-background);
 }
 
 label {
@@ -639,7 +640,9 @@ label {
 	text-transform: uppercase;
 }
 
-.nav-menu {
+.nav-menu, 
+.separate-profile-nav, 
+.header-nav-big-screen {
 	display: none;
 }
 
@@ -715,12 +718,33 @@ label {
 		text-transform: uppercase;
 		font-size: 1.1em;
 		padding: 10px 0;
-		border-bottom: 1px solid var(--background);
 		
 	}
 
-	.nav-menu a {
+	#user-profile-container a {
 		text-decoration: none;
 		width: 100%;
+		color: var(--solid-background);
+		font-weight: 700;
+	}
+
+	#user-profile-container a:hover,
+	.nav-menu:hover {
+		color: #323b3b;
+		text-shadow: 1px 1px 2px #bfe0df;
+		border-top: 1px solid #323b3b;
+		border-bottom: 1px solid #323b3b;
+		text-align: center;
+	}
+
+	.separate-profile-nav {
+		display: block;
+		border-color: var(--background);
+	}
+
+	.header-nav-big-screen {
+		display: block;
+		font-size: 1.3em;
+		color: #fff;
 	}
 }
