@@ -649,6 +649,7 @@ label {
 
 /* Change layout of login page in larger screens */
 @media only screen and (min-width: 768px) {
+	
 	#user-home-main .container {
 		max-width: 100%;
 		width: 100%;
@@ -730,12 +731,18 @@ label {
 	}
 
 	#user-profile-container a:hover,
-	.nav-menu:hover {
+	.nav-menu:hover, 
+	#current-side-bar {
 		color: #323b3b;
 		text-shadow: 1px 1px 2px #bfe0df;
 		border-top: 1px solid #323b3b;
 		border-bottom: 1px solid #323b3b;
 		text-align: center;
+	}
+
+	#current-side-bar {
+		background: var(--background);
+		color: #fff;
 	}
 
 	.separate-profile-nav {
