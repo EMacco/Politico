@@ -621,6 +621,12 @@ label {
 	font-size: 1.5em;
 }
 
+.ongoing-election {
+	color: blue;
+	text-transform: uppercase;
+	font-size: 1.3em;
+}
+
 .individual-person-container img {
 	width: 60px;
 	height: 60px;
