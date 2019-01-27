@@ -568,7 +568,8 @@ header a {
 	padding: 10px;
 }
 
-#user-profile-container img {
+#user-profile-container img,
+.input-profile img {
 	width: 100px;
 	height: 100px;
 	border-radius: 50px;
@@ -793,3 +794,24 @@ label {
 	max-width: 400px;
 }
 
+.input-profile {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.input-profile img {
+	margin: 0 auto;
+}
+
+.select-btn {
+	margin: 10px 0;
+}
+
+@media only screen and (min-width: 768px) {
+	.input-profile {
+		text-align: center;
+		margin-top: 20px;
+		display: flex;
+		align-items: center;
+	}
+}
