@@ -7,7 +7,7 @@
     <meta name="description" content="Simple website for elections">
     <meta name="keywords" content="voting, election, politician, politics">
     <meta name="author" content="Okwara Emmanuel">
-    <title>POLITICO | Create Office</title>
+    <title>POLITICO | Schedule Election</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 
@@ -68,13 +68,13 @@
                         New Political Party
                     </div>
                 </a>
-                <a href="new-government-office.html" id="current-side-bar">
-                    <div class="nav-menu" id="current-side-bar">
+                <a href="new-government-office.html">
+                    <div class="nav-menu">
                         New Government Office
                     </div>
                 </a>
-                <a href="new-elections.html">
-                    <div class="nav-menu">
+                <a href="new-elections.html" id="current-side-bar">
+                    <div class="nav-menu" id="current-side-bar">
                         Schedule Election
                     </div>
                 </a>
@@ -88,22 +88,20 @@
             <section id="user-home-content-div">
                 <div class="profile-page-section">
                     <div class="content-group-create">
-                        <h3>Create Government Office</h3>
+                        <h3>Schedule Election</h3>
                         <form>
                             <div class="input-with-icon-create">
-                                <img src="../img/office-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Office name..." />
+                                <select class="dropdown-btn">
+                                    <option>Member Kogi State House Of Assemblies</option>
+                                    <option>New Direction Blueprint Team</option>
+                                    <option>House of Representatives</option>
+                                </select>
                             </div>
                             <div class="input-with-icon-create">
                                 <img src="../img/calendar-icon2.png">
                                 <input type="date" class="signin-text-field" />
                             </div>
-                            <div class="input-profile">
-                                <img src="../img/person-large.png">
-                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" />
-                            </div>
-
-                            <input type="submit" value="Create Office" class="signin-submit-btn" />
+                            <input type="submit" value="Create Schedule" class="signin-submit-btn" />
                         </form>
                     </div>
                 </div>

@@ -750,7 +750,7 @@ label {
 	.nav-menu:hover, 
 	#current-side-bar {
 		color: #323b3b;
-		text-shadow: 1px 1px 2px #bfe0df;
+		text-shadow: 1px 1px 2px #829493;
 		border-top: 1px solid #323b3b;
 		border-bottom: 1px solid #323b3b;
 		text-align: center;
@@ -836,6 +836,19 @@ label {
 		margin: 0 auto;
 		margin-top: 20px;
 	}
+}
 
-
+/* Schedule Election */
+.dropdown-btn {
+	width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    height: 50px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    background: rgba(66, 121, 70, 0.3);
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    display: block;
 }
