@@ -409,7 +409,8 @@ footer {
     border-radius: 20px;
 }
 
-.input-with-icon {
+.input-with-icon,
+.input-with-icon-create {
     margin: 0 auto;
     height: 50px;
     width: 80%;
@@ -417,7 +418,8 @@ footer {
     display: flex;
 }
 
-.input-with-icon img {
+.input-with-icon img,
+.input-with-icon-create img {
     width: 20px;
     height: 20px;
     margin: 15px 0 0 17px;
@@ -533,7 +535,8 @@ header a {
 		height: 40px;
 	}
 
-	.input-with-icon {
+	.input-with-icon,
+	.input-with-icon-create {
 		margin-top: 0;
 	}
 
@@ -545,7 +548,8 @@ header a {
 		margin-bottom: 20px;
 	}
 
-	.input-with-icon img {
+	.input-with-icon img,
+	.input-with-icon-create img {
 		margin: 10px 0 0 17px;
 	}
 
@@ -564,7 +568,8 @@ header a {
 	padding: 10px;
 }
 
-#user-profile-container img {
+#user-profile-container img,
+.input-profile img {
 	width: 100px;
 	height: 100px;
 	border-radius: 50px;
@@ -781,4 +786,45 @@ label {
 	font-size: 0.9em;
 	margin: 3px 0;
 	padding: 0px 5px;
+}
+
+
+/* Create Political Page */
+.content-group-create {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.content-group-create h3 {
+	padding-top: 20px;
+	text-align: center;
+}
+
+.input-profile {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.input-profile img {
+	margin: 0 auto;
+}
+
+.select-btn {
+	margin: 10px 0;
+}
+
+.input-with-icon-create input {
+	background: rgba(66, 121, 70, 0.3);
+}
+
+@media only screen and (min-width: 768px) {
+	.input-profile {
+		display: flex;
+		align-items: center;
+		max-width: 400px;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+
+
 }
