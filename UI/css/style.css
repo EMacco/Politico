@@ -35,6 +35,10 @@ main {
 	width: 90%;
 }
 
+#aboutUs {
+	padding-top: 30px;
+}
+
 /*	Navigation Bar styling	*/
 .index-header {
 	background: var(--background);
