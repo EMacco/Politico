@@ -774,3 +774,11 @@ label {
 	color: red;
 	box-shadow: none;
 }
+
+
+/* Admin Dashboard index */
+.dashboard-fields {
+	font-size: 0.9em;
+	margin: 3px 0;
+	padding: 0px 5px;
+}
