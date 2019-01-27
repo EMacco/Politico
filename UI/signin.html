@@ -6,6 +6,7 @@
 	<meta name="description" content="Simple website for elections">
 	<meta name="keywords" content="voting, election, politician, politics">
 	<meta name="author" content="Okwara Emmanuel">
+	<script src="js/script.js"></script>
 	<title>POLITICO | Signin Page</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -37,7 +38,7 @@
 								<input type="password" class="signin-text-field" placeholder="Password" />
 							</div>
 
-							<input type="submit" value="Login" class="signin-submit-btn" />
+							<input type="button" value="Login" class="signin-submit-btn" onclick="loginUser()" />
 							
 							<div id="reset-password-div">
 								<a href="resetPassword.html">Did you forget password?<a>
