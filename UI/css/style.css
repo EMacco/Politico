@@ -409,7 +409,8 @@ footer {
     border-radius: 20px;
 }
 
-.input-with-icon {
+.input-with-icon,
+.input-with-icon-create {
     margin: 0 auto;
     height: 50px;
     width: 80%;
@@ -417,7 +418,8 @@ footer {
     display: flex;
 }
 
-.input-with-icon img {
+.input-with-icon img,
+.input-with-icon-create img {
     width: 20px;
     height: 20px;
     margin: 15px 0 0 17px;
@@ -533,7 +535,8 @@ header a {
 		height: 40px;
 	}
 
-	.input-with-icon {
+	.input-with-icon,
+	.input-with-icon-create {
 		margin-top: 0;
 	}
 
@@ -545,7 +548,8 @@ header a {
 		margin-bottom: 20px;
 	}
 
-	.input-with-icon img {
+	.input-with-icon img,
+	.input-with-icon-create img {
 		margin: 10px 0 0 17px;
 	}
 
@@ -782,3 +786,10 @@ label {
 	margin: 3px 0;
 	padding: 0px 5px;
 }
+
+
+/* Create Political Page */
+.content-group-create {
+	max-width: 400px;
+}
+
