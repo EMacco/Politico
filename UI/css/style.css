@@ -836,6 +836,19 @@ label {
 		margin: 0 auto;
 		margin-top: 20px;
 	}
+}
 
-
+/* Schedule Election */
+.dropdown-btn {
+	width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    height: 50px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    background: rgba(66, 121, 70, 0.3);
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    display: block;
 }
