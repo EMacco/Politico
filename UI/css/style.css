@@ -791,7 +791,13 @@ label {
 
 /* Create Political Page */
 .content-group-create {
-	max-width: 400px;
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.content-group-create h3 {
+	padding-top: 20px;
+	text-align: center;
 }
 
 .input-profile {
@@ -807,11 +813,18 @@ label {
 	margin: 10px 0;
 }
 
+.input-with-icon-create input {
+	background: rgba(66, 121, 70, 0.3);
+}
+
 @media only screen and (min-width: 768px) {
 	.input-profile {
-		text-align: center;
-		margin-top: 20px;
 		display: flex;
 		align-items: center;
+		max-width: 400px;
+		margin: 0 auto;
+		margin-top: 20px;
 	}
+
+
 }
