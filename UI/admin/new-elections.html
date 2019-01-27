@@ -23,7 +23,7 @@
                     <li><a href="user-home.html">My Dashboard</a></li>
                     <li><a href="new-political-party.html">New Political Party</a></li>
                     <li><a href="new-government-office.html">New Government Office</a></li>
-                    <li><a href="set-election.html">Schedule Election</a></li>
+                    <li><a href="new-elections.html">Schedule Election</a></li>
                     <li><a href="index.html">Log out</a></li>
                 </ul>
             </div>
@@ -87,7 +87,30 @@
 
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    
+                    <div class="content-group-create">
+                        <h3>Schedule Election</h3>
+                        <form>
+                            <div class="input-with-icon-create">
+                                <img src="../img/office-icon.png">
+                                <select>
+                                    <option>Member Kogi State House Of Assemblies</option>
+                                    <option>New Direction Blueprint Team</option>
+                                    <option>House of Representatives</option>
+                                </select>
+                                <input type="text" class="signin-text-field" placeholder="Office name..." />
+                            </div>
+                            <div class="input-with-icon-create">
+                                <img src="../img/calendar-icon2.png">
+                                <input type="date" class="signin-text-field" />
+                            </div>
+                            <div class="input-profile">
+                                <img src="../img/person-large.png">
+                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" />
+                            </div>
+
+                            <input type="submit" value="Create Office" class="signin-submit-btn" />
+                        </form>
+                    </div>
                 </div>
             </section>
         </div>
