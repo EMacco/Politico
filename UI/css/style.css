@@ -758,11 +758,19 @@ label {
 }
 
 /* Political Party Page */
-.add-party-btn {
+.add-party-btn,
+.remove-party-btn {
 	border: 0;
 	color: #fff;
 	background: rgb(66, 121, 70);
 	border-radius: 5px;
 	padding: 5px;
 	box-shadow: 1px 1px 2px rgb(37, 37, 37);
+}
+
+.remove-party-btn {
+	border: 1px solid red;
+	background: #fff;
+	color: red;
+	box-shadow: none;
 }
