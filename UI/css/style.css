@@ -709,10 +709,9 @@ label {
 	}
 
 	.individual-person-container {
-		width: 100%;
+		width: 48%;
 		margin: 5px;
 		overflow: hidden;
-		max-width: 400px;
 		min-width: 300px;
 	}
 
@@ -720,6 +719,11 @@ label {
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 50px;
+		justify-content: space-evenly;
+	}
+
+	.hidden-div {
+		visibility: hidden;
 	}
 
 	.user-home-footer {
