@@ -787,6 +787,16 @@ label {
 	}
 }
 
+@media only screen and (max-width: 870px) {
+	/* Stretch the card in case there is only column */
+	.individual-person-container {	
+		width: 100%;
+		margin: 5px;
+		overflow: hidden;
+		min-width: 300px;
+	}
+}
+
 /* Political Party Page */
 .add-party-btn,
 .remove-party-btn {
