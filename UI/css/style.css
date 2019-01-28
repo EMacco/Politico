@@ -39,6 +39,12 @@ main {
 	padding-top: 30px;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	display: none;
+	margin: 0;
+}
+
 /*	Navigation Bar styling	*/
 .index-header {
 	background: var(--background);
