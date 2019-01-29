@@ -673,6 +673,10 @@ label {
 	display: none;
 }
 
+.hidden-div {
+	visibility: hidden;
+}
+
 /* Change layout of login page in larger screens */
 @media only screen and (min-width: 768px) {
 	
@@ -720,10 +724,6 @@ label {
 		flex-wrap: wrap;
 		margin-bottom: 50px;
 		justify-content: space-evenly;
-	}
-
-	.hidden-div {
-		visibility: hidden;
 	}
 
 	.user-home-footer {
