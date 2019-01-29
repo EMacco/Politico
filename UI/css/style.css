@@ -588,8 +588,10 @@ header a {
 
 
 .profile-description-text {
-	line-height: 20px;
+	line-height: 25px;
 	margin-left: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	letter-spacing: 0.5px
 }
 
 .profile-description-text a {
