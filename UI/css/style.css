@@ -425,7 +425,7 @@ footer {
     height: 50px;
     width: 80%;
     margin-top: 10px;
-    display: flex;
+	display: flex;
 }
 
 .input-with-icon img,
@@ -548,6 +548,7 @@ header a {
 	.input-with-icon,
 	.input-with-icon-create {
 		margin-top: 0;
+		margin-bottom: 10px;
 	}
 
 	.form-attributes-registration {
@@ -833,7 +834,7 @@ label {
 }
 
 .content-group-create h3 {
-	padding-top: 20px;
+	padding-top:40px;
 	text-align: center;
 }
 
