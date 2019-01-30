@@ -28,5 +28,14 @@
   },
   "dependencies": {
     "express": "^4.16.4"
+  },
+  "nodemonConfig": {
+    "name": "nodemon",
+    "homepage": "http://nodemon.io",
+    "...": "... other standard package.json values",
+    "nodemonConfig": {
+      "ignore": ["test/*", "docs/*"],
+      "delay": "2500"
+    }
   }
 }
