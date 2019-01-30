@@ -1,0 +1,55 @@
+{
+  "name": "Politico",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=* nodemon --exec babel-node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EMacco/Politico.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EMacco/Politico/issues"
+  },
+  "homepage": "https://github.com/EMacco/Politico#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "debug": "^4.1.1",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9",
+    "prettier": "^1.16.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "nodemonConfig": {
+    "name": "nodemon",
+    "homepage": "http://nodemon.io",
+    "...": "... other standard package.json values",
+    "nodemonConfig": {
+      "ignore": [
+        "test/*",
+        "docs/*"
+      ],
+      "delay": "2500"
+    }
+  }
+}
