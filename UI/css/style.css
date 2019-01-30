@@ -39,6 +39,12 @@ main {
 	padding-top: 30px;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	display: none;
+	margin: 0;
+}
+
 /*	Navigation Bar styling	*/
 .index-header {
 	background: var(--background);
@@ -419,7 +425,7 @@ footer {
     height: 50px;
     width: 80%;
     margin-top: 10px;
-    display: flex;
+	display: flex;
 }
 
 .input-with-icon img,
@@ -542,6 +548,7 @@ header a {
 	.input-with-icon,
 	.input-with-icon-create {
 		margin-top: 0;
+		margin-bottom: 10px;
 	}
 
 	.form-attributes-registration {
@@ -582,8 +589,10 @@ header a {
 
 
 .profile-description-text {
-	line-height: 20px;
+	line-height: 25px;
 	margin-left: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	letter-spacing: 0.5px
 }
 
 .profile-description-text a {
@@ -667,6 +676,10 @@ label {
 	display: none;
 }
 
+.hidden-div {
+	visibility: hidden;
+}
+
 /* Change layout of login page in larger screens */
 @media only screen and (min-width: 768px) {
 	
@@ -703,10 +716,9 @@ label {
 	}
 
 	.individual-person-container {
-		width: 100%;
+		width: 48%;
 		margin: 5px;
 		overflow: hidden;
-		max-width: 400px;
 		min-width: 300px;
 	}
 
@@ -714,6 +726,7 @@ label {
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 50px;
+		justify-content: space-evenly;
 	}
 
 	.user-home-footer {
@@ -777,6 +790,16 @@ label {
 	}
 }
 
+@media only screen and (max-width: 870px) {
+	/* Stretch the card in case there is only column */
+	.individual-person-container {	
+		width: 100%;
+		margin: 5px;
+		overflow: hidden;
+		min-width: 300px;
+	}
+}
+
 /* Political Party Page */
 .add-party-btn,
 .remove-party-btn {
@@ -811,7 +834,7 @@ label {
 }
 
 .content-group-create h3 {
-	padding-top: 20px;
+	padding-top:40px;
 	text-align: center;
 }
 

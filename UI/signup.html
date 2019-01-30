@@ -6,7 +6,6 @@
 	<meta name="description" content="Simple website for elections">
 	<meta name="keywords" content="voting, election, politician, politics">
     <meta name="author" content="Okwara Emmanuel">
-    <script src="js/script.js"></script>
 	<title>POLITICO | Signup Page</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -26,32 +25,32 @@
                 <div class="login-form">
                     <div class="form-attributes-registration">
                         <center><h1>Create Account</h1></center>
-                        <form>
+                        <form action="user-home.html">
                             <div class="input-with-icon">
                                 <img src="img/person-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="First Name" />
+                                <input type="text" class="signin-text-field" placeholder="First Name" required />
                             </div>
                             
                             <div class="input-with-icon">
                                 <img src="img/person-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Last Name" />
+                                <input type="text" class="signin-text-field" placeholder="Last Name" required />
                             </div>
 
                             <div class="input-with-icon">
                                 <img src="img/phone-icon.png">
-                                <input type="tel" class="signin-text-field" placeholder="Phone Number" />
+                                <input type="number" class="signin-text-field" placeholder="Phone Number" required />
                             </div>
 
                             <div class="input-with-icon">
                                 <img src="img/email-icon.png">
-                                <input type="email" class="signin-text-field" placeholder="Email" />
+                                <input type="email" class="signin-text-field" placeholder="Email" required />
                             </div>
                             <div class="input-with-icon">
                                 <img src="img/password-icon.png">
-                                <input type="password" class="signin-text-field" placeholder="Password" />
+                                <input type="password" class="signin-text-field" placeholder="Password" required />
                             </div>
 
-                            <input type="button" value="Join Us" class="signin-submit-btn" onclick="loginUser()" />
+                            <input type="submit" value="Join Us" class="signin-submit-btn" />
 
                             <div class="create-account-div" >
                                 <a href="signin.html">Already have an account?<a>
