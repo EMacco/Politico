@@ -27,6 +27,7 @@
     "nodemon": "^1.18.9"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4"
   },
   "nodemonConfig": {
@@ -34,7 +35,10 @@
     "homepage": "http://nodemon.io",
     "...": "... other standard package.json values",
     "nodemonConfig": {
-      "ignore": ["test/*", "docs/*"],
+      "ignore": [
+        "test/*",
+        "docs/*"
+      ],
       "delay": "2500"
     }
   }
