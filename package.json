@@ -23,6 +23,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.18.9"
   },
   "dependencies": {
