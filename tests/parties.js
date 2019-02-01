@@ -99,4 +99,30 @@ describe('Political Parties', () => {
         });
     });
   });
+
+  describe('DELETE /', () => {
+    // Test should delete party since id exist
+    it('should delete political party', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/parties/${1}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not delete a party since it does not exist
+    it('should not delete political party', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/parties/${5334}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
