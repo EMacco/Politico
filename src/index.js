@@ -4,9 +4,9 @@ import bodyparser from 'body-parser';
 import debug from 'debug';
 
 // Import my routers
-import partiesRoutes from './src/routes/parties';
-import officesRoutes from './src/routes/offices';
-import usersRoutes from './src/routes/users';
+import partiesRoutes from './routes/parties';
+import officesRoutes from './routes/offices';
+import usersRoutes from './routes/users';
 
 // Instantiate express Module
 const app = express();
