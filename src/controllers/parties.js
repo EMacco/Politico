@@ -51,6 +51,31 @@ class PartiesController {
     // Return deleted value
     return res.status(200).json({ status: 200, data: [partyFound] });
   }
+
+  static editParticularPoliticalParty(req, res) {
+    // Check if the party exists
+    const partyFound = politicalParties.find(party => party.id === parseInt(req.params.id, 10));
+
+    if (!partyFound) return res.status(404).json({ status: 404, error: 'Party does not exist' });
+
+    // Validate the name
+    const schema = {
+      name: Joi.string()
+        .min(10)
+        .required()
+    };
+    const { error } = Joi.validate({ name: req.params.name }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Find the index of the party in the array
+    const partiesIndexes = politicalParties.map(party => party.id);
+    const updateIndex = partiesIndexes.indexOf(parseInt(req.params.id, 10));
+
+    //   Update data in database
+    politicalParties[updateIndex].name = req.params.name;
+
+    return res.status(200).json({ status: 200, data: [politicalParties[updateIndex]] });
+  }
 }
 
 export default PartiesController;
