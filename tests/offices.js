@@ -44,4 +44,59 @@ describe('Political Offices', () => {
         });
     });
   });
+
+  describe('POST /', () => {
+    // Test should create an office since all fields are complete
+    it('should create political office', done => {
+      const office = {
+        name: 'Office of the President',
+        type: 'federal',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/offices')
+        .send(office)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not create an office without required field
+    it('should not create political office', done => {
+      const office = {
+        type: 'Federal',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/offices')
+        .send(office)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not create an office because it has invalid type office
+    it('should not create political office', done => {
+      const office = {
+        name: 'President',
+        type: 'fake type',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/offices')
+        .send(office)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
