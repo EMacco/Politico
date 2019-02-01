@@ -99,4 +99,30 @@ describe('Political Offices', () => {
         });
     });
   });
+
+  describe('DELETE /', () => {
+    // Test should delete office since id exist
+    it('should delete political office', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/offices/${1}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not delete an office since it does not exist
+    it('should not delete political office', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/offices/${5334}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
