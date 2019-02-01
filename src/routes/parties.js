@@ -12,4 +12,7 @@ routes.get('/:id', PartiesController.getSingleParty);
 // Create political party
 routes.post('/', PartiesController.createPoliticalParty);
 
+// Delete a particular party
+routes.delete('/:id', PartiesController.deletePoliticalParty);
+
 export default routes;
