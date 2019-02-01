@@ -37,6 +37,20 @@ class PartiesController {
 
     return res.status(201).json({ status: 201, data: [newParty] });
   }
+
+  static deletePoliticalParty(req, res) {
+    // Check if the party exists
+    const partyFound = politicalParties.find(party => party.id === parseInt(req.params.id, 10));
+
+    if (!partyFound) return res.status(404).json({ status: 404, error: 'Party does not exist' });
+
+    // Delete the party
+    const index = politicalParties.indexOf(partyFound);
+    politicalParties.splice(index, 1);
+
+    // Return deleted value
+    return res.status(200).json({ status: 200, data: [partyFound] });
+  }
 }
 
 export default PartiesController;
