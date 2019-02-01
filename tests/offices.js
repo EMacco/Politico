@@ -19,5 +19,17 @@ describe('Political Offices', () => {
           done();
         });
     });
+
+    // Test should return a particular office
+    it('should get a particular political office', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/offices/${1}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
   });
 });
