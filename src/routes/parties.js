@@ -9,4 +9,7 @@ routes.get('/', PartiesController.getAllParties);
 // Get a specific political party
 routes.get('/:id', PartiesController.getSingleParty);
 
+// Create political party
+routes.post('/', PartiesController.createPoliticalParty);
+
 export default routes;
