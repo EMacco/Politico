@@ -31,5 +31,17 @@ describe('Political Offices', () => {
           done();
         });
     });
+
+    // Test should return status code 404
+    it('should return status 404 office does not exist', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/offices/${432}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
   });
 });
