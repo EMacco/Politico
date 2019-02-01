@@ -18,6 +18,25 @@ class PartiesController {
     // The party exists return party details
     return res.status(200).json({ status: 200, data: [foundParty] });
   }
+
+  static createPoliticalParty(req, res) {
+    // Validate user input
+    const { error } = validateParty(req.body);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // The data is valid create it and return
+    const newParty = {
+      id: politicalParties.length + 1,
+      name: req.body.name,
+      hqAddress: req.body.hqAddress,
+      logoUrl: req.body.logoUrl
+    };
+
+    //   Insert the new office in the array
+    politicalParties.push(newParty);
+
+    return res.status(201).json({ status: 201, data: [newParty] });
+  }
 }
 
 export default PartiesController;
