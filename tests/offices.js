@@ -125,4 +125,42 @@ describe('Political Offices', () => {
         });
     });
   });
+
+  describe('PATCH /', () => {
+    // Test should not update an office since id does not exist
+    it('should not update political office', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/offices/${5334}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not update an office since name is too short
+    it('should not update political office since name is short', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/offices/${2}/emma`)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should update office since name and id exist
+    it('should update political office id exist and name is long enough', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/offices/${2}/${'This is a changed name'}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
