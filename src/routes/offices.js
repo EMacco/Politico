@@ -14,4 +14,7 @@ routes.post('/', OfficesController.createPoliticalOffice);
 // Delete a particular office
 routes.delete('/:id', OfficesController.deletePoliticalOffice);
 
+// Edit particular political office
+routes.patch('/:id/:name', OfficesController.editParticularPoliticalOffice);
+
 export default routes;
