@@ -7,7 +7,6 @@ module.exports = {
       name: Joi.string()
         .min(10)
         .required()
-        .allow('')
         .trim()
         .strict(),
       type: Joi.string()
@@ -23,13 +22,11 @@ module.exports = {
       name: Joi.string()
         .min(10)
         .required()
-        .allow('')
         .trim()
         .strict(),
       hqAddress: Joi.string()
         .min(10)
         .required()
-        .allow('')
         .trim()
         .strict(),
       logoUrl: Joi.string().required()

@@ -63,7 +63,6 @@ class OfficesController {
       name: Joi.string()
         .min(10)
         .required()
-        .allow('')
         .trim()
         .strict()
     };
