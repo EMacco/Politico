@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import politicalOffices from '../models/offices';
+import { validateOffice } from './validationFunctions';
 
 class OfficesController {
   // Get all offices
@@ -19,6 +20,13 @@ class OfficesController {
   }
 
   static createPoliticalOffice(req, res) {
+    // Check if the data already exists
+    const foundOffice = politicalOffices.find(
+      office => office.name === req.body.name && office.type === req.body.type
+    );
+    if (foundOffice)
+      return res.status(409).json({ status: 409, error: 'This political office already exists' });
+
     // Validate user input
     const { error } = validateOffice(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
@@ -62,6 +70,8 @@ class OfficesController {
       name: Joi.string()
         .min(10)
         .required()
+        .trim()
+        .strict()
     };
     const { error } = Joi.validate({ name: req.params.name }, schema);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });

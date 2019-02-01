@@ -6,11 +6,16 @@ module.exports = {
     const schema = {
       name: Joi.string()
         .min(10)
-        .required(),
+        .required()
+        .trim()
+        .strict(),
       type: Joi.string()
         .valid('federal', 'legislative', 'state', 'local')
         .required(),
-      logoUrl: Joi.string().required()
+      logoUrl: Joi.string()
+        .uri()
+        .trim()
+        .required()
     };
     return Joi.validate(office, schema);
   },
@@ -19,11 +24,18 @@ module.exports = {
     const schema = {
       name: Joi.string()
         .min(10)
-        .required(),
+        .required()
+        .trim()
+        .strict(),
       hqAddress: Joi.string()
         .min(10)
-        .required(),
-      logoUrl: Joi.string().required()
+        .required()
+        .trim()
+        .strict(),
+      logoUrl: Joi.string()
+        .uri()
+        .trim()
+        .required()
     };
 
     return Joi.validate(party, schema);
