@@ -125,4 +125,42 @@ describe('Political Parties', () => {
         });
     });
   });
+
+  describe('PATCH /', () => {
+    // Test should not update a party since id does not exist
+    it('should not update political party', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/parties/${5334}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not update a party since name is too short
+    it('should not update political party since name is short', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/parties/${2}/emma`)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should update party since name and id exist
+    it('should update political party id exist and name is long enough', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/parties/${2}/${'This is a changed name'}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
