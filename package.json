@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register ./tests/*.js --exit",
-    "start": "DEBUG=* nodemon --exec babel-node index.js",
+    "start": "node ./dist",
+    "build": "npm run clean && babel src -d dist",
+    "clean": "rm -rf dist",
+    "heroku-postbuild": "npm run build",
+    "dev": "DEBUG=* nodemon --exec babel-node ./src/index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
