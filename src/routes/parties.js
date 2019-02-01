@@ -15,4 +15,7 @@ routes.post('/', PartiesController.createPoliticalParty);
 // Delete a particular party
 routes.delete('/:id', PartiesController.deletePoliticalParty);
 
+// Edit particular political party
+routes.patch('/:id/:name', PartiesController.editParticularPoliticalParty);
+
 export default routes;
