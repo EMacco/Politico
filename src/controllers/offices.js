@@ -17,6 +17,25 @@ class OfficesController {
     // The office exists retrun to the user
     return res.status(200).json({ status: 200, data: [foundOffice] });
   }
+
+  static createPoliticalOffice(req, res) {
+    // Validate user input
+    const { error } = validateOffice(req.body);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // The data is valid create it and return
+    const newOffice = {
+      id: politicalOffices.length + 1,
+      name: req.body.name,
+      type: req.body.type,
+      logoUrl: req.body.logoUrl
+    };
+
+    //   Insert the new office in the array
+    politicalOffices.push(newOffice);
+
+    return res.status(201).json({ status: 201, data: [newOffice] });
+  }
 }
 
 export default OfficesController;
