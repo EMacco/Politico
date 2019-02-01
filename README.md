@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/EMacco/Politico.svg?branch=develop)](https://travis-ci.org/EMacco/Politico) [![Coverage Status](https://coveralls.io/repos/github/EMacco/Politico/badge.svg?branch=develop)](https://coveralls.io/github/EMacco/Politico?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d89fa1a26a068eec43e3/maintainability)](https://codeclimate.com/github/EMacco/Politico/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d89fa1a26a068eec43e3/test_coverage)](https://codeclimate.com/github/EMacco/Politico/test_coverage)
 
 # Politico
 
@@ -16,6 +18,12 @@ You can also:
   - Vote for contestants
 
 We are in the 21st century and it is only logically for us to follow the latest trent of technology. No more standing in queues, while putting your safety at risk of thugs.
+
+### Pivotal Tracker
+https://www.pivotaltracker.com/n/projects/2239544
+
+### Template
+https://emacco.github.io/Politico/UI/index.html
 
 ### Tech
 
@@ -60,4 +68,6 @@ License
 ----
 
 Emmanuel Okwara
+
+
 
