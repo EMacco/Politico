@@ -36,6 +36,20 @@ class OfficesController {
 
     return res.status(201).json({ status: 201, data: [newOffice] });
   }
+
+  static deletePoliticalOffice(req, res) {
+    // Check if the office exists
+    const officeFound = politicalOffices.find(office => office.id === parseInt(req.params.id, 10));
+
+    if (!officeFound) return res.status(404).json({ status: 404, error: 'Office does not exist' });
+
+    // Delete the office
+    const index = politicalOffices.indexOf(officeFound);
+    politicalOffices.splice(index, 1);
+
+    // Return deleted value
+    return res.status(200).json({ status: 200, data: [officeFound] });
+  }
 }
 
 export default OfficesController;
