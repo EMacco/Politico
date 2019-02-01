@@ -6,7 +6,10 @@ module.exports = {
     const schema = {
       name: Joi.string()
         .min(10)
-        .required(),
+        .required()
+        .allow('')
+        .trim()
+        .strict(),
       type: Joi.string()
         .valid('federal', 'legislative', 'state', 'local')
         .required(),
@@ -19,10 +22,16 @@ module.exports = {
     const schema = {
       name: Joi.string()
         .min(10)
-        .required(),
+        .required()
+        .allow('')
+        .trim()
+        .strict(),
       hqAddress: Joi.string()
         .min(10)
-        .required(),
+        .required()
+        .allow('')
+        .trim()
+        .strict(),
       logoUrl: Joi.string().required()
     };
 
