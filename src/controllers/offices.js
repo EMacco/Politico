@@ -50,6 +50,31 @@ class OfficesController {
     // Return deleted value
     return res.status(200).json({ status: 200, data: [officeFound] });
   }
+
+  static editParticularPoliticalOffice(req, res) {
+    // Check if the office exists
+    const officeFound = politicalOffices.find(office => office.id === parseInt(req.params.id, 10));
+
+    if (!officeFound) return res.status(404).json({ status: 404, error: 'Office does not exist' });
+
+    // Validate the name
+    const schema = {
+      name: Joi.string()
+        .min(10)
+        .required()
+    };
+    const { error } = Joi.validate({ name: req.params.name }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Find the index of the office in the array
+    const officesIndexes = politicalOffices.map(office => office.id);
+    const updateIndex = officesIndexes.indexOf(parseInt(req.params.id, 10));
+
+    //   Update data in database
+    politicalOffices[updateIndex].name = req.params.name;
+
+    return res.status(200).json({ status: 200, data: [politicalOffices[updateIndex]] });
+  }
 }
 
 export default OfficesController;
