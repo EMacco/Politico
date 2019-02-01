@@ -1,0 +1,102 @@
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import app from '../index';
+
+// Configure chai
+chai.use(chaiHttp);
+chai.should();
+
+describe('Political Parties', () => {
+  describe('GET /', () => {
+    // Test should return a list of all political parties
+    it('should get all political party', done => {
+      chai
+        .request(app)
+        .get('/api/v1/parties')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return a particular political party
+    it('should get a particular political party', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/parties/${1}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return status code 404
+    it('should return status 404 party does not exist', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/parties/${432}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('POST /', () => {
+    // Test should not create a party since hq address is short
+    it('should create political party', done => {
+      const party = {
+        name: 'All Progressive Congress',
+        hqAddress: 'Abuja',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/parties')
+        .send(party)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should create a party since all fields are complete
+    it('should create political party', done => {
+      const party = {
+        name: 'All Progressive Congress',
+        hqAddress: 'Garki Abuja, Nigeria',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/parties')
+        .send(party)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not create a party without required field
+    it('should not create political party', done => {
+      const party = {
+        hqAddress: 'Lagos',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/parties')
+        .send(party)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+});
