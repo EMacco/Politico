@@ -12,7 +12,10 @@ module.exports = {
       type: Joi.string()
         .valid('federal', 'legislative', 'state', 'local')
         .required(),
-      logoUrl: Joi.string().required()
+      logoUrl: Joi.string()
+        .uri()
+        .trim()
+        .required()
     };
     return Joi.validate(office, schema);
   },
@@ -29,7 +32,10 @@ module.exports = {
         .required()
         .trim()
         .strict(),
-      logoUrl: Joi.string().required()
+      logoUrl: Joi.string()
+        .uri()
+        .trim()
+        .required()
     };
 
     return Joi.validate(party, schema);
