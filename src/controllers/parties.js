@@ -20,6 +20,14 @@ class PartiesController {
   }
 
   static createPoliticalParty(req, res) {
+    // Check if the data already exists
+    const foundParty = politicalParties.find(
+      party => party.name === req.body.name && party.hqAddress === req.body.hqAddress
+    );
+
+    if (foundParty)
+      return res.status(409).json({ status: 409, error: 'This political party already exists' });
+
     // Validate user input
     const { error } = validateParty(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
