@@ -42,7 +42,8 @@ Install the dependencies and devDependencies and start the server.
 ```sh
 $ cd politico
 $ npm install -d
-$ node app
+$ npm run build
+$ npm tun start
 ```
 
 For production environments...
