@@ -114,6 +114,7 @@ const createUserTable = () => {
         lastName VARCHAR(15) NOT NULL, 
         otherName VARCHAR(15), 
         email VARCHAR(40) UNIQUE NOT NULL, 
+        password VARCHAR(40) NOT NULL,
         phoneNumber INT NOT NULL,
         passportUrl TEXT,
         isAdmin boolean DEFAULT false
