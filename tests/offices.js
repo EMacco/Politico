@@ -6,45 +6,9 @@ import app from '../src/index';
 chai.use(chaiHttp);
 chai.should();
 
+let createdIndex;
+
 describe('Political Offices', () => {
-  describe('GET /', () => {
-    // Test should return a list of all political offices
-    it('should get all political office', done => {
-      chai
-        .request(app)
-        .get('/api/v1/offices')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-
-    // Test should return a particular office
-    it('should get a particular political office', done => {
-      chai
-        .request(app)
-        .get(`/api/v1/offices/${1}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-
-    // Test should return status code 404
-    it('should return status 404 office does not exist', done => {
-      chai
-        .request(app)
-        .get(`/api/v1/offices/${432}`)
-        .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-  });
-
   describe('POST /', () => {
     // Test should create an office since all fields are complete
     it('should create political office', done => {
@@ -58,6 +22,7 @@ describe('Political Offices', () => {
         .post('/api/v1/offices')
         .send(office)
         .end((err, res) => {
+          createdIndex = res.body.data[0].id;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -100,12 +65,12 @@ describe('Political Offices', () => {
     });
   });
 
-  describe('DELETE /', () => {
-    // Test should delete office since id exist
-    it('should delete political office', done => {
+  describe('GET /', () => {
+    // Test should return a list of all political offices
+    it('should get all political office', done => {
       chai
         .request(app)
-        .delete(`/api/v1/offices/${1}`)
+        .get('/api/v1/offices')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -113,11 +78,23 @@ describe('Political Offices', () => {
         });
     });
 
-    // Test should not delete an office since it does not exist
-    it('should not delete political office', done => {
+    // Test should return a particular office
+    it('should get a particular political office', done => {
       chai
         .request(app)
-        .delete(`/api/v1/offices/${5334}`)
+        .get(`/api/v1/offices/${createdIndex}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return status code 404
+    it('should return status 404 office does not exist', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/offices/0`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -131,7 +108,7 @@ describe('Political Offices', () => {
     it('should not update political office', done => {
       chai
         .request(app)
-        .patch(`/api/v1/offices/${5334}`)
+        .patch(`/api/v1/offices/0`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -143,7 +120,7 @@ describe('Political Offices', () => {
     it('should not update political office since name is short', done => {
       chai
         .request(app)
-        .patch(`/api/v1/offices/${2}/emma`)
+        .patch(`/api/v1/offices/${createdIndex}/emma`)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -155,9 +132,35 @@ describe('Political Offices', () => {
     it('should update political office id exist and name is long enough', done => {
       chai
         .request(app)
-        .patch(`/api/v1/offices/${2}/${'This is a changed name'}`)
+        .patch(`/api/v1/offices/${createdIndex}/${'This is a changed name'}`)
         .end((err, res) => {
           res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /', () => {
+    // Test should delete office since id exist
+    it('should delete political office', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/offices/${createdIndex}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not delete an office since it does not exist
+    it('should not delete political office', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/offices/${0}`)
+        .end((err, res) => {
+          res.should.have.status(404);
           res.body.should.be.a('object');
           done();
         });

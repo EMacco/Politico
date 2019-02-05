@@ -72,9 +72,9 @@ const createCandidatesTable = () => {
 const createPartiesTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS parties(
           id SERIAL PRIMARY KEY, 
-          name VARCHAR(15) NOT NULL, 
-          hqAddress VARCHAR(15) NOT NULL, 
-          logoUrl VARCHAR(15)
+          name VARCHAR(40) NOT NULL, 
+          hqAddress VARCHAR(100) NOT NULL, 
+          logoUrl TEXT
           )`;
 
   pool
@@ -91,9 +91,9 @@ const createPartiesTable = () => {
 const createOfficesTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS offices(
             id SERIAL PRIMARY KEY, 
-            name VARCHAR(15) NOT NULL, 
-            type VARCHAR(15) NOT NULL, 
-            logoUrl VARCHAR(15)
+            name VARCHAR(40) NOT NULL, 
+            type VARCHAR(40) NOT NULL, 
+            logoUrl TEXT
             )`;
 
   pool

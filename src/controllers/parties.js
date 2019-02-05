@@ -1,75 +1,104 @@
 import Joi from 'joi';
-import politicalParties from '../models/parties';
+import PartiesModel from '../models/parties';
 import { validateParty } from './validationFunctions';
 
 class PartiesController {
   // Get all parties
   static getAllParties(req, res) {
-    return res.json({ status: 200, data: politicalParties });
+    PartiesModel.fetchAllParties(({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        return res.status(200).json({ status: 200, data });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
   }
 
   static getSingleParty(req, res) {
-    // Make sure that the id exists in the database
-    const foundParty = politicalParties.find(party => party.id === parseInt(req.params.id, 10));
+    PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        // Check if the party exists
 
-    if (!foundParty)
-      return res.status(404).json({ status: 404, error: 'The political party does not exist' });
+        if (data.length === 0)
+          return res.status(404).json({ status: 404, error: 'The political party does not exist' });
 
-    // The party exists return party details
-    return res.status(200).json({ status: 200, data: [foundParty] });
+        // The party exists retrun to the user
+        return res.status(200).json({ status: 200, data: [data] });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
   }
 
   static createPoliticalParty(req, res) {
-    // Check if the data already exists
-    const foundParty = politicalParties.find(
-      party => party.name === req.body.name && party.hqAddress === req.body.hqAddress
-    );
-
-    if (foundParty)
-      return res.status(409).json({ status: 409, error: 'This political party already exists' });
-
-    // Validate user input
+    // Validate the party details
     const { error } = validateParty(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
-    // The data is valid create it and return
-    const newParty = {
-      id: politicalParties.length + 1,
-      name: req.body.name,
-      hqAddress: req.body.hqAddress,
-      logoUrl: req.body.logoUrl
-    };
+    // Check if the party exists before
+    PartiesModel.fetchPartyByName(req.body.name, ({ success, data }) => {
+      if (!success) {
+        // It is a server error
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    //   Insert the new office in the array
-    politicalParties.push(newParty);
+      // Check if the party exists
+      if (data.length !== 0)
+        // The party already exists
+        return res.status(409).json({ status: 409, error: 'This political party already exists' });
 
-    return res.status(201).json({ status: 201, data: [newParty] });
+      // Create the new party
+      const newParty = {
+        name: req.body.name,
+        hqAddress: req.body.hqAddress,
+        logoUrl: req.body.logoUrl
+      };
+
+      //   Insert the new party in the array
+      PartiesModel.createNewParty(newParty, ({ successs, dataa }) => {
+        if (successs) {
+          // Return the new user details to the user
+          return res.status(201).json({ status: 201, data: dataa });
+        }
+        return res.status(500).json({ status: 500, error: dataa });
+      });
+    });
   }
 
   static deletePoliticalParty(req, res) {
     // Check if the party exists
-    const partyFound = politicalParties.find(party => party.id === parseInt(req.params.id, 10));
+    PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
+      if (!success) {
+        // It is a server error
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    if (!partyFound) return res.status(404).json({ status: 404, error: 'Party does not exist' });
+      // Check if the party exists
+      if (data.length === 0) {
+        return res.status(404).json({ status: 404, error: 'Party does not exist' });
+      }
 
-    // Delete the party
-    const index = politicalParties.indexOf(partyFound);
-    politicalParties.splice(index, 1);
+      // Delete from server
+      PartiesModel.deletePartyById(parseInt(req.params.id, 10), ({ successs }) => {
+        if (!successs) {
+          return res.status(500).json({ status: 500, error: data });
+        }
 
-    // Return deleted value
-    return res.status(200).json({ status: 200, data: [partyFound] });
+        return res.status(200).json({ status: 200, data });
+      });
+    });
   }
 
   static editParticularPoliticalParty(req, res) {
-    // Check if the party exists
-    const partyFound = politicalParties.find(party => party.id === parseInt(req.params.id, 10));
-
-    if (!partyFound) return res.status(404).json({ status: 404, error: 'Party does not exist' });
-
     // Validate the name
     const schema = {
       name: Joi.string()
         .min(10)
+        .max(40)
         .required()
         .trim()
         .strict()
@@ -77,14 +106,25 @@ class PartiesController {
     const { error } = Joi.validate({ name: req.params.name }, schema);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
-    // Find the index of the party in the array
-    const partiesIndexes = politicalParties.map(party => party.id);
-    const updateIndex = partiesIndexes.indexOf(parseInt(req.params.id, 10));
+    PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
+      if (!success) {
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    //   Update data in database
-    politicalParties[updateIndex].name = req.params.name;
+      // Check if there is party
+      if (data.length === 0) {
+        return res.status(404).json({ status: 404, error: 'Party does not exist' });
+      }
 
-    return res.status(200).json({ status: 200, data: [politicalParties[updateIndex]] });
+      // Update the party
+      PartiesModel.updatePartyNameById(req.params.id, req.params.name, ({ successs, dataa }) => {
+        if (successs) {
+          // Return the new user details to the user
+          return res.status(200).json({ status: 200, data: dataa });
+        }
+        return res.status(500).json({ status: 500, error: dataa });
+      });
+    });
   }
 }
 

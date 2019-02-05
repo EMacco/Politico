@@ -6,45 +6,9 @@ import app from '../src/index';
 chai.use(chaiHttp);
 chai.should();
 
+let createdIndex;
+
 describe('Political Parties', () => {
-  describe('GET /', () => {
-    // Test should return a list of all political parties
-    it('should get all political party', done => {
-      chai
-        .request(app)
-        .get('/api/v1/parties')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-
-    // Test should return a particular political party
-    it('should get a particular political party', done => {
-      chai
-        .request(app)
-        .get(`/api/v1/parties/${1}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-
-    // Test should return status code 404
-    it('should return status 404 party does not exist', done => {
-      chai
-        .request(app)
-        .get(`/api/v1/parties/${432}`)
-        .end((err, res) => {
-          res.should.have.status(404);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
-  });
-
   describe('POST /', () => {
     // Test should not create a party since hq address is short
     it('should create political party', done => {
@@ -76,6 +40,7 @@ describe('Political Parties', () => {
         .post('/api/v1/parties')
         .send(party)
         .end((err, res) => {
+          createdIndex = res.body.data[0].id;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -100,12 +65,12 @@ describe('Political Parties', () => {
     });
   });
 
-  describe('DELETE /', () => {
-    // Test should delete party since id exist
-    it('should delete political party', done => {
+  describe('GET /', () => {
+    // Test should return a list of all political parties
+    it('should get all political party', done => {
       chai
         .request(app)
-        .delete(`/api/v1/parties/${1}`)
+        .get('/api/v1/parties')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -113,11 +78,23 @@ describe('Political Parties', () => {
         });
     });
 
-    // Test should not delete a party since it does not exist
-    it('should not delete political party', done => {
+    // Test should return a particular political party
+    it('should get a particular political party', done => {
       chai
         .request(app)
-        .delete(`/api/v1/parties/${5334}`)
+        .get(`/api/v1/parties/${createdIndex}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return status code 404
+    it('should return status 404 party does not exist', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/parties/${0}`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -131,7 +108,7 @@ describe('Political Parties', () => {
     it('should not update political party', done => {
       chai
         .request(app)
-        .patch(`/api/v1/parties/${5334}`)
+        .patch(`/api/v1/parties/${0}`)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -143,7 +120,7 @@ describe('Political Parties', () => {
     it('should not update political party since name is short', done => {
       chai
         .request(app)
-        .patch(`/api/v1/parties/${2}/emma`)
+        .patch(`/api/v1/parties/${createdIndex}/emma`)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -155,9 +132,35 @@ describe('Political Parties', () => {
     it('should update political party id exist and name is long enough', done => {
       chai
         .request(app)
-        .patch(`/api/v1/parties/${2}/${'This is a changed name'}`)
+        .patch(`/api/v1/parties/${createdIndex}/${'This is a changed name'}`)
         .end((err, res) => {
           res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /', () => {
+    // Test should delete party since id exist
+    it('should delete political party', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/parties/${createdIndex}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not delete a party since it does not exist
+    it('should not delete political party', done => {
+      chai
+        .request(app)
+        .delete(`/api/v1/parties/${0}`)
+        .end((err, res) => {
+          res.should.have.status(404);
           res.body.should.be.a('object');
           done();
         });

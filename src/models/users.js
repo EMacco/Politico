@@ -1,14 +1,18 @@
-const users = [
-  {
-    id: 1,
-    firstName: 'Emmanuel',
-    lastName: 'Okwara',
-    otherName: 'Nduka',
-    email: 'okwarae.n@gmail.com',
-    phoneNumber: '08124185320',
-    photoUrl: 'https://www.google.com/emmanuel-okwara',
-    isAdmin: true
-  }
-];
+import pool from './db_connection';
 
-export default users;
+class UsersModel {
+  static fetchUserById(userID, completionHandler) {
+    const queryText = `SELECT * FROM users WHERE id=${userID}`;
+
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+  }
+}
+
+export default UsersModel;

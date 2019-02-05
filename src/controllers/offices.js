@@ -1,74 +1,106 @@
 import Joi from 'joi';
-import politicalOffices from '../models/offices';
 import { validateOffice } from './validationFunctions';
+import OfficesModel from '../models/offices';
 
 class OfficesController {
   // Get all offices
   static getAllOffices(req, res) {
-    return res.json({ status: 200, data: politicalOffices });
+    OfficesModel.fetchAllOffices(({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        return res.status(200).json({ status: 200, data });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
   }
 
   static getSingleOffice(req, res) {
-    // Check if the office exists
-    const foundOffice = politicalOffices.find(office => office.id === parseInt(req.params.id, 10));
+    OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        // Check if the office exists
 
-    if (!foundOffice)
-      return res.status(404).json({ status: 404, error: 'The political office does not exist' });
+        if (data.length === 0)
+          return res
+            .status(404)
+            .json({ status: 404, error: 'The political office does not exist' });
 
-    // The office exists retrun to the user
-    return res.status(200).json({ status: 200, data: [foundOffice] });
+        // The office exists retrun to the user
+        return res.status(200).json({ status: 200, data });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
   }
 
   static createPoliticalOffice(req, res) {
-    // Check if the data already exists
-    const foundOffice = politicalOffices.find(
-      office => office.name === req.body.name && office.type === req.body.type
-    );
-    if (foundOffice)
-      return res.status(409).json({ status: 409, error: 'This political office already exists' });
-
-    // Validate user input
+    // Validate the office details
     const { error } = validateOffice(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
-    // The data is valid create it and return
-    const newOffice = {
-      id: politicalOffices.length + 1,
-      name: req.body.name,
-      type: req.body.type,
-      logoUrl: req.body.logoUrl
-    };
+    // Check if the office exists before
+    OfficesModel.fetchOfficeByNameAndType(req.body.name, req.body.type, ({ success, data }) => {
+      if (!success) {
+        // It is a server error
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    //   Insert the new office in the array
-    politicalOffices.push(newOffice);
+      // Check if the office exists
+      if (data.length !== 0)
+        // The office already exists
+        return res.status(409).json({ status: 409, error: 'This political office already exists' });
 
-    return res.status(201).json({ status: 201, data: [newOffice] });
+      // Create the new office
+      const newOffice = {
+        name: req.body.name,
+        type: req.body.type,
+        logoUrl: req.body.logoUrl
+      };
+
+      //   Insert the new office in the array
+      OfficesModel.createNewOffice(newOffice, ({ successs, dataa }) => {
+        if (successs) {
+          // Return the new user details to the user
+          return res.status(201).json({ status: 201, data: dataa });
+        }
+        return res.status(500).json({ status: 500, error: dataa });
+      });
+    });
   }
 
   static deletePoliticalOffice(req, res) {
     // Check if the office exists
-    const officeFound = politicalOffices.find(office => office.id === parseInt(req.params.id, 10));
+    OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
+      if (!success) {
+        // It is a server error
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    if (!officeFound) return res.status(404).json({ status: 404, error: 'Office does not exist' });
+      // Check if the office exists
+      if (data.length === 0) {
+        return res.status(404).json({ status: 404, error: 'Office does not exist' });
+      }
 
-    // Delete the office
-    const index = politicalOffices.indexOf(officeFound);
-    politicalOffices.splice(index, 1);
+      // Delete from server
+      OfficesModel.deleteOfficeById(parseInt(req.params.id, 10), ({ successs }) => {
+        if (!successs) {
+          return res.status(500).json({ status: 500, error: data });
+        }
 
-    // Return deleted value
-    return res.status(200).json({ status: 200, data: [officeFound] });
+        return res.status(200).json({ status: 200, data });
+      });
+    });
   }
 
   static editParticularPoliticalOffice(req, res) {
-    // Check if the office exists
-    const officeFound = politicalOffices.find(office => office.id === parseInt(req.params.id, 10));
-
-    if (!officeFound) return res.status(404).json({ status: 404, error: 'Office does not exist' });
-
     // Validate the name
     const schema = {
       name: Joi.string()
         .min(10)
+        .max(40)
         .required()
         .trim()
         .strict()
@@ -76,14 +108,25 @@ class OfficesController {
     const { error } = Joi.validate({ name: req.params.name }, schema);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
-    // Find the index of the office in the array
-    const officesIndexes = politicalOffices.map(office => office.id);
-    const updateIndex = officesIndexes.indexOf(parseInt(req.params.id, 10));
+    OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
+      if (!success) {
+        return res.status(500).json({ status: 500, error: data });
+      }
 
-    //   Update data in database
-    politicalOffices[updateIndex].name = req.params.name;
+      // Check if there is office
+      if (data.length === 0) {
+        return res.status(404).json({ status: 404, error: 'Office does not exist' });
+      }
 
-    return res.status(200).json({ status: 200, data: [politicalOffices[updateIndex]] });
+      // Update the office
+      OfficesModel.updateOfficeNameById(req.params.id, req.params.name, ({ successs, dataa }) => {
+        if (successs) {
+          // Return the new user details to the user
+          return res.status(200).json({ status: 200, data: dataa });
+        }
+        return res.status(500).json({ status: 500, error: dataa });
+      });
+    });
   }
 }
 
