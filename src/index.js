@@ -2,11 +2,15 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import debug from 'debug';
+import { config } from 'dotenv';
 
 // Import my routers
 import partiesRoutes from './routes/parties';
 import officesRoutes from './routes/offices';
 import usersRoutes from './routes/users';
+
+// Configure the environment
+config();
 
 // Instantiate express Module
 const app = express();
