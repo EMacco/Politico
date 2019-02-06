@@ -14,6 +14,7 @@ class OfficesController {
       // It is a server error
       return res.json({ status: 500, error: data });
     });
+    return null;
   }
 
   static getSingleOffice(req, res) {
@@ -34,6 +35,7 @@ class OfficesController {
       // It is a server error
       return res.json({ status: 500, error: data });
     });
+    return null;
   }
 
   static createPoliticalOffice(req, res) {
@@ -68,7 +70,9 @@ class OfficesController {
         }
         return res.status(500).json({ status: 500, error: dataa });
       });
+      return null;
     });
+    return null;
   }
 
   static deletePoliticalOffice(req, res) {
@@ -92,7 +96,9 @@ class OfficesController {
 
         return res.status(200).json({ status: 200, data });
       });
+      return null;
     });
+    return null;
   }
 
   static editParticularPoliticalOffice(req, res) {
@@ -126,7 +132,9 @@ class OfficesController {
         }
         return res.status(500).json({ status: 500, error: dataa });
       });
+      return null;
     });
+    return null;
   }
 }
 

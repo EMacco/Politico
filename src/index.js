@@ -8,6 +8,7 @@ import { config } from 'dotenv';
 import partiesRoutes from './routes/parties';
 import officesRoutes from './routes/offices';
 import usersRoutes from './routes/users';
+import authRoutes from './routes/auth';
 
 // Configure the environment
 config();
@@ -28,6 +29,9 @@ app.use('/api/v1/offices', officesRoutes);
 
 // Use the users routers
 app.use('/api/v1/users', usersRoutes);
+
+// Use the users auth
+app.use('/api/v1/auth', authRoutes);
 
 // Define the port
 const port = process.env.PORT || 3000;

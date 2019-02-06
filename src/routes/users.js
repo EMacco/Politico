@@ -1,17 +1,13 @@
 import { Router } from 'express';
 import UsersController from '../controllers/users';
+import Authorization from '../controllers/authorization';
+
 const routes = Router();
 
 // Fetch specific users
-routes.get('/:id', UsersController.fetchSpecificUser);
-
-// User registration
-routes.post('/auth/signup', UsersController.createUsers);
+routes.get('/:id', Authorization.isUser, UsersController.fetchSpecificUser);
 
 // Delete user by id
-routes.delete('/:id', UsersController.deleteUser);
-
-// User Login
-routes.post('/auth/login', UsersController.loginUser);
+routes.delete('/:id', Authorization.isAdmin, UsersController.deleteUser);
 
 export default routes;

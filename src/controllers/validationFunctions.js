@@ -2,7 +2,6 @@ import Joi from 'joi';
 
 module.exports = {
   validateOffice: office => {
-    // TODO make it validate a url
     const schema = {
       name: Joi.string()
         .min(10)
@@ -67,7 +66,7 @@ module.exports = {
         .max(100)
         .required()
         .trim()
-        .email()
+        .email({ minDomainAtoms: 2 })
         .strict(),
       password: Joi.string()
         .min(8)
@@ -100,7 +99,7 @@ module.exports = {
         .max(100)
         .required()
         .trim()
-        .email()
+        .email({ minDomainAtoms: 2 })
         .strict(),
       password: Joi.string()
         .min(8)
