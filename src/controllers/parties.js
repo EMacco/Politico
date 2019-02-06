@@ -14,6 +14,7 @@ class PartiesController {
       // It is a server error
       return res.json({ status: 500, error: data });
     });
+    return null;
   }
 
   static getSingleParty(req, res) {
@@ -32,6 +33,7 @@ class PartiesController {
       // It is a server error
       return res.json({ status: 500, error: data });
     });
+    return null;
   }
 
   static createPoliticalParty(req, res) {
@@ -66,7 +68,9 @@ class PartiesController {
         }
         return res.status(500).json({ status: 500, error: dataa });
       });
+      return null;
     });
+    return null;
   }
 
   static deletePoliticalParty(req, res) {
@@ -90,7 +94,9 @@ class PartiesController {
 
         return res.status(200).json({ status: 200, data });
       });
+      return null;
     });
+    return null;
   }
 
   static editParticularPoliticalParty(req, res) {
@@ -124,7 +130,9 @@ class PartiesController {
         }
         return res.status(500).json({ status: 500, error: dataa });
       });
+      return null;
     });
+    return null;
   }
 }
 

@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import UsersModel from '../models/users';
 import { validateUserLogin, validateUser } from './validationFunctions';
 
@@ -16,7 +18,7 @@ class UsersController {
       }
 
       // It is a server error
-      return res.json({ status: 500, error: data });
+      return res.status(500).json({ status: 500, error: data });
     });
   }
 
@@ -42,26 +44,34 @@ class UsersController {
         adminVal = req.body.isAdmin;
       }
 
-      const newUser = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        otherName: req.body.otherName,
-        email: req.body.email,
-        password: req.body.password,
-        phoneNumber: req.body.phoneNumber,
-        passportUrl: req.body.passportUrl,
-        isAdmin: adminVal
-      };
+      // Hash the password
+      const salt = 10;
+      bcrypt.hash(req.body.password, salt, (_, result) => {
+        const newUser = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          otherName: req.body.otherName,
+          email: req.body.email,
+          password: result,
+          phoneNumber: req.body.phoneNumber,
+          passportUrl: req.body.passportUrl,
+          isAdmin: adminVal
+        };
 
-      //   Insert the new user in the array
-      UsersModel.createNewUser(newUser, ({ successs, dataa }) => {
-        if (successs) {
-          // Return the new user details to the user
-          return res.status(201).json({ status: 201, data: dataa });
-        }
-        return res.status(500).json({ status: 500, error: dataa });
+        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, { expiresIn: 60 * 60 });
+
+        //   Insert the new user in the array
+        UsersModel.createNewUser(newUser, ({ successs, dataa }) => {
+          if (successs) {
+            // Return the new user details to the user
+            return res.status(201).json({ status: 201, data: [{ token, user: dataa[0] }] });
+          }
+          return res.status(500).json({ status: 500, error: dataa });
+        });
       });
+      return null;
     });
+    return null;
   }
 
   static deleteUser(req, res) {
@@ -85,6 +95,7 @@ class UsersController {
 
         return res.status(200).json({ status: 200, data });
       });
+      return null;
     });
   }
 
@@ -100,14 +111,24 @@ class UsersController {
       }
 
       // Check if the user exists
-      if (data.length !== 0 && data[0].password === req.body.password) {
-        // The login details are correct
-        return res.status(409).json({ status: 200, success: 'Login Successful' });
+      if (data.length === 0) {
+        // The login details are incorrect
+        return res.status(401).json({ status: 401, error: 'Invalid Email or Password!' });
       }
+      bcrypt.compare(req.body.password, data[0].password, (err, result) => {
+        if (!result) {
+          return res.status(401).json({ status: 401, error: 'Invalid Email or Password!' });
+        }
 
-      // The login details are incorrect
-      return res.status(409).json({ status: 404, error: 'Invalid Email or Password!' });
+        // Generate token for the user
+        const token = jwt.sign({ data: data[0] }, process.env.TOKEN_KEY, { expiresIn: 60 * 60 });
+
+        // The login details are correct
+        return res.status(200).json({ status: 200, data: [{ token, user: data[0] }] });
+      });
+      return null;
     });
+    return null;
   }
 }
 

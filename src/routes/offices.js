@@ -1,20 +1,22 @@
 import { Router } from 'express';
 import OfficesController from '../controllers/offices';
+import Authorization from '../controllers/authorization';
+
 const routes = Router();
 
 // Fetch all political offices
-routes.get('/', OfficesController.getAllOffices);
+routes.get('/', Authorization.isUser, OfficesController.getAllOffices);
 
 // Fetch a specific political office
-routes.get('/:id', OfficesController.getSingleOffice);
+routes.get('/:id', Authorization.isUser, OfficesController.getSingleOffice);
 
 // Create political office
-routes.post('/', OfficesController.createPoliticalOffice);
+routes.post('/', Authorization.isAdmin, OfficesController.createPoliticalOffice);
 
 // Delete a particular office
-routes.delete('/:id', OfficesController.deletePoliticalOffice);
+routes.delete('/:id', Authorization.isAdmin, OfficesController.deletePoliticalOffice);
 
 // Edit particular political office
-routes.patch('/:id/:name', OfficesController.editParticularPoliticalOffice);
+routes.patch('/:id/:name', Authorization.isAdmin, OfficesController.editParticularPoliticalOffice);
 
 export default routes;
