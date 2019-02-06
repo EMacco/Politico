@@ -55,7 +55,7 @@ const createCandidatesTable = () => {
           id SERIAL PRIMARY KEY, 
           officeId INT NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
           partyId INT NOT NULL REFERENCES parties(id) ON DELETE CASCADE, 
-          candidateId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+          candidateId INT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE
           )`;
 
   pool

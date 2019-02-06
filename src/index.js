@@ -7,6 +7,7 @@ import { config } from 'dotenv';
 // Import my routers
 import partiesRoutes from './routes/parties';
 import officesRoutes from './routes/offices';
+import officeRoutes from './routes/office';
 import usersRoutes from './routes/users';
 import authRoutes from './routes/auth';
 
@@ -32,6 +33,13 @@ app.use('/api/v1/users', usersRoutes);
 
 // Use the users auth
 app.use('/api/v1/auth', authRoutes);
+
+// Use the office
+app.use('/api/v1/office', officeRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({ status: 404, error: 'Page not found!' });
+});
 
 // Define the port
 const port = process.env.PORT || 3000;
