@@ -7,6 +7,8 @@ chai.use(chaiHttp);
 chai.should();
 
 let createdIndex;
+let createdEmail;
+let createdPassword;
 
 describe('Users', () => {
   describe('POST /', () => {
@@ -27,6 +29,8 @@ describe('Users', () => {
         .send(user)
         .end((err, res) => {
           createdIndex = res.body.data[0].id;
+          createdEmail = res.body.data[0].email;
+          createdPassword = res.body.data[0].password;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -67,6 +71,23 @@ describe('Users', () => {
       chai
         .request(app)
         .post('/api/v1/users/auth/signup')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test user can sign in
+    it('should be able to login', done => {
+      const user = {
+        email: createdEmail,
+        password: createdPassword
+      };
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
         .send(user)
         .end((err, res) => {
           res.should.have.status(409);

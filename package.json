@@ -48,6 +48,7 @@
     "prettier": "^1.16.2"
   },
   "dependencies": {
+    "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "debug": "^4.1.1",
     "dotenv": "^6.2.0",

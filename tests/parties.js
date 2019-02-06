@@ -65,6 +65,8 @@ describe('Political Parties', () => {
     });
   });
 
+  
+
   describe('GET /', () => {
     // Test should return a list of all political parties
     it('should get all political party', done => {

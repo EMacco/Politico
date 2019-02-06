@@ -1,5 +1,5 @@
 import UsersModel from '../models/users';
-import { validateUser } from './validationFunctions';
+import { validateUserLogin, validateUser } from './validationFunctions';
 
 class UsersController {
   static fetchSpecificUser(req, res) {
@@ -21,7 +21,7 @@ class UsersController {
   }
 
   static createUsers(req, res) {
-    // Validate the party details
+    // Validate the user details
     const { error } = validateUser(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
     // Check if the user exists before
@@ -85,6 +85,28 @@ class UsersController {
 
         return res.status(200).json({ status: 200, data });
       });
+    });
+  }
+
+  static loginUser(req, res) {
+    // Validate the user details
+    const { error } = validateUserLogin(req.body);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+    // Check if the user exists before
+    UsersModel.fetchUserByEmail(req.body.email, ({ success, data }) => {
+      if (!success) {
+        // It is a server error
+        return res.status(500).json({ status: 500, error: data });
+      }
+
+      // Check if the user exists
+      if (data.length !== 0 && data[0].password === req.body.password) {
+        // The login details are correct
+        return res.status(409).json({ status: 200, success: 'Login Successful' });
+      }
+
+      // The login details are incorrect
+      return res.status(409).json({ status: 404, error: 'Invalid Email or Password!' });
     });
   }
 }
