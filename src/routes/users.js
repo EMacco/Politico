@@ -3,8 +3,14 @@ import UsersController from '../controllers/users';
 const routes = Router();
 
 // Fetch specific users
-routes.get('/:email', UsersController.fetchSpecificUser);
+routes.get('/:id', UsersController.fetchSpecificUser);
 
-// Write the Endpoint for validating user for login
+// User registration
+routes.post('/auth/signup', UsersController.createUsers);
+
+// Delete user by id
+routes.delete('/:id', UsersController.deleteUser);
+
+// User Login
 
 export default routes;
