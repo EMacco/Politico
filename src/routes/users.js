@@ -12,5 +12,6 @@ routes.post('/auth/signup', UsersController.createUsers);
 routes.delete('/:id', UsersController.deleteUser);
 
 // User Login
+routes.post('/auth/login', UsersController.loginUser);
 
 export default routes;

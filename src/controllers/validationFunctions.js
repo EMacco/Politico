@@ -92,5 +92,23 @@ module.exports = {
     };
 
     return Joi.validate(user, schema);
+  },
+  validateUserLogin: user => {
+    const schema = {
+      email: Joi.string()
+        .min(10)
+        .max(100)
+        .required()
+        .trim()
+        .email()
+        .strict(),
+      password: Joi.string()
+        .min(8)
+        .max(15)
+        .required()
+        .strict()
+    };
+
+    return Joi.validate(user, schema);
   }
 };
