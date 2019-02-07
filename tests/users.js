@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../src/index';
+import app from '../server/index';
 
 // Configure chai
 chai.use(chaiHttp);
@@ -15,8 +15,8 @@ describe('Users', () => {
       const user = {
         firstName: 'This is a test',
         lastName: 'federal road',
-        email: 'sdnwssd@scnssj.sdcsdj',
-        password: 'bhsbjdhbjshbhbs',
+        email: process.env.TEST_EMAIL,
+        password: process.env.TEST_PASSWORD,
         phoneNumber: '37277837785',
         passportUrl: 'http://google.com',
         isAdmin: 'true'
@@ -25,8 +25,9 @@ describe('Users', () => {
         .request(app)
         .post('/api/v1/auth/signup')
         .send(user)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
-          createdIndex = res.body.data[0].id;
+          createdIndex = res.body.data[0].user.id;
           res.should.have.status(201);
           res.body.should.be.a('object');
           done();
@@ -46,6 +47,7 @@ describe('Users', () => {
         .request(app)
         .post('/api/v1/auth/signup')
         .send(user)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -68,6 +70,7 @@ describe('Users', () => {
         .request(app)
         .post('/api/v1/auth/signup')
         .send(user)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(409);
           res.body.should.be.a('object');
@@ -85,6 +88,7 @@ describe('Users', () => {
         .request(app)
         .post('/api/v1/auth/login')
         .send(user)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -99,6 +103,7 @@ describe('Users', () => {
       chai
         .request(app)
         .get(`/api/v1/users/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -109,10 +114,11 @@ describe('Users', () => {
 
   describe('DELETE /', () => {
     // Test should delete party since id exist
-    it('should delete political party', done => {
+    it('should delete user', done => {
       chai
         .request(app)
         .delete(`/api/v1/users/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -125,6 +131,7 @@ describe('Users', () => {
       chai
         .request(app)
         .delete(`/api/v1/users/${0}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');

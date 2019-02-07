@@ -19,18 +19,32 @@ class OfficeController {
     const { error } = Joi.validate(details, schema);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
-    OfficeModel.registerCandidate(
-      req.body.officeId,
-      req.body.partyId,
-      req.params.candidateId,
-      ({ success, data }) => {
-        if (!success) {
-          // Does not meet requirement to save
-          return res.status(400).json({ status: 400, error: data.detail });
-        }
-        return res
-          .status(201)
-          .json({ status: 201, data: { office: data[0].officeid, user: data[0].candidateid } });
+    // Check if this office already has a candidate from my party
+    OfficeModel.checkIfPartySlotAvailable(
+      details.officeId,
+      details.partyId,
+      ({ err, partyInfo }) => {
+        if (err) return res.status(500).json({ status: 500, error: partyInfo });
+        if (partyInfo.length !== 0)
+          return res
+            .status(409)
+            .json({ status: 409, error: 'Your party already has a candidate for this office' });
+
+        // Your party does not have a candidate yet
+        OfficeModel.registerCandidate(
+          req.body.officeId,
+          req.body.partyId,
+          req.params.candidateId,
+          ({ success, data }) => {
+            if (!success) {
+              // Does not meet requirement to save
+              return res.status(400).json({ status: 400, error: data.detail });
+            }
+            return res
+              .status(201)
+              .json({ status: 201, data: { office: data[0].officeid, user: data[0].candidateid } });
+          }
+        );
       }
     );
     return null;
@@ -54,7 +68,7 @@ class OfficeController {
         if (!successs) {
           return res.status(500).json({ status: 500, error: dataa });
         }
-        
+
         return res.status(200).json({
           status: 200,
           data: dataa

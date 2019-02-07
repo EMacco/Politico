@@ -23,9 +23,17 @@ class UsersController {
   }
 
   static createUsers(req, res) {
+    if (req.body.email) {
+      req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
+    }
     // Validate the user details
     const { error } = validateUser(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Remove white spaces
+    req.body.firstName = req.body.firstName.replace(/\s\s+/g, ' ').trim();
+    req.body.lastName = req.body.lastName.replace(/\s\s+/g, ' ').trim();
+
     // Check if the user exists before
     UsersModel.fetchUserByEmail(req.body.email, ({ success, data }) => {
       if (!success) {
@@ -39,9 +47,9 @@ class UsersController {
         return res.status(409).json({ status: 409, error: 'This user already exists' });
 
       // Create the new user
-      let adminVal = false;
-      if (req.body.isAdmin !== undefined) {
-        adminVal = req.body.isAdmin;
+      let isAdmin = false;
+      if (req.body.isAdmin) {
+        isAdmin = true;
       }
 
       // Hash the password
@@ -55,10 +63,12 @@ class UsersController {
           password: result,
           phoneNumber: req.body.phoneNumber,
           passportUrl: req.body.passportUrl,
-          isAdmin: adminVal
+          isAdmin
         };
 
-        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, { expiresIn: 60 * 60 });
+        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, {
+          expiresIn: 60 * 60
+        });
 
         //   Insert the new user in the array
         UsersModel.createNewUser(newUser, ({ successs, dataa }) => {
@@ -100,9 +110,17 @@ class UsersController {
   }
 
   static loginUser(req, res) {
+    if (req.body.email) {
+      req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
+    }
+
     // Validate the user details
     const { error } = validateUserLogin(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Remove white spaces
+    req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
+
     // Check if the user exists before
     UsersModel.fetchUserByEmail(req.body.email, ({ success, data }) => {
       if (!success) {

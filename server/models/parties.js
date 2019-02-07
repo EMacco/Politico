@@ -1,8 +1,8 @@
 import pool from './db_connection';
 
-class OfficesModel {
-  static fetchAllOffices(completionHandler) {
-    const queryText = `SELECT * FROM offices`;
+class PartiesModel {
+  static fetchAllParties(completionHandler) {
+    const queryText = `SELECT * FROM parties`;
     pool
       .query(queryText)
       .then(res => {
@@ -13,8 +13,8 @@ class OfficesModel {
       });
   }
 
-  static fetchOfficeById(officeID, completionHandler) {
-    const queryText = `SELECT * FROM offices WHERE id=${officeID}`;
+  static fetchPartyById(partyID, completionHandler) {
+    const queryText = `SELECT * FROM parties WHERE id=${partyID}`;
 
     pool
       .query(queryText)
@@ -26,8 +26,8 @@ class OfficesModel {
       });
   }
 
-  static fetchOfficeByNameAndType(officeName, officeType, completionHandler) {
-    const queryText = `SELECT * FROM offices WHERE name='${officeName}' AND type='${officeType}'`;
+  static fetchPartyByName(partyName, completionHandler) {
+    const queryText = `SELECT * FROM parties WHERE name='${partyName}'`;
     pool
       .query(queryText)
       .then(res => {
@@ -38,8 +38,8 @@ class OfficesModel {
       });
   }
 
-  static createNewOffice({ name, type, logoUrl }, completionHandler) {
-    const queryText = `INSERT INTO offices(name, type, logoUrl) VALUES('${name}', '${type}', '${logoUrl}') RETURNING *`;
+  static createNewParty({ name, hqAddress, logoUrl }, completionHandler) {
+    const queryText = `INSERT INTO parties(name, hqAddress, logoUrl) VALUES('${name}', '${hqAddress}', '${logoUrl}') RETURNING *`;
     pool
       .query(queryText)
       .then(res => {
@@ -50,8 +50,8 @@ class OfficesModel {
       });
   }
 
-  static updateOfficeNameById(id, name, completionHandler) {
-    const queryText = `UPDATE offices SET name='${name}' WHERE id=${id} RETURNING *`;
+  static updatePartyNameById(id, name, completionHandler) {
+    const queryText = `UPDATE parties SET name='${name}' WHERE id=${id} RETURNING *`;
     pool
       .query(queryText)
       .then(res => {
@@ -62,8 +62,20 @@ class OfficesModel {
       });
   }
 
-  static deleteOfficeById(id, completionHandler) {
-    const queryText = `DELETE FROM offices WHERE id='${id}'`;
+  static updatePartyAddressById(id, hqAddress, completionHandler) {
+    const queryText = `UPDATE parties SET hqaddress='${hqAddress}' WHERE id=${id} RETURNING *`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ successs: true, dataa: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ successs: false, dataa: err });
+      });
+  }
+
+  static deletePartyById(id, completionHandler) {
+    const queryText = `DELETE FROM parties WHERE id='${id}'`;
     pool
       .query(queryText)
       .then(res => {
@@ -75,4 +87,4 @@ class OfficesModel {
   }
 }
 
-export default OfficesModel;
+export default PartiesModel;

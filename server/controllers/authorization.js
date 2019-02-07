@@ -39,14 +39,14 @@ class Authorization {
     }
 
     // Check if it is a valid token
-    jwt.verify(token, process.env.TOKEN_KEY, (err, decode) => {
+    jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
       if (err) {
         return res.status(401).json({ status: 401, error: 'Token expired please login again' });
       }
-
+      
       // Check if user is admin
-      if (!decode.isAdmin) {
-        return res.status(401).json({ status: 401, error: `Unauthorized Access! ${decode}` });
+      if (!decoded.data.isadmin && !decoded.data.isAdmin) {
+        return res.status(401).json({ status: 401, error: `Unauthorized Access!` });
       }
 
       next();

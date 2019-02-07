@@ -124,7 +124,17 @@ const createUserTable = () => {
     .query(queryText)
     .then(res => {
       debugg(res);
-      createOfficesTable();
+
+      // Instantiate the initial Admin user
+      const createUserQuery = `INSERT INTO users(firstName, lastName, otherName, email, password, phoneNumber, passportUrl, isAdmin) VALUES ('Emmanuel', 'Okwara', 'Nduka', 'emma4real37@gmail.com', '$2b$10$gAeAektVtOq1bdlr.CXHJuGolSV5Sl2/.k6V675/PwXtubcS.Ph/m', '08124185320', 'http://www.google.com/emmanuel-okwara', true)`;
+      pool
+        .query(createUserQuery)
+        .then(ress => {
+          createOfficesTable();
+        })
+        .catch(errr => {
+          debugg(errr);
+        });
     })
     .catch(err => {
       debugg(err);
