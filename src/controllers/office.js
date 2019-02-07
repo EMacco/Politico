@@ -35,6 +35,34 @@ class OfficeController {
     );
     return null;
   }
+
+  static collateResult(req, res) {
+    // Check if the office exists
+    OfficeModel.fetchOfficeById(parseInt(req.params.officeId, 10), ({ success, data }) => {
+      // Check if the query was successful
+      if (!success) {
+        // It is a server error
+        return res.json({ status: 500, error: data });
+      }
+
+      // Check if the office exists
+      if (data.length === 0)
+        return res.status(404).json({ status: 404, error: 'The political office does not exist' });
+
+      // The office exists collate the result
+      OfficeModel.collateResult(parseInt(req.params.officeId, 10), ({ successs, dataa }) => {
+        if (!successs) {
+          return res.status(500).json({ status: 500, error: dataa });
+        }
+        
+        return res.status(200).json({
+          status: 200,
+          data: dataa
+        });
+      });
+    });
+    return null;
+  }
 }
 
 export default OfficeController;

@@ -25,7 +25,7 @@ class VotesModel {
           completionHandler(false, true);
         }
       })
-      .catch(err => {
+      .catch(() => {
         completionHandler(true, true);
       });
     return null;
@@ -42,7 +42,7 @@ class VotesModel {
           completionHandler(false, true);
         }
       })
-      .catch(err => {
+      .catch(() => {
         completionHandler(true, true);
       });
     return null;
