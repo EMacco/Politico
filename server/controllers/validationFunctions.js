@@ -6,16 +6,13 @@ module.exports = {
       name: Joi.string()
         .min(10)
         .max(40)
-        .required()
-        .trim()
-        .strict(),
+        .required(),
       type: Joi.string()
         .valid('federal', 'legislative', 'state', 'local')
         .max(40)
         .required(),
       logoUrl: Joi.string()
         .uri()
-        .trim()
         .required()
     };
     return Joi.validate(office, schema);
@@ -25,18 +22,13 @@ module.exports = {
       name: Joi.string()
         .min(10)
         .max(40)
-        .required()
-        .trim()
-        .strict(),
+        .required(),
       hqAddress: Joi.string()
         .min(10)
         .max(100)
-        .required()
-        .trim()
-        .strict(),
+        .required(),
       logoUrl: Joi.string()
         .uri()
-        .trim()
         .required()
     };
 
@@ -47,47 +39,31 @@ module.exports = {
       firstName: Joi.string()
         .min(3)
         .max(15)
-        .required()
-        .trim()
-        .strict(),
+        .required(),
       lastName: Joi.string()
         .min(3)
         .max(15)
-        .required()
-        .trim()
-        .strict(),
+        .required(),
       otherName: Joi.string()
         .min(3)
-        .max(15)
-        .trim()
-        .strict(),
+        .max(15),
       email: Joi.string()
         .min(10)
         .max(100)
         .required()
-        .trim()
-        .email({ minDomainAtoms: 2 })
-        .strict(),
+        .email({ minDomainAtoms: 2 }),
       password: Joi.string()
         .min(8)
         .max(15)
-        .required()
-        .strict(),
+        .required(),
       phoneNumber: Joi.string()
         .regex(/^\d{11}$/)
         .required()
-        .strict()
         .label('Please enter a valid phone number of 11 characters'),
-      isAdmin: Joi.string()
-        .min(4)
-        .max(5)
-        .trim()
-        .valid('true', 'false')
-        .strict(),
       passportUrl: Joi.string()
         .uri()
-        .trim()
-        .required()
+        .required(),
+      isAdmin: Joi.string().valid('true', 'false')
     };
 
     return Joi.validate(user, schema);
@@ -98,14 +74,11 @@ module.exports = {
         .min(10)
         .max(100)
         .required()
-        .trim()
-        .email({ minDomainAtoms: 2 })
-        .strict(),
+        .email({ minDomainAtoms: 2 }),
       password: Joi.string()
         .min(8)
         .max(15)
         .required()
-        .strict()
     };
 
     return Joi.validate(user, schema);

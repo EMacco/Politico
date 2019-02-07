@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../src/index';
+import app from '../server/index';
 
 // Configure chai
 chai.use(chaiHttp);
@@ -17,11 +17,14 @@ describe('Political Offices', () => {
         type: 'federal',
         logoUrl: 'http://google.com/president-of-nigeria.png'
       };
+
       chai
         .request(app)
         .post('/api/v1/offices')
         .send(office)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
+          console.log(res.body)
           createdIndex = res.body.data[0].id;
           res.should.have.status(201);
           res.body.should.be.a('object');
@@ -39,6 +42,7 @@ describe('Political Offices', () => {
         .request(app)
         .post('/api/v1/offices')
         .send(office)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -57,6 +61,7 @@ describe('Political Offices', () => {
         .request(app)
         .post('/api/v1/offices')
         .send(office)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -71,6 +76,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .get('/api/v1/offices')
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -83,6 +89,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .get(`/api/v1/offices/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -95,6 +102,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .get(`/api/v1/offices/0`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -109,6 +117,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .patch(`/api/v1/offices/0`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -121,6 +130,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .patch(`/api/v1/offices/${createdIndex}/emma`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -133,6 +143,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .patch(`/api/v1/offices/${createdIndex}/${'This is a changed name'}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -147,6 +158,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .delete(`/api/v1/offices/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -159,6 +171,7 @@ describe('Political Offices', () => {
       chai
         .request(app)
         .delete(`/api/v1/offices/${0}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');

@@ -54,7 +54,7 @@ class OfficeController {
         if (!successs) {
           return res.status(500).json({ status: 500, error: dataa });
         }
-        
+
         return res.status(200).json({
           status: 200,
           data: dataa

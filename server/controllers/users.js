@@ -39,9 +39,9 @@ class UsersController {
         return res.status(409).json({ status: 409, error: 'This user already exists' });
 
       // Create the new user
-      let adminVal = false;
-      if (req.body.isAdmin !== undefined) {
-        adminVal = req.body.isAdmin;
+      let isAdmin = false;
+      if (req.body.isAdmin) {
+        isAdmin = true;
       }
 
       // Hash the password
@@ -55,10 +55,12 @@ class UsersController {
           password: result,
           phoneNumber: req.body.phoneNumber,
           passportUrl: req.body.passportUrl,
-          isAdmin: adminVal
+          isAdmin
         };
 
-        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, { expiresIn: 60 * 60 });
+        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, {
+          expiresIn: 60 * 60
+        });
 
         //   Insert the new user in the array
         UsersModel.createNewUser(newUser, ({ successs, dataa }) => {

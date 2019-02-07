@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../src/index';
+import app from '../server/index';
 
 // Configure chai
 chai.use(chaiHttp);
@@ -21,6 +21,7 @@ describe('Political Parties', () => {
         .request(app)
         .post('/api/v1/parties')
         .send(party)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -39,6 +40,7 @@ describe('Political Parties', () => {
         .request(app)
         .post('/api/v1/parties')
         .send(party)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           createdIndex = res.body.data[0].id;
           res.should.have.status(201);
@@ -57,6 +59,7 @@ describe('Political Parties', () => {
         .request(app)
         .post('/api/v1/parties')
         .send(party)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -65,14 +68,13 @@ describe('Political Parties', () => {
     });
   });
 
-  
-
   describe('GET /', () => {
     // Test should return a list of all political parties
     it('should get all political party', done => {
       chai
         .request(app)
         .get('/api/v1/parties')
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -85,6 +87,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .get(`/api/v1/parties/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -97,6 +100,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .get(`/api/v1/parties/${0}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -111,6 +115,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .patch(`/api/v1/parties/${0}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
@@ -123,6 +128,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .patch(`/api/v1/parties/${createdIndex}/emma`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
@@ -135,6 +141,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .patch(`/api/v1/parties/${createdIndex}/${'This is a changed name'}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -149,6 +156,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .delete(`/api/v1/parties/${createdIndex}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -161,6 +169,7 @@ describe('Political Parties', () => {
       chai
         .request(app)
         .delete(`/api/v1/parties/${0}`)
+        .set('x-access-token', process.env.TEST_TOKEN)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.a('object');
