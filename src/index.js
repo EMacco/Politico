@@ -10,6 +10,7 @@ import officesRoutes from './routes/offices';
 import officeRoutes from './routes/office';
 import usersRoutes from './routes/users';
 import authRoutes from './routes/auth';
+import votesRoutes from './routes/votes';
 
 // Configure the environment
 config();
@@ -36,6 +37,9 @@ app.use('/api/v1/auth', authRoutes);
 
 // Use the office
 app.use('/api/v1/office', officeRoutes);
+
+// Use the votes
+app.use('/api/v1/votes', votesRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ status: 404, error: 'Page not found!' });
