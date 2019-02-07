@@ -33,10 +33,10 @@ const createPetitionTable = () => {
 const createVotesTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS votes(
           id SERIAL PRIMARY KEY, 
-          createdOn DATE NOT NULL, 
-          createdBy INT NOT NULL, 
+          createdOn DATE NOT NULL DEFAULT CURRENT_DATE, 
+          createdBy INT NOT NULL REFERENCES users(id), 
           officeId INT NOT NULL REFERENCES offices(id),
-          candidateId INT NOT NULL REFERENCES candidates(id)
+          candidateId INT NOT NULL REFERENCES users(id)
           )`;
 
   pool

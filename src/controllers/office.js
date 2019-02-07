@@ -28,8 +28,9 @@ class OfficeController {
           // Does not meet requirement to save
           return res.status(400).json({ status: 400, error: data.detail });
         }
-
-        return res.status(201).json({ status: 201, data });
+        return res
+          .status(201)
+          .json({ status: 201, data: { office: data[0].officeid, user: data[0].candidateid } });
       }
     );
     return null;
