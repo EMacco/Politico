@@ -41,6 +41,11 @@ class PartiesController {
     const { error } = validateParty(req.body);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
+    // Remove white spaces
+    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
+    req.body.hqAddress = req.body.hqAddress.replace(/\s\s+/g, ' ').trim();
+
+
     // Check if the party exists before
     PartiesModel.fetchPartyByName(req.body.name, ({ success, data }) => {
       if (!success) {
@@ -103,14 +108,17 @@ class PartiesController {
     // Validate the name
     const schema = {
       name: Joi.string()
-        .min(10)
+        .min(5)
         .max(40)
-        .required()
-        .trim()
-        .strict()
+        .required(),
+      id: Joi.number().required()
+
     };
-    const { error } = Joi.validate({ name: req.params.name }, schema);
+    const { error } = Joi.validate({ name: req.body.name, id: req.params.id }, schema);
     if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Remove white spaces
+    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
 
     PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
       if (!success) {
@@ -123,13 +131,55 @@ class PartiesController {
       }
 
       // Update the party
-      PartiesModel.updatePartyNameById(req.params.id, req.params.name, ({ successs, dataa }) => {
+      PartiesModel.updatePartyNameById(req.params.id, req.body.name, ({ successs, dataa }) => {
         if (successs) {
           // Return the new user details to the user
           return res.status(200).json({ status: 200, data: dataa });
         }
         return res.status(500).json({ status: 500, error: dataa });
       });
+      return null;
+    });
+    return null;
+  }
+
+  static editPartyAddress(req, res) {
+    // Validate the name
+    const schema = {
+      hqAddress: Joi.string()
+        .min(10)
+        .max(100)
+        .required(),
+      id: Joi.number().required()
+    };
+    const { error } = Joi.validate({ hqAddress: req.body.hqAddress, id: req.params.id }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+
+    // Remove white spaces
+    req.body.hqAddress = req.body.hqAddress.replace(/\s\s+/g, ' ').trim();
+
+    PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
+      if (!success) {
+        return res.status(500).json({ status: 500, error: data });
+      }
+
+      // Check if there is party
+      if (data.length === 0) {
+        return res.status(404).json({ status: 404, error: 'Party does not exist' });
+      }
+
+      // Update the party
+      PartiesModel.updatePartyAddressById(
+        req.params.id,
+        req.body.hqAddress,
+        ({ successs, dataa }) => {
+          if (successs) {
+            // Return the new user details to the user
+            return res.status(200).json({ status: 200, data: dataa });
+          }
+          return res.status(500).json({ status: 500, error: dataa });
+        }
+      );
       return null;
     });
     return null;

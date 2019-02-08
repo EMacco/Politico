@@ -17,6 +17,7 @@ routes.post('/', Authorization.isAdmin, PartiesController.createPoliticalParty);
 routes.delete('/:id', Authorization.isAdmin, PartiesController.deletePoliticalParty);
 
 // Edit particular political party
-routes.patch('/:id/:name', Authorization.isAdmin, PartiesController.editParticularPoliticalParty);
+routes.patch('/:id/name', Authorization.isAdmin, PartiesController.editParticularPoliticalParty);
+routes.patch('/:id/address', Authorization.isAdmin, PartiesController.editPartyAddress);
 
 export default routes;

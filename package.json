@@ -9,9 +9,9 @@
     "build": "npm run clean && babel src -d dist",
     "clean": "rm -rf dist",
     "heroku-postbuild": "npm run build",
-    "dev": "DEBUG=index nodemon --exec babel-node ./src/index.js",
-    "migrations": "DEBUG=index babel-node ./src/migrations",
-    "drop-migrations": "DEBUG=drop babel-node ./src/migrations/drop.js",
+    "dev": "DEBUG=index nodemon --exec babel-node ./server/index.js",
+    "migrations": "DEBUG=index babel-node ./server/migrations",
+    "drop-migrations": "DEBUG=drop babel-node ./server/migrations/drop.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

@@ -27,6 +27,20 @@ class OfficeModel extends OfficesModel {
       });
     return null;
   }
+
+  static checkIfPartySlotAvailable(officeId, partyId, completionHandler) {
+    const queryText = `SELECT * FROM candidates WHERE officeId=${officeId} AND partyId=${partyId}`;
+
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ err: false, partyInfo: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ err: true, partyInfo: err });
+      });
+    return null;
+  }
 }
 
 export default OfficeModel;
