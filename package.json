@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha --require babel-register ./tests/*.js --exit",
     "start": "node ./dist",
-    "build": "npm run clean && babel src -d dist",
+    "build": "npm run clean && babel server -d dist",
     "clean": "rm -rf dist",
     "heroku-postbuild": "npm run build",
     "dev": "DEBUG=index nodemon --exec babel-node ./server/index.js",
