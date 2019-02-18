@@ -9,17 +9,18 @@
     <meta name="author" content="Okwara Emmanuel">
     <title>POLITICO | Create Party</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="../js/index.js"></script>
 </head>
 
 <body class="signed-in-page">
     <header class="index-header">
-        <h1 class="logo"><a href="user-home.html">POLITICO</a></h1>
+        <h1 class="logo"><a href="../user-home.html">POLITICO</a></h1>
 
-        <input type="checkbox" class="nav-toggle" id="nav-toggle">
+        <input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
         <nav>
             <div class="header-nav">
                 <ul>
-                    <li><a href="../user-home.html">My Profile</a></li>
+                    <li><a href="../user-home.html">Home</a></li>
                     <li><a href="user-home.html">My Dashboard</a></li>
                     <li><a href="new-political-party.html">New Political Party</a></li>
                     <li><a href="new-government-office.html">New Government Office</a></li>
@@ -38,6 +39,8 @@
             <span></span>
         </label>
     </header>
+
+    <div id="overlay" class="overlay"></div>
 
     <main id="user-home-main">
         <div class="container">

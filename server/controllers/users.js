@@ -23,16 +23,33 @@ class UsersController {
   }
 
   static createUsers(req, res) {
-    if (req.body.email) {
-      req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
-    }
+    try {
+      if (req.body.email) {
+        req.body.email = req.body.email
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+
+      // Remove white spaces
+      if (req.body.password) {
+        req.body.password = req.body.password.replace(/\s\s+/g, ' ').trim();
+      }
+
+      // Remove white spaces
+      if (req.body.firstName) {
+        req.body.firstName = req.body.firstName.replace(/\s\s+/g, ' ').trim();
+      }
+
+      // Remove white spaces
+      if (req.body.lastName) {
+        req.body.lastName = req.body.lastName.replace(/\s\s+/g, ' ').trim();
+      }
+    } catch (error) {}
+
     // Validate the user details
     const { error } = validateUser(req.body);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
-
-    // Remove white spaces
-    req.body.firstName = req.body.firstName.replace(/\s\s+/g, ' ').trim();
-    req.body.lastName = req.body.lastName.replace(/\s\s+/g, ' ').trim();
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     // Check if the user exists before
     UsersModel.fetchUserByEmail(req.body.email, ({ success, data }) => {
@@ -110,16 +127,23 @@ class UsersController {
   }
 
   static loginUser(req, res) {
-    if (req.body.email) {
-      req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
-    }
+    try {
+      if (req.body.email) {
+        req.body.email = req.body.email
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+
+      // Remove white spaces
+      if (req.body.password) {
+        req.body.password = req.body.password.replace(/\s\s+/g, ' ').trim();
+      }
+    } catch (error) {}
 
     // Validate the user details
     const { error } = validateUserLogin(req.body);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
-
-    // Remove white spaces
-    req.body.email = req.body.email.replace(/\s\s+/g, ' ').trim();
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     // Check if the user exists before
     UsersModel.fetchUserByEmail(req.body.email, ({ success, data }) => {

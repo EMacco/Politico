@@ -18,12 +18,14 @@ class OfficesController {
   }
 
   static getSingleOffice(req, res) {
-    //Check if it is a number
+    // Check if it is a number
     const schema = {
-      id: Joi.number().required()
+      id: Joi.number()
+        .required()
+        .label('Please enter ID as a number')
     };
     const { error } = Joi.validate({ id: req.params.id }, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
       // Check if the query was successful
@@ -46,12 +48,19 @@ class OfficesController {
   }
 
   static createPoliticalOffice(req, res) {
+    // Remove white spaces
+    try {
+      if (req.body.name) {
+        req.body.name = req.body.name
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+    } catch (error) {}
+
     // Validate the office details
     const { error } = validateOffice(req.body);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
-
-    // Remove white spaces
-    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     // Check if the office exists before
     OfficesModel.fetchOfficeByNameAndType(req.body.name, req.body.type, ({ success, data }) => {
@@ -117,14 +126,25 @@ class OfficesController {
       name: Joi.string()
         .min(5)
         .max(40)
-        .required(),
-      id: Joi.number().required()
+        .required()
+        .label('Please enter name that contains 5 - 40 characters'),
+      id: Joi.number()
+        .required()
+        .label('Please enter ID as a number')
     };
-    const { error } = Joi.validate({ name: req.body.name, id: req.params.id }, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
     // Remove white spaces
-    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
+    try {
+      if (req.body.name) {
+        req.body.name = req.body.name
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+    } catch (error) {}
+
+    const { error } = Joi.validate({ name: req.body.name, id: req.params.id }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
       if (!success) {
@@ -160,11 +180,14 @@ class OfficesController {
         .valid('federal', 'legislative', 'state', 'local')
         .min(5)
         .max(40)
-        .required(),
-      id: Joi.number().required()
+        .required()
+        .label('Please enter office type as: federal, legislative, state, or local'),
+      id: Joi.number()
+        .required()
+        .label('Please enter ID as a number')
     };
     const { error } = Joi.validate({ type: req.body.type, id: req.params.id }, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     OfficesModel.fetchOfficeById(parseInt(req.params.id, 10), ({ success, data }) => {
       if (!success) {

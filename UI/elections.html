@@ -7,17 +7,18 @@
 	<meta name="keywords" content="voting, election, politician, politics">
 	<meta name="author" content="Okwara Emmanuel">
 	<title>POLITICO | Vote Page</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="./js/index.js"></script>
 </head>
 <body class="signed-in-page">
 	<header class="index-header">
 		<h1 class="logo"><a href="user-home.html">POLITICO</a></h1>
 		
-		<input type="checkbox" class="nav-toggle" id="nav-toggle">
+		<input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
 		<nav>
             <div class="header-nav">
                 <ul>
-                    <li><a href="user-home.html">My Profile</a></li>
+                    <li><a href="user-home.html">Home</a></li>
                     <li><a href="admin/user-home.html">My Dashboard</a></li>
                     <li><a href="political-parties.html">Political Parties</a></li>
                     <li><a href="government-offices.html">Government Offices</a></li>
@@ -35,7 +36,9 @@
 		<label for="nav-toggle" class="nav-toggle-label">
 			<span></span>
 		</label>
-	</header>
+    </header>
+    
+    <div id="overlay" class="overlay"></div>
 
 	<main id="user-home-main">
         <div class="container">
@@ -85,7 +88,7 @@
     
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <h3>(Election) President of the Republic of Nigeria</h3>
+                    <h3 id="interested-office-header">(Election) President of the Republic of Nigeria</h3>
                     <div class="content-group">
                         <div class="individual-person-container">
                             <div>

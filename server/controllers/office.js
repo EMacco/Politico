@@ -11,13 +11,19 @@ class OfficeController {
     };
 
     const schema = {
-      officeId: Joi.number().required(),
-      partyId: Joi.number().required(),
-      candidateId: Joi.number().required()
+      officeId: Joi.number()
+        .required()
+        .label('Please enter office ID as a number'),
+      partyId: Joi.number()
+        .required()
+        .label('Please enter party ID as a number'),
+      candidateId: Joi.number()
+        .required()
+        .label('Please enter candidate number as a number')
     };
 
     const { error } = Joi.validate(details, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     // Check if this office already has a candidate from my party
     OfficeModel.checkIfPartySlotAvailable(
