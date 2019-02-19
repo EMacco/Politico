@@ -890,3 +890,7 @@ label {
   overflow: hidden;
   height: calc(100vh);
 }
+
+#errorMessage {
+  color: red;
+}

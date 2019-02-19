@@ -97,6 +97,54 @@ describe('Users', () => {
     });
   });
 
+  // Testing authentication
+  describe('Authorization /', () => {
+    it('should return unauthorized access', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/users/${createdIndex}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should return 401 since token is invalid or expired', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/users/${createdIndex}`)
+        .set('x-access-token', 'this_token_is_invalid')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should not create political office since the user is not an admin', done => {
+      const office = {
+        name: 'Office of the President',
+        type: 'federal',
+        logoUrl: 'http://google.com/president-of-nigeria.png'
+      };
+
+      chai
+        .request(app)
+        .post('/api/v1/offices')
+        .send(office)
+        .set(
+          'x-access-token',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0TmFtZSI6IlRoaXMgaXMgYSBwYXJ0eSIsImxhc3ROYW1lIjoiZmVkZXJhbCByb2FkIiwiZW1haWwiOiJ0ZXN0cHJpdmlsZWRnZUB0ZXN0LmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJDFObzRROS9SWFVyV21XL05URkNTR3UuZVRINS91U2hXWUFFbTAuUGxYUms0RHlNVDNyVE5pIiwicGhvbmVOdW1iZXIiOiIzNzI3NzgzNzc4NSIsInBhc3Nwb3J0VXJsIjoiaHR0cDovL2dvb2dsZS5jb20iLCJpc0FkbWluIjpmYWxzZX0sImlhdCI6MTU1MDU4NTUxOSwiZXhwIjoxNTUwNTg5MTE5fQ.OW6JXWfufkid1VO4NaoqhHl0JpLqvPxec-arws9PBc4'
+        )
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
   describe('GET /', () => {
     // Test should return status code 200 user exists
     it('should get a particular user since he exist', done => {
