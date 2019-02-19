@@ -8,6 +8,7 @@
 	<meta name="author" content="Okwara Emmanuel">
 	<title>POLITICO | Signin Page</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="./js/index.js"></script>
 </head>
 <body>
 	<div class="outer">
@@ -27,17 +28,18 @@
 				<div class="login-form">
 					<div class="form-attributes">
 						<center><h1>Member Login</h1></center>
-						<form action="user-home.html">
+						<center><label id="errorMessage"></label></center>
+						<form>
 							<div class="input-with-icon">
 								<img src="img/email-icon.png">
-								<input type="email" class="signin-text-field" placeholder="Email" required />
+								<input type="email" class="signin-text-field" placeholder="Email" id="loginEmail" required />
 							</div>
 							<div class="input-with-icon">
 								<img src="img/password-icon.png">
-								<input type="password" class="signin-text-field" placeholder="Password" required />
+								<input type="password" class="signin-text-field" placeholder="Password" id="loginPassword" required />
 							</div>
 
-							<input type="submit" value="Login" class="signin-submit-btn" />
+							<input type="button" value="Login" class="signin-submit-btn" id="loginBtn" onclick="loginBtnClicked()" />
 							
 							<div id="reset-password-div">
 								<a href="resetPassword.html">Did you forget password?<a>
