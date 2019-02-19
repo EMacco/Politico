@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha --require babel-register ./tests/*.js --exit",
+    "test": "nyc --reporter=html --reporter=text mocha --require babel-register ./tests/*.js --timeout 50000 --exit",
     "start": "node ./dist",
     "build": "npm run clean && babel server -d dist",
     "clean": "rm -rf dist",

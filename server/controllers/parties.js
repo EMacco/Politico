@@ -37,14 +37,27 @@ class PartiesController {
   }
 
   static createPoliticalParty(req, res) {
+    // Remove white spaces
+    try {
+      if (req.body.name) {
+        req.body.name = req.body.name
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+
+      // Remove white spaces
+      if (req.body.hqAddress) {
+        req.body.hqAddress = req.body.hqAddress
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+    } catch (error) {}
+
     // Validate the party details
     const { error } = validateParty(req.body);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
-
-    // Remove white spaces
-    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
-    req.body.hqAddress = req.body.hqAddress.replace(/\s\s+/g, ' ').trim();
-
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     // Check if the party exists before
     PartiesModel.fetchPartyByName(req.body.name, ({ success, data }) => {
@@ -110,15 +123,25 @@ class PartiesController {
       name: Joi.string()
         .min(5)
         .max(40)
-        .required(),
-      id: Joi.number().required()
-
+        .required()
+        .label('Please enter name that contains 5 - 40 characters'),
+      id: Joi.number()
+        .required()
+        .label('Please enter ID as a number')
     };
-    const { error } = Joi.validate({ name: req.body.name, id: req.params.id }, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
     // Remove white spaces
-    req.body.name = req.body.name.replace(/\s\s+/g, ' ').trim();
+    try {
+      if (req.body.name) {
+        req.body.name = req.body.name
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+    } catch (error) {}
+
+    const { error } = Joi.validate({ name: req.body.name, id: req.params.id }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
       if (!success) {
@@ -149,14 +172,25 @@ class PartiesController {
       hqAddress: Joi.string()
         .min(10)
         .max(100)
-        .required(),
-      id: Joi.number().required()
+        .required()
+        .label('Please enter HQ address that contains 10 - 100 characters'),
+      id: Joi.number()
+        .required()
+        .label('Please enter ID as a number')
     };
-    const { error } = Joi.validate({ hqAddress: req.body.hqAddress, id: req.params.id }, schema);
-    if (error) return res.status(400).json({ status: 400, error: error.details[0].message });
 
     // Remove white spaces
-    req.body.hqAddress = req.body.hqAddress.replace(/\s\s+/g, ' ').trim();
+    try {
+      if (req.body.hqAddress) {
+        req.body.hqAddress = req.body.hqAddress
+          .replace(/\s\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+      }
+    } catch (error) {}
+
+    const { error } = Joi.validate({ hqAddress: req.body.hqAddress, id: req.params.id }, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
 
     PartiesModel.fetchPartyById(parseInt(req.params.id, 10), ({ success, data }) => {
       if (!success) {
