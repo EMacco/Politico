@@ -2,6 +2,7 @@
 import express from 'express';
 import bodyparser from 'body-parser';
 import debug from 'debug';
+import cors from 'cors';
 import { config } from 'dotenv';
 
 // Import my routers
@@ -22,6 +23,7 @@ const debugg = debug('index');
 // Add parser middleware to parser json data
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
+app.use(cors());
 
 // Use the political parties routes
 app.use('/api/v1/parties', partiesRoutes);
