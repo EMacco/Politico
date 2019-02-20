@@ -49,7 +49,7 @@ const loginBtnClicked = () => {
     .then(res => {
       // Check if the user details is valid
       if (res.status === 200) {
-        window.localStorage.setItem('userToken', res.data[0].token);
+        window.localStorage.setItem('userDetails', JSON.stringify(res.data[0]));
         window.location.href = './user-home.html';
       } else {
         alertLabel.innerHTML = res.error;
