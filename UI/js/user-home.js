@@ -1,8 +1,23 @@
 // Get the token of the user
-const userToken = window.localStorage.getItem('userToken');
+const userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 
-// Check if user is admin
+if (!userDetails) {
+  // Return the user to the sign in page
+  window.location.href = './signin.html';
+} else {
+  const userToken = userDetails.token;
 
-// Get the interested offices
+  // Get the interested offices
 
-// Get votes that have been casted by this user
+  // Get votes that have been casted by this user
+}
+
+signoutBtnClicked = () => {
+  window.localStorage.removeItem('userDetails');
+  window.location.href = './signin.html';
+};
+
+dashboardSignoutBtnClicked = () => {
+  window.localStorage.removeItem('userDetails');
+  window.location.href = '../signin.html';
+};

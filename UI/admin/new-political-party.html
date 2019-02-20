@@ -10,6 +10,8 @@
     <title>POLITICO | Create Party</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script src="../js/index.js"></script>
+    <script src="../js/user-home.js"></script>
+    
 </head>
 
 <body class="signed-in-page">
@@ -25,7 +27,7 @@
                     <li><a href="new-political-party.html">New Political Party</a></li>
                     <li><a href="new-government-office.html">New Government Office</a></li>
                     <li><a href="new-elections.html">Schedule Election</a></li>
-                    <li><a href="../index.html">Log out</a></li>
+                    <li><a onclick="dashboardSignoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
@@ -81,7 +83,7 @@
                         Schedule Election
                     </div>
                 </a>
-                <a href="../index.html">
+                <a onclick="dashboardSignoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>

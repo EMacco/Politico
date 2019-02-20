@@ -9,6 +9,7 @@
 	<title>POLITICO | Political Parties</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
 	<header class="index-header">
@@ -23,7 +24,7 @@
                     <li><a href="political-parties.html">Political Parties</a></li>
                     <li><a href="government-offices.html">Government Offices</a></li>
                     <li><a href="elections.html">Vote</a></li>
-                    <li><a href="index.html">Log out</a></li>
+                    <li><a onclick="signoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
@@ -79,7 +80,7 @@
                         Vote
                     </div>
                 </a>
-                <a href="index.html">
+                <a onclick="signoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>
