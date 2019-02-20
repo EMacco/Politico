@@ -18,13 +18,13 @@
 		<input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
 		<nav>
             <div class="header-nav">
-                <ul>
+                <ul id="hideDashboard">
                     <li><a href="user-home.html">Home</a></li>
                     <li><a href="admin/user-home.html">My Dashboard</a></li>
                     <li><a href="political-parties.html">Political Parties</a></li>
                     <li><a href="government-offices.html">Government Offices</a></li>
                     <li><a href="elections.html">Vote</a></li>
-                    <li><a href="index.html">Log out</a></li>
+                    <li><a onclick="signoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
@@ -36,13 +36,13 @@
 		<label for="nav-toggle" class="nav-toggle-label" >
 			<span></span>
 		</label>
-	</header>
+    </header>
 
     <div id="overlay" class="overlay"></div>
     
 	<main id="user-home-main">
         <div class="container">
-            <section id="user-profile-container">
+            <section id="user-profile-container" class="hideDashboard">
                 <div>
                     <img src="img/person-large.png" />
                 </div>
@@ -59,7 +59,7 @@
                         My Profile
                     </div>
                 </a>
-                <a href="admin/user-home.html">
+                <a href="admin/user-home.html" id="hideDashboardDiv">
                     <div class="nav-menu">
                         My Dashboard
                     </div>
@@ -79,12 +79,22 @@
                         Vote
                     </div>
                 </a>
-                <a href="index.html">
+                <a onclick="signoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>
                 </a>
             </section>
+
+            <script>
+                // Check if user is admin
+                if (userDetails.user.isAdmin === 'false') {
+                    // Hide the dashboardconst navListItem = document.getElementById('hideDashboard');
+                    navListItem.children[1].style.display = 'none';
+                    const dashboardNavDiv = document.getElementById('hideDashboardDiv');
+                    dashboardNavDiv.style.display = 'none'
+                }
+            </script>
     
             <section id="user-home-content-div">
                 <div class="profile-page-section">
