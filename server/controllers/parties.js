@@ -27,7 +27,7 @@ class PartiesController {
           return res.status(404).json({ status: 404, error: 'The political party does not exist' });
 
         // The party exists retrun to the user
-        return res.status(200).json({ status: 200, data: [data] });
+        return res.status(200).json({ status: 200, data });
       }
 
       // It is a server error

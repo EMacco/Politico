@@ -41,6 +41,33 @@ class OfficeModel extends OfficesModel {
       });
     return null;
   }
+
+  static fetchVotesByOfficeId(officeId, completionHandler) {
+    const queryText = `SELECT * FROM votes WHERE officeid=${officeId}`;
+
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ successs: true, dataa: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ successs: false, dataaa: err });
+      });
+    return null;
+  }
+
+  static fetchVotesByVoterId(userId, completionHandler) {
+    const queryText = `SELECT * FROM votes WHERE createdby=${userId}`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ successs: true, dataa: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ successs: false, dataaa: err });
+      });
+    return null;
+  }
 }
 
 export default OfficeModel;

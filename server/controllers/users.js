@@ -14,7 +14,7 @@ class UsersController {
           return res.status(404).json({ status: 404, error: 'The user does not exist' });
 
         // The user exists return to the user
-        return res.status(200).json({ status: 200, data: [data] });
+        return res.status(200).json({ status: 200, data });
       }
 
       // It is a server error

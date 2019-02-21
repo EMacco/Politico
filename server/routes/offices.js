@@ -7,6 +7,9 @@ const routes = Router();
 // Fetch all political offices
 routes.get('/', Authorization.isUser, OfficesController.getAllOffices);
 
+// Fetch all candidates
+routes.get('/candidates', Authorization.isUser, OfficesController.getAllCandidates);
+
 // Fetch a specific political office
 routes.get('/:id', Authorization.isUser, OfficesController.getSingleOffice);
 
