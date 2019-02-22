@@ -62,6 +62,18 @@ class PartiesModel {
       });
   }
 
+  static updateUserParty(userId, partyId, completionHandler) {
+    const queryText = `UPDATE users SET partyid=${partyId} WHERE id=${userId} RETURNING *`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler(true, res.rows);
+      })
+      .catch(err => {
+        completionHandler(false, err);
+      });
+  }
+
   static updatePartyAddressById(id, hqAddress, completionHandler) {
     const queryText = `UPDATE parties SET hqaddress='${hqAddress}' WHERE id=${id} RETURNING *`;
     pool

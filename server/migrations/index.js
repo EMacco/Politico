@@ -55,7 +55,8 @@ const createCandidatesTable = () => {
           id SERIAL PRIMARY KEY, 
           officeId INT NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
           partyId INT NOT NULL REFERENCES parties(id) ON DELETE CASCADE, 
-          candidateId INT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE
+          candidateId INT NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+          date DATE NULL
           )`;
 
   pool
@@ -117,7 +118,8 @@ const createUserTable = () => {
         password TEXT NOT NULL,
         phoneNumber VARCHAR(11) NOT NULL,
         passportUrl TEXT,
-        isAdmin boolean DEFAULT false
+        isAdmin boolean DEFAULT false,
+        partyid INT NULL
         )`;
 
   pool

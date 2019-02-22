@@ -17,6 +17,20 @@ class OfficesController {
     return null;
   }
 
+  // Get all offices
+  static getAllCandidates(req, res) {
+    OfficesModel.fetchAllCandidates(({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        return res.status(200).json({ status: 200, data });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
+    return null;
+  }
+
   static getSingleOffice(req, res) {
     // Check if it is a number
     const schema = {

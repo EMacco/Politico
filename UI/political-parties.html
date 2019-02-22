@@ -9,6 +9,7 @@
 	<title>POLITICO | Political Parties</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
     <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
@@ -18,7 +19,7 @@
 		<input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
 		<nav>
             <div class="header-nav">
-                <ul>
+                <ul id="hideDashboard">
                     <li><a href="user-home.html">Home</a></li>
                     <li><a href="admin/user-home.html">My Dashboard</a></li>
                     <li><a href="political-parties.html">Political Parties</a></li>
@@ -29,7 +30,7 @@
             </div>
             <div class="header-nav-big-screen">
                 <ul>
-                    <li>Welcome, Emmanuel Okwara</li>
+                    <li>Welcome, <span id="welcomeUserLbl">Emmanuel Okwara</span></li>
                 </ul>
             </div>
 		</nav>
@@ -48,11 +49,20 @@
                     <img src="img/person-large.png" />
                 </div>
                 <div class="profile-description-text">
-                    <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                    <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                    <label>Phone: <span class="profile-answers">08124185320</span></label>
+                    <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
+                    <label>Email: <span class="profile-answers" id="welcomeEmailLbl">okwarae.n@gmail.com</span></label>
+                    <label>Phone: <span class="profile-answers" id="welcomePhoneLbl">08124185320</span></label>
                     <a href="resetPassword.html">Reset Password</a>
                 </div>
+
+                <script>
+                    // Set the values of the profile 
+                    // Set the name 
+                    document.getElementById('welcomeUserLbl').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeUserLbl2').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeEmailLbl').innerHTML = userDetails.user.email;
+                    document.getElementById('welcomePhoneLbl').innerHTML = userDetails.user.phonenumber;
+                </script>
                 <hr class="separate-profile-nav"/>
 
                 <a href="user-home.html">
@@ -60,7 +70,7 @@
                         My Profile
                     </div>
                 </a>
-                <a href="admin/user-home.html">
+                <a href="admin/user-home.html" id="hideDashboardDiv">
                     <div class="nav-menu">
                         My Dashboard
                     </div>
@@ -86,35 +96,25 @@
                     </div>
                 </a>
             </section>
+
+            <script>
+                // Check if user is admin
+                if (userDetails.user.isadmin === false) {
+                    // Hide the dashboard
+                    const navListItem = document.getElementById('hideDashboard');
+                    navListItem.children[1].style.display = 'none';
+                    const dashboardNavDiv = document.getElementById('hideDashboardDiv');
+                    dashboardNavDiv.style.display = 'none'
+                }
+            </script>
             
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <h3 id="interested-office-header">Political Parties (2)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Email: <span class="profile-answers">apc_nigeria@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08037483744</span></label>
-                                <input type="submit" class="add-party-btn" value="Join Party" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                                <div>
-                                    <img src="img/pdp-logo.JPG" />
-                                </div>
-                                <div class="profile-description-text">
-                                    <label><span class="profile-answers">People's Democratic Party</span></label>
-                                    <label>Email: <span class="profile-answers">pdp_nigeria@gmail.com</span></label>
-                                    <label>Phone: <span class="profile-answers">080263647333</span></label>
-                                    <input type="submit" class="add-party-btn" value="Join Party" />
-                                </div>
-                            </div>
-
-                        
+                    <h3 id="interested-office-header">Political Parties (<span id="numberOfPartiesLbl"></span>)</h3>
+                    <div class="content-group" id="politicalPartiesSlot">
+                        <script>
+                            fetchPoliticalParties();
+                        </script>
                     </div>
                 </div>
             </section>

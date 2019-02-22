@@ -4,7 +4,7 @@ import Authorization from './authorization';
 
 class VotesController {
   static registerVote(req, res) {
-    // Get the id of the user that is signed in //#endregion
+    // Get the id of the user that is signed in
     Authorization.getUserDetails(req, res, userDetails => {
       // Validate the data
       const details = {

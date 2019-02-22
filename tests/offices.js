@@ -110,6 +110,101 @@ describe('Political Offices', () => {
     });
   });
 
+  describe('GET /candidates', () => {
+    // Test should return a list of all political offices
+    it('should get all candidates', done => {
+      chai
+        .request(app)
+        .get('/api/v1/offices/candidates')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
+  describe('GET /votes', () => {
+    // Test should return a list of all votes
+    it('should get all votes for office', done => {
+      chai
+        .request(app)
+        .get(`/api/v1/office/${createdIndex}/office-votes`)
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return bad request
+    it('should not return votes', done => {
+      chai
+        .request(app)
+        .get('/api/v1/office/q/office-votes')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return not found
+    it('should return 404 error since office does not exist', done => {
+      chai
+        .request(app)
+        .get('/api/v1/office/0/office-votes')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return a list of all votes
+    it('should get all votes for user', done => {
+      chai
+        .request(app)
+        .get('/api/v1/office/1/user-votes')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return bad request
+    it('should not return votes since candidateid is not a number', done => {
+      chai
+        .request(app)
+        .get('/api/v1/office/q/user-votes')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should return not found
+    it('should return 404 error since candidate does not exist', done => {
+      chai
+        .request(app)
+        .get('/api/v1/office/0/user-votes')
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
+
   describe('PATCH /', () => {
     // Test should not update an office since id does not exist
     it('should not update political office', done => {

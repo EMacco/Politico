@@ -1,5 +1,8 @@
 import Joi from 'joi';
+import jwt from 'jsonwebtoken';
 import PartiesModel from '../models/parties';
+import UsersModel from '../models/users';
+import Authorization from './authorization';
 import { validateParty } from './validationFunctions';
 
 class PartiesController {
@@ -27,7 +30,7 @@ class PartiesController {
           return res.status(404).json({ status: 404, error: 'The political party does not exist' });
 
         // The party exists retrun to the user
-        return res.status(200).json({ status: 200, data: [data] });
+        return res.status(200).json({ status: 200, data });
       }
 
       // It is a server error
@@ -217,6 +220,75 @@ class PartiesController {
       return null;
     });
     return null;
+  }
+
+  static joinParty(req, res) {
+    // Get the id of the user that is signed in
+    Authorization.getUserDetails(req, res, userDetails => {
+      const details = {
+        userId: userDetails.id,
+        partyId: req.body.partyId
+      };
+      const schema = {
+        userId: Joi.number()
+          .required()
+          .label('Please enter user ID as a number'),
+        partyId: Joi.number()
+          .required()
+          .label('Please enter party ID as a number')
+      };
+
+      const { error } = Joi.validate(details, schema);
+      if (error)
+        return res.status(400).json({ status: 400, error: error.details[0].context.label });
+
+      // Check if the user exists
+      UsersModel.fetchUserById(parseInt(details.userId, 10), ({ success, data }) => {
+        if (!success) {
+          // It is a server error
+          return res.status(500).json({ status: 500, error: data });
+        }
+
+        // Check if the user exists
+        if (data.length === 0)
+          // The user does not exist
+          return res.status(404).json({ status: 404, error: 'The user does not exist' });
+
+        // Check if the party exists
+        PartiesModel.fetchPartyById(parseInt(req.body.partyId, 10), partyDetails => {
+          const successs = partyDetails.success;
+          const dataa = partyDetails.data;
+          // Check if the query was successful
+          if (successs) {
+            // Check if the party exists
+            if (dataa.length === 0)
+              return res
+                .status(404)
+                .json({ status: 404, error: 'The political party does not exist' });
+
+            // Update the user party
+            PartiesModel.updateUserParty(
+              parseInt(details.userId, 10),
+              parseInt(details.partyId, 10),
+              (succ, val) => {
+                if (!succ) return res.status(500).json({ status: 500, data, val });
+
+                // Generate new token
+                const token = jwt.sign({ data: val }, process.env.TOKEN_KEY, {
+                  expiresIn: 60 * 60
+                });
+                return res.status(200).json({ status: 200, data: [{ token, user: val[0] }] });
+              }
+            );
+          } else {
+            // It is a server error
+            return res.json({ status: 500, error: data });
+          }
+        });
+        return null;
+      });
+      return null;
+    });
   }
 }
 
