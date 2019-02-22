@@ -271,10 +271,9 @@ class PartiesController {
               parseInt(details.userId, 10),
               parseInt(details.partyId, 10),
               (succ, val) => {
-                if (!succ) return res.status(500).json({ status: 500, data, val });
-
+                if (!succ) return res.status(500).json({ status: 500, data: val });
                 // Generate new token
-                const token = jwt.sign({ data: val }, process.env.TOKEN_KEY, {
+                const token = jwt.sign({ data: val[0] }, process.env.TOKEN_KEY, {
                   expiresIn: 60 * 60
                 });
                 return res.status(200).json({ status: 200, data: [{ token, user: val[0] }] });

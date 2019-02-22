@@ -126,3 +126,22 @@ const fetchAllParties = (userToken, completionHandler) => {
     })
     .catch(() => {});
 };
+
+const changeUserParty = (userToken, partyId, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ partyId })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties/join`, options)
+    .then(res => res.json())
+    .then(res => {
+      // Check if the user details is valid
+      completionHandler(res);
+    })
+    .catch(() => {});
+};

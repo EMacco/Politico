@@ -178,10 +178,12 @@ const fetchPoliticalParties = () => {
       let cardDesign = '';
 
       for (let ind = 0; ind < data.length; ind += 1) {
-        let partyBtn = 'add';
+        let partyBtn = 'add-party-btn';
+        let partyText = 'Join Party';
         // Check if this user is a member of this party
         if (userDetails.user.partyid === data[ind].id) {
-          partyBtn = 'remove';
+          partyBtn = 'casted-vote';
+          partyText = 'Member';
         }
 
         // Display the details in the card
@@ -192,10 +194,22 @@ const fetchPoliticalParties = () => {
           </div>
           <div class="profile-description-text">
               <label><span class="profile-answers">${data[ind].name}</span></label>
-              <label>HQ Address: <span class="profile-answers">${data[ind].hqaddress}</span></label>
-              <input type="submit" class="${partyBtn}-party-btn" value="Join Party" />
-          </div>
-        </div>`;
+              <label>HQ Address: <span class="profile-answers">${
+                data[ind].hqaddress
+              }</span></label>`;
+
+        if (partyText === 'Member') {
+          // The container should be a span not a button
+          cardDesign += `<span class="${partyBtn}" name="${data[ind].id}">${partyText}</span>
+                  </div>
+                </div>`;
+        } else {
+          cardDesign += `<input type="submit" class="${partyBtn}" value="${partyText}" name="${
+            data[ind].id
+          }" onclick="joinParty(this.name)" />
+                  </div>
+                </div>`;
+        }
 
         // Check how many results there are
         if (ind + 1 === data.length && data.length % 2 !== 0) {
@@ -207,6 +221,24 @@ const fetchPoliticalParties = () => {
         document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
       }
       document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
+    }
+  });
+};
+
+const joinParty = id => {
+  const userToken = userDetails.token;
+
+  changeUserParty(userToken, id, res => {
+    // Check if the user has access to this page
+    if (res.status === 401) {
+      // Invalid token
+      window.localStorage.removeItem('userDetails');
+      window.location.href = './signin.html';
+    } else if (res.status === 200) {
+      // Update the local storage with new information
+      window.localStorage.setItem('userDetails', JSON.stringify(res.data[0]));
+      // Refresh the political parties page
+      window.location.reload();
     }
   });
 };

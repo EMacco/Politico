@@ -83,13 +83,12 @@ class UsersController {
           isAdmin
         };
 
-        const token = jwt.sign({ data: newUser }, process.env.TOKEN_KEY, {
-          expiresIn: 60 * 60
-        });
-
         //   Insert the new user in the array
         UsersModel.createNewUser(newUser, ({ successs, dataa }) => {
           if (successs) {
+            const token = jwt.sign({ data: dataa[0] }, process.env.TOKEN_KEY, {
+              expiresIn: 60 * 60
+            });
             // Return the new user details to the user
             return res.status(201).json({ status: 201, data: [{ token, user: dataa[0] }] });
           }
