@@ -9,6 +9,7 @@
 	<title>POLITICO | User Home Page</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
     <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
@@ -29,7 +30,7 @@
             </div>
             <div class="header-nav-big-screen">
                 <ul>
-                    <li>Welcome, Emmanuel Okwara</li>
+                    <li>Welcome, <span id="welcomeUserLbl">Emmanuel Okwara</span></li>
                 </ul>
             </div>
         </nav>
@@ -42,16 +43,26 @@
     
 	<main id="user-home-main">
         <div class="container">
-            <section id="user-profile-container" class="hideDashboard">
+            <section id="user-profile-container">
                 <div>
                     <img src="img/person-large.png" />
                 </div>
                 <div class="profile-description-text">
-                    <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                    <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                    <label>Phone: <span class="profile-answers">08124185320</span></label>
+                    <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
+                    <label>Email: <span class="profile-answers" id="welcomeEmailLbl">okwarae.n@gmail.com</span></label>
+                    <label>Phone: <span class="profile-answers" id="welcomePhoneLbl">08124185320</span></label>
                     <a href="resetPassword.html">Reset Password</a>
                 </div>
+
+                <script>
+                    // Set the values of the profile 
+                    // Set the name 
+                    document.getElementById('welcomeUserLbl').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeUserLbl2').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeEmailLbl').innerHTML = userDetails.user.email;
+                    document.getElementById('welcomePhoneLbl').innerHTML = userDetails.user.phonenumber;
+                </script>
+
                 <hr class="separate-profile-nav"/>
 
                 <a href="user-home.html" id="current-side-bar">
@@ -88,8 +99,9 @@
 
             <script>
                 // Check if user is admin
-                if (userDetails.user.isAdmin === 'false') {
-                    // Hide the dashboardconst navListItem = document.getElementById('hideDashboard');
+                if (userDetails.user.isadmin === false) {
+                    // Hide the dashboard
+                    const navListItem = document.getElementById('hideDashboard');
                     navListItem.children[1].style.display = 'none';
                     const dashboardNavDiv = document.getElementById('hideDashboardDiv');
                     dashboardNavDiv.style.display = 'none'
@@ -99,95 +111,19 @@
             <section id="user-home-content-div">
                 <div class="profile-page-section">
                     <h3 id="interested-office-header">Interested Office</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Member of the House of Representatives</span></label>
-                                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">6 Candidates</a></span></label>
-                                <label>Date: <span class="profile-answers">20th Dec, 2019</span></label>
-                                <label><span class="pending-election">Pending</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container hidden-div"></div>
+                    <div class="content-group" id="interestedOfficeSlot"> 
+                        <script>
+                            fetchPageInterestedOffice();
+                        </script>
                     </div>
                 </div>
 
                 <div class="profile-page-section">
-                    <h3>My Votes (5)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Office: <span class="profile-answers">Presidency</span></label>
-                                <label>Result: <span class="profile-answers">17 million</span> Votes</label>
-                                <label><span class="won-election">Won</span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Office: <span class="profile-answers">Presidency</span></label>
-                                <label>Result: <span class="profile-answers">17 million</span> Votes</label>
-                                <label><span class="won-election">Won</span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container hidden-div"></div>
+                    <h3>My Votes (<span id="numberOfVotesLbl"></span>)</h3>
+                    <div class="content-group" id="userVotesSlot">
+                        <script>
+                            fetchPageVotes();
+                        </script>
                     </div>
                 </div>
             </section>

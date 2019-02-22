@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import OfficeModel from '../models/office';
+import UsersModel from '../models/users';
 
 class OfficeController {
   static registerCandidate(req, res) {
@@ -57,6 +58,17 @@ class OfficeController {
   }
 
   static collateResult(req, res) {
+    const details = {
+      officeId: req.params.officeId
+    };
+    const schema = {
+      officeId: Joi.number()
+        .required()
+        .label('Please enter office ID as a number')
+    };
+
+    const { error } = Joi.validate(details, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
     // Check if the office exists
     OfficeModel.fetchOfficeById(parseInt(req.params.officeId, 10), ({ success, data }) => {
       // Check if the query was successful
@@ -80,6 +92,80 @@ class OfficeController {
           data: dataa
         });
       });
+    });
+    return null;
+  }
+
+  static fetchVotesForOffice(req, res) {
+    const details = {
+      officeId: req.params.officeId
+    };
+    const schema = {
+      officeId: Joi.number()
+        .required()
+        .label('Please enter office ID as a number')
+    };
+
+    const { error } = Joi.validate(details, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
+
+    OfficeModel.fetchOfficeById(parseInt(details.officeId, 10), ({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        // Check if the office exists
+
+        if (data.length === 0)
+          return res
+            .status(404)
+            .json({ status: 404, error: 'The political office does not exist' });
+
+        // The office exists retrun to the user get the votes
+        OfficeModel.fetchVotesByOfficeId(parseInt(details.officeId, 10), ({ successs, dataa }) => {
+          // Check if the query was successful
+          if (successs) {
+            return res.status(200).json({ status: 200, dataa });
+          }
+        });
+      } else {
+        // It is a server error
+        return res.json({ status: 500, error: data });
+      }
+    });
+    return null;
+  }
+
+  static fetchVotesForUser(req, res) {
+    const details = {
+      userId: req.params.userId
+    };
+    const schema = {
+      userId: Joi.number()
+        .required()
+        .label('Please enter user ID as a number')
+    };
+
+    const { error } = Joi.validate(details, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
+
+    UsersModel.fetchUserById(parseInt(details.userId, 10), ({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        // Check if the office exists
+
+        if (data.length === 0)
+          return res.status(404).json({ status: 404, error: 'The user does not exist' });
+
+        // The user exists return the votes
+        OfficeModel.fetchVotesByVoterId(parseInt(details.userId, 10), ({ successs, dataa }) => {
+          // Check if the query was successful
+          if (successs) {
+            return res.status(200).json({ status: 200, dataa });
+          }
+        });
+      } else {
+        // It is a server error
+        return res.json({ status: 500, error: data });
+      }
     });
     return null;
   }

@@ -13,6 +13,18 @@ class OfficesModel {
       });
   }
 
+  static fetchAllCandidates(completionHandler) {
+    const queryText = `SELECT * FROM candidates`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+  }
+
   static fetchOfficeById(officeID, completionHandler) {
     const queryText = `SELECT * FROM offices WHERE id=${officeID}`;
 
