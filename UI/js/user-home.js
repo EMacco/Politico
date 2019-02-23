@@ -318,6 +318,7 @@ const fetchGovernmentOffices = () => {
           </div>
           <div class="profile-description-text">
               <label><span class="profile-answers">${officeData[ind].name}</span></label>
+              <label>Type: <span class="profile-answers">${officeData[ind].type}</span></label>
               <label>Date: <span class="profile-answers">${electionDate}</span></label>
               <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${count} Candidates</a></span></label>`;
 
