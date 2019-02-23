@@ -66,6 +66,40 @@ describe('Political Parties', () => {
           done();
         });
     });
+
+    // Test should not create a party without required field
+    it('should not update user political party. Bad request', done => {
+      const body = {
+        partyId: 'gfgf'
+      };
+      chai
+        .request(app)
+        .post('/api/v1/parties/join')
+        .send(body)
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    // Test should not create a party without required field
+    it('should not update user political party since user id is not specified', done => {
+      const body = {
+        partyId: 0
+      };
+      chai
+        .request(app)
+        .post('/api/v1/parties/join')
+        .send(body)
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
   });
 
   describe('GET /', () => {

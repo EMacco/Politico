@@ -13,6 +13,9 @@ routes.get('/:id', Authorization.isUser, PartiesController.getSingleParty);
 // Create political party
 routes.post('/', Authorization.isAdmin, PartiesController.createPoliticalParty);
 
+// Join a political party
+routes.post('/join', Authorization.isUser, PartiesController.joinParty);
+
 // Delete a particular party
 routes.delete('/:id', Authorization.isAdmin, PartiesController.deletePoliticalParty);
 

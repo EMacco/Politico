@@ -108,3 +108,40 @@ const collateResult = (id, userToken, completionHandler) => {
     })
     .catch(() => {});
 };
+
+const fetchAllParties = (userToken, completionHandler) => {
+  const options = {
+    method: 'GET',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties`, options)
+    .then(res => res.json())
+    .then(res => {
+      // Check if the user details is valid
+      completionHandler(res);
+    })
+    .catch(() => {});
+};
+
+const changeUserParty = (userToken, partyId, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ partyId })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties/join`, options)
+    .then(res => res.json())
+    .then(res => {
+      // Check if the user details is valid
+      completionHandler(res);
+    })
+    .catch(() => {});
+};
