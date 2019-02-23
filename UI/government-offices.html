@@ -9,6 +9,7 @@
 	<title>POLITICO | Government Offices</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
     <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
@@ -109,42 +110,11 @@
             
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <h3 id="interested-office-header">Government Offices (3)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/kogi-logo.png" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Member Kogi State House Of Assemblies</span></label>
-                                <label>Date: <span class="profile-answers">31st sept, 2019</span></label>
-                                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">6 Candidates</a></span></label>
-                                <input type="submit" class="add-party-btn" value="Express Interest" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/new direction.jpg" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">New Direction Blueprint Team</span></label>
-                                <label>Date: <span class="profile-answers">2nd june, 2019</span></label>
-                                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">3 Candidates</a></span></label>
-                                <input type="submit" class="add-party-btn" value="Express Interest" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/kogi-logo.png" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">House of Representatives</span></label>
-                                <label>Date: <span class="profile-answers">20st sept, 2019</span></label>
-                                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">11 Candidates</a></span></label>
-                                <input type="submit" class="remove-party-btn" value="Forfeit Interest" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container hidden-div"></div>
+                    <h3 id="interested-office-header">Government Offices (<span id="numberOfOfficessLbl"></span>)</h3>
+                    <div class="content-group" id="governmentOfficeSlot">
+                        <script>
+                            fetchGovernmentOffices();
+                        </script>
                         
                     </div>
                 </div>

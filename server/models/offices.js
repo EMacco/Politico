@@ -25,6 +25,18 @@ class OfficesModel {
       });
   }
 
+  static fetchAllInterests(completionHandler) {
+    const queryText = `SELECT * FROM interests`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+  }
+
   static fetchOfficeById(officeID, completionHandler) {
     const queryText = `SELECT * FROM offices WHERE id=${officeID}`;
 
@@ -59,6 +71,18 @@ class OfficesModel {
       })
       .catch(err => {
         completionHandler({ successs: false, dataa: err });
+      });
+  }
+
+  static expressInterest({ candidateId, partyId, officeId }, completionHandler) {
+    const queryText = `INSERT INTO interests(candidateid, partyid, officeid) VALUES(${candidateId}, ${partyId},${officeId}) RETURNING *`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
       });
   }
 

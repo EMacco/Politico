@@ -15,6 +15,14 @@ class OfficeModel extends OfficesModel {
     return null;
   }
 
+  static removeInterest(officeId, partyId, candidateId) {
+    const queryText = `DELETE FROM interests WHERE candidateid=${candidateId} AND officeid=${officeId} AND partyid=${partyId}`;
+    pool
+      .query(queryText)
+      .then(() => {})
+      .catch(() => {});
+  }
+
   static collateResult(officeId, completionHandler) {
     const queryText = `SELECT officeid, candidateid, COUNT(candidateid) FROM votes WHERE officeId='${officeId}' GROUP BY candidateid, officeid`;
     pool

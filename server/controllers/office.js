@@ -47,6 +47,13 @@ class OfficeController {
               // Does not meet requirement to save
               return res.status(400).json({ status: 400, error: data.detail });
             }
+            // Successfully registered new candidate remove the person from expressed interest
+            OfficeModel.removeInterest(
+              parseInt(req.body.officeId, 10),
+              parseInt(req.body.partyId, 10),
+              parseInt(req.body.candidateId, 10)
+            );
+
             return res
               .status(201)
               .json({ status: 201, data: { office: data[0].officeid, user: data[0].candidateid } });

@@ -641,6 +641,11 @@ label {
   color: var(--solid-background);
 }
 
+.pending-vote {
+  font-style: italic;
+  color: rgb(214, 157, 51);
+}
+
 .individual-person-container img {
   width: 60px;
   height: 60px;

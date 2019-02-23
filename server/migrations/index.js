@@ -30,6 +30,25 @@ const createPetitionTable = () => {
     });
 };
 
+const createInterestsTable = () => {
+  const queryText = `CREATE TABLE IF NOT EXISTS interests(
+          id SERIAL PRIMARY KEY, 
+          partyId INT NOT NULL REFERENCES parties(id) ON DELETE CASCADE, 
+          officeId INT NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
+          candidateId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+          )`;
+
+  pool
+    .query(queryText)
+    .then(res => {
+      debugg(res);
+      createPetitionTable();
+    })
+    .catch(err => {
+      debugg(err);
+    });
+};
+
 const createVotesTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS votes(
           id SERIAL PRIMARY KEY, 
@@ -43,7 +62,7 @@ const createVotesTable = () => {
     .query(queryText)
     .then(res => {
       debugg(res);
-      createPetitionTable();
+      createInterestsTable();
     })
     .catch(err => {
       debugg(err);
@@ -131,11 +150,12 @@ const createUserTable = () => {
       const createUserQuery = `INSERT INTO users(firstName, lastName, otherName, email, password, phoneNumber, passportUrl, isAdmin) VALUES ('Emmanuel', 'Okwara', 'Nduka', 'emma4real37@gmail.com', '$2b$10$gAeAektVtOq1bdlr.CXHJuGolSV5Sl2/.k6V675/PwXtubcS.Ph/m', '08124185320', 'http://www.google.com/emmanuel-okwara', true)`;
       pool
         .query(createUserQuery)
-        .then(ress => {
+        .then(() => {
           createOfficesTable();
         })
-        .catch(errr => {
-          debugg(errr);
+        .catch(() => {
+          // The user has been created before
+          createOfficesTable();
         });
     })
     .catch(err => {

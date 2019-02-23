@@ -1,6 +1,8 @@
 import Joi from 'joi';
 import { validateOffice } from './validationFunctions';
+import Authorization from './authorization';
 import OfficesModel from '../models/offices';
+import PartiesModel from '../models/parties';
 
 class OfficesController {
   // Get all offices
@@ -20,6 +22,20 @@ class OfficesController {
   // Get all offices
   static getAllCandidates(req, res) {
     OfficesModel.fetchAllCandidates(({ success, data }) => {
+      // Check if the query was successful
+      if (success) {
+        return res.status(200).json({ status: 200, data });
+      }
+
+      // It is a server error
+      return res.json({ status: 500, error: data });
+    });
+    return null;
+  }
+
+  // Get all interests
+  static getAllInterests(req, res) {
+    OfficesModel.fetchAllInterests(({ success, data }) => {
       // Check if the query was successful
       if (success) {
         return res.status(200).json({ status: 200, data });
@@ -228,6 +244,79 @@ class OfficesController {
       return null;
     });
     return null;
+  }
+
+  static expressInterest(req, res) {
+    // Get the id of the user that is signed in
+    Authorization.getUserDetails(req, res, userDetails => {
+      // Validate the data
+      const details = {
+        candidateId: userDetails.id,
+        officeId: req.body.officeId,
+        partyId: req.body.partyId
+      };
+      req.body.createdBy = details.createdBy;
+
+      const schema = {
+        partyId: Joi.number()
+          .required()
+          .label('Please enter party id as a number'),
+        officeId: Joi.number()
+          .required()
+          .label('Please enter office id as a number'),
+        candidateId: Joi.number()
+          .required()
+          .label('Please enter candidate id as a number')
+      };
+
+      const { error } = Joi.validate(details, schema);
+      if (error) {
+        return res.status(400).json({ status: 400, error: error.details[0].context.label });
+      }
+
+      OfficesModel.fetchOfficeById(parseInt(details.officeId, 10), result => {
+        const officeSuccess = result.success;
+        const officeData = result.data;
+        // Check if the query was successful
+        if (officeSuccess) {
+          // Check if the office exists
+          if (officeData.length === 0)
+            return res
+              .status(404)
+              .json({ status: 404, error: 'The political office does not exist' });
+
+          // Check if the party exists
+          PartiesModel.fetchPartyById(parseInt(req.body.partyId, 10), partyDetails => {
+            const partySuccess = partyDetails.success;
+            const partyData = partyDetails.data;
+            // Check if the query was successful
+            if (partySuccess) {
+              // Check if the party exists
+              if (partyData.length === 0)
+                return res
+                  .status(404)
+                  .json({ status: 404, error: 'The political party does not exist' });
+
+              // Express the interest
+              OfficesModel.expressInterest(details, ({ success, data }) => {
+                if (success) {
+                  // Return the new interest details to the user
+                  return res.status(201).json({ status: 201, data });
+                }
+                return res.status(500).json({ status: 500, error: data });
+              });
+            } else {
+              // It is a server error
+              return res.json({ status: 500, error: partyData });
+            }
+          });
+        } else {
+          // It is a server error
+          return res.json({ status: 500, error: officeData });
+        }
+      });
+      return null;
+    });
   }
 }
 
