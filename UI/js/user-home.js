@@ -9,77 +9,70 @@ const fetchPageInterestedOffice = () => {
   const userToken = userDetails.token;
 
   // Get the interested offices
-  fetchInterestedOffice(userDetails.user.id, userToken, res => {
+  fetchInterestedOffice(userToken, res => {
     // Check if the user has access to this page
-    if (res.status === 401) {
-      // Invalid token
-      window.localStorage.removeItem('userDetails');
-      window.location.href = './signin.html';
-    } else {
-      const { data } = res;
-      let cardDesign = '';
-      for (let ind = 0; ind < data.length; ind += 1) {
-        // Check if this candidate is me
-        if (data[ind].candidateid === userDetails.user.id) {
-          // Get the full details of the office
-          // eslint-disable-next-line no-loop-func
-          fetchOfficeDetailsByID(data[ind].officeid, userToken, res => {
-            // Create a card for this user
-            const fullData = res.data[0];
+    const { data } = res;
+    let cardDesign = '';
+    for (let ind = 0; ind < data.length; ind += 1) {
+      // Check if this candidate is me
+      if (data[ind].candidateid === userDetails.user.id) {
+        // Get the full details of the office
+        // eslint-disable-next-line no-loop-func
+        fetchOfficeDetailsByID(data[ind].officeid, userToken, res => {
+          // Create a card for this user
+          const fullData = res.data[0];
 
-            // Check if the date is before or after today
-            let status = '';
-            let statusStyle = '';
+          // Check if the date is before or after today
+          let status = '';
+          let statusStyle = '';
 
-            // Get the number of candidates for this office
-            let numberOfCandidates = 0;
-            for (let ind2 = 0; ind2 < data.length; ind2 += 1) {
-              if (data[ind2].officeid === data[ind].officeid) {
-                numberOfCandidates += 1;
-              }
+          // Get the number of candidates for this office
+          let numberOfCandidates = 0;
+          for (let ind2 = 0; ind2 < data.length; ind2 += 1) {
+            if (data[ind2].officeid === data[ind].officeid) {
+              numberOfCandidates += 1;
             }
+          }
 
-            // Just for test create column for election date default (not set)
-            let electionDate = data[ind].date;
-            if (!electionDate) {
-              electionDate = 'Not set';
+          // Just for test create column for election date default (not set)
+          let electionDate = data[ind].date;
+          if (!electionDate) {
+            electionDate = 'Not set';
+          } else {
+            electionDate = new Date(electionDate).toDateString();
+            const today = new Date();
+
+            if (today < new Date(electionDate)) {
+              status = 'pending';
+              statusStyle = 'pending-election';
             } else {
-              electionDate = new Date(electionDate).toDateString();
-              const today = new Date();
-
-              if (today < new Date(electionDate)) {
-                status = 'pending';
-                statusStyle = 'pending-election';
-              } else {
-                // TODO check if this user won or lost the election
-                status = 'won';
-                statusStyle = 'won-election';
-              }
+              // TODO check if this user won or lost the election
+              status = 'won';
+              statusStyle = 'won-election';
             }
+          }
 
-            cardDesign += `
-          <div class="individual-person-container">
-            <div>
-                <img src="${fullData.logourl}" />
-            </div>
-            <div class="profile-description-text">
-                <label><span class="profile-answers">${fullData.name.charAt(0).toUpperCase() +
-                  fullData.name.substr(1)}</span></label>
-                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${numberOfCandidates} Candidates</a></span></label>
-                <label>Date: <span class="profile-answers">${electionDate}</span></label>
-                <label><span class="${statusStyle}">${status}</span></label>
-            </div>
-          </div>`;
+          cardDesign += `
+        <div class="individual-person-container">
+          <div>
+              <img src="${fullData.logourl}" />
+          </div>
+          <div class="profile-description-text">
+              <label><span class="profile-answers">${fullData.name.charAt(0).toUpperCase() +
+                fullData.name.substr(1)}</span></label>
+              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${numberOfCandidates} Candidates</a></span></label>
+              <label>Date: <span class="profile-answers">${electionDate}</span></label>
+              <label><span class="${statusStyle}">${status}</span></label>
+          </div>
+        </div>`;
 
-            // Check how many results there are
-            if (ind + 1 === data.length && data.length % 2 !== 0) {
-              cardDesign += `<div class="individual-person-container hidden-div"></div>`;
-            }
+          // There can be only one interested office
+          cardDesign += `<div class="individual-person-container hidden-div"></div>`;
 
-            // Set the card in the provided slot
-            document.getElementById('interestedOfficeSlot').innerHTML = cardDesign;
-          });
-        }
+          // Set the card in the provided slot
+          document.getElementById('interestedOfficeSlot').innerHTML = cardDesign;
+        });
+        break;
       }
     }
   });
@@ -168,60 +161,51 @@ const fetchPoliticalParties = () => {
   const userToken = userDetails.token;
 
   fetchAllParties(userToken, res => {
-    // Check if the user has access to this page
-    if (res.status === 401) {
-      // Invalid token
-      window.localStorage.removeItem('userDetails');
-      window.location.href = './signin.html';
-    } else {
-      const { data } = res;
-      let cardDesign = '';
+    const { data } = res;
+    let cardDesign = '';
 
-      for (let ind = 0; ind < data.length; ind += 1) {
-        let partyBtn = 'add-party-btn';
-        let partyText = 'Join Party';
-        // Check if this user is a member of this party
-        if (userDetails.user.partyid === data[ind].id) {
-          partyBtn = 'casted-vote';
-          partyText = 'Member';
-        }
-
-        // Display the details in the card
-        cardDesign += `
-        <div class="individual-person-container">
-          <div>
-              <img src="${data[ind].logourl}" />
-          </div>
-          <div class="profile-description-text">
-              <label><span class="profile-answers">${data[ind].name}</span></label>
-              <label>HQ Address: <span class="profile-answers">${
-                data[ind].hqaddress
-              }</span></label>`;
-
-        if (partyText === 'Member') {
-          // The container should be a span not a button
-          cardDesign += `<span class="${partyBtn}" name="${data[ind].id}">${partyText}</span>
-                  </div>
-                </div>`;
-        } else {
-          cardDesign += `<input type="submit" class="${partyBtn}" value="${partyText}" name="${
-            data[ind].id
-          }" onclick="joinParty(this.name)" />
-                  </div>
-                </div>`;
-        }
-
-        // Check how many results there are
-        if (ind + 1 === data.length && data.length % 2 !== 0) {
-          cardDesign += `<div class="individual-person-container hidden-div"></div>`;
-        }
-
-        // Set the card in the provided slot
-        document.getElementById('politicalPartiesSlot').innerHTML = cardDesign;
-        document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
+    for (let ind = 0; ind < data.length; ind += 1) {
+      let partyBtn = 'add-party-btn';
+      let partyText = 'Join Party';
+      // Check if this user is a member of this party
+      if (userDetails.user.partyid === data[ind].id) {
+        partyBtn = 'casted-vote';
+        partyText = 'Member';
       }
+
+      // Display the details in the card
+      cardDesign += `
+      <div class="individual-person-container">
+        <div>
+            <img src="${data[ind].logourl}" />
+        </div>
+        <div class="profile-description-text">
+            <label><span class="profile-answers">${data[ind].name}</span></label>
+            <label>HQ Address: <span class="profile-answers">${data[ind].hqaddress}</span></label>`;
+
+      if (partyText === 'Member') {
+        // The container should be a span not a button
+        cardDesign += `<span class="${partyBtn}" name="${data[ind].id}">${partyText}</span>
+                </div>
+              </div>`;
+      } else {
+        cardDesign += `<input type="submit" class="${partyBtn}" value="${partyText}" name="${
+          data[ind].id
+        }" onclick="joinParty(this.name)" />
+                </div>
+              </div>`;
+      }
+
+      // Check how many results there are
+      if (ind + 1 === data.length && data.length % 2 !== 0) {
+        cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+      }
+
+      // Set the card in the provided slot
+      document.getElementById('politicalPartiesSlot').innerHTML = cardDesign;
       document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
     }
+    document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
   });
 };
 
@@ -229,15 +213,157 @@ const joinParty = id => {
   const userToken = userDetails.token;
 
   changeUserParty(userToken, id, res => {
-    // Check if the user has access to this page
-    if (res.status === 401) {
-      // Invalid token
-      window.localStorage.removeItem('userDetails');
-      window.location.href = './signin.html';
-    } else if (res.status === 200) {
-      // Update the local storage with new information
-      window.localStorage.setItem('userDetails', JSON.stringify(res.data[0]));
-      // Refresh the political parties page
+    // Update the local storage with new information
+    window.localStorage.setItem('userDetails', JSON.stringify(res.data[0]));
+    // Refresh the political parties page
+    window.location.reload();
+  });
+};
+
+const extractCandidateInfoFromOffice = (candidates, officeId) => {
+  let count = 0;
+  let isCandidate = false;
+  let electionDate = 'Not set';
+
+  for (let ind = 0; ind < candidates.length; ind += 1) {
+    // Check if current user is candidate
+    if (
+      candidates[ind].candidateid === userDetails.user.id &&
+      officeId === candidates[ind].officeid
+    ) {
+      isCandidate = true;
+    }
+
+    // Get the election date
+    if (candidates[ind].date) {
+      electionDate = candidates[ind].date;
+    }
+
+    // Check if this candidate is for the current office
+    if (candidates[ind].officeid === officeId) {
+      count += 1;
+    }
+  }
+
+  return { count, isCandidate, electionDate };
+};
+
+const checkIfUserExpressedInterest = (interests, officeId) => {
+  let isInterested = false;
+  for (let ind = 0; ind < interests.length; ind += 1) {
+    // Check if current user has expressed interest
+    if (
+      interests[ind].candidateid === userDetails.user.id &&
+      officeId === interests[ind].officeid
+    ) {
+      isInterested = true;
+    }
+  }
+  return isInterested;
+};
+
+const fetchGovernmentOffices = () => {
+  const userToken = userDetails.token;
+
+  fetchInterestedOffice(userToken, res => {
+    const candidates = res.data;
+    // Fetch all interests
+    fetchAllInterests(userToken, interestsRes => {
+      const interests = interestsRes.data;
+      // Fetch the offices
+      fetchAllOffices(userToken, officeRes => {
+        const officeData = officeRes.data;
+        let alreadyApplied = false;
+        let cardDesign = '';
+
+        // Check if user has sent request for any of the offices
+        for (let ind = 0; ind < officeData.length; ind += 1) {
+          const { isCandidate } = extractCandidateInfoFromOffice(candidates, officeData[ind].id);
+          const isInterested = checkIfUserExpressedInterest(interests, officeData[ind].id);
+
+          if (isCandidate || isInterested) {
+            alreadyApplied = true;
+            break;
+          }
+        }
+
+        for (let ind = 0; ind < officeData.length; ind += 1) {
+          let candidateStatus = '';
+          let officeBtn = 'add-party-btn';
+          // Extract the candidate information for this candidate
+          const { count, isCandidate, electionDate } = extractCandidateInfoFromOffice(
+            candidates,
+            officeData[ind].id
+          );
+
+          const isInterested = checkIfUserExpressedInterest(interests, officeData[ind].id);
+
+          if (isCandidate) {
+            candidateStatus = 'Approved candidate';
+            officeBtn = 'casted-vote';
+          } else if (isInterested) {
+            candidateStatus = 'Awaiting approval';
+            officeBtn = 'pending-vote';
+          } else {
+            // Make sure that no to other office has claimed this candidate
+            candidateStatus = 'Express Interest';
+            officeBtn = 'add-party-btn';
+          }
+
+          // Display the details in the card
+          cardDesign += `
+        <div class="individual-person-container">
+          <div>
+              <img src="${officeData[ind].logourl}" />
+          </div>
+          <div class="profile-description-text">
+              <label><span class="profile-answers">${officeData[ind].name}</span></label>
+              <label>Date: <span class="profile-answers">${electionDate}</span></label>
+              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${count} Candidates</a></span></label>`;
+
+          if (candidateStatus === 'Approved candidate' || candidateStatus === 'Awaiting approval') {
+            // The container should be a span not a button
+            cardDesign += `<span class="${officeBtn}" name="${
+              officeData.id
+            }">${candidateStatus}</span>
+                  </div>
+                </div>`;
+          } else if (!alreadyApplied) {
+            // Make sure that the user has not made a request already
+            cardDesign += `<input type="submit" class="${officeBtn}" value="${candidateStatus}" name="${
+              officeData[ind].id
+            }" onclick="expressInterestBtnClicked(this.name)" />
+                    </div>
+                  </div>`;
+          } else {
+            cardDesign += `</div>
+                  </div>`;
+          }
+
+          // Check how many results there are
+          if (ind + 1 === officeData.length && officeData.length % 2 !== 0) {
+            cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+          }
+
+          // Set the card in the provided slot
+          document.getElementById('governmentOfficeSlot').innerHTML = cardDesign;
+          document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
+        }
+      });
+    });
+  });
+};
+
+const expressInterestBtnClicked = id => {
+  const userToken = userDetails.token;
+
+  expressInterest(userToken, id, userDetails.user.partyid, res => {
+    if (res.status === 400) {
+      console.log(res);
+      // User is not a member of a party
+      showAlert('You have to join a party before you can contest for any office');
+    } else {
+      // Refresh the government offices page
       window.location.reload();
     }
   });
