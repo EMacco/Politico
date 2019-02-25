@@ -49,13 +49,26 @@ const dropPartiesTable = () => {
     });
 };
 
+const dropInterestsTable = () => {
+  const queryText = 'DROP TABLE IF EXISTS interests';
+  pool
+    .query(queryText)
+    .then(res => {
+      debugg(res);
+      dropPartiesTable();
+    })
+    .catch(err => {
+      debugg(err);
+    });
+};
+
 const dropCandidatesTable = () => {
   const queryText = 'DROP TABLE IF EXISTS candidates';
   pool
     .query(queryText)
     .then(res => {
       debugg(res);
-      dropPartiesTable();
+      dropInterestsTable();
     })
     .catch(err => {
       debugg(err);

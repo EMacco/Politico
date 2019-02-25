@@ -1,6 +1,7 @@
 const serverUrl = 'https://politico-okwara.herokuapp.com';
 // const serverUrl = 'http://localhost:3000';
 
+// User page functions start here
 const fetchInterestedOffice = (userToken, completionHandler) => {
   const options = {
     method: 'GET',
@@ -255,6 +256,35 @@ const expressInterest = (userToken, officeId, partyId, completionHandler) => {
     })
     .catch(() => {});
 };
+
+// User page functions end here
+
+// These are the functions for the dashboard pages
+const setElectionDate = (userToken, officeId, date, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ officeId, date })
+  };
+
+  fetch(`${serverUrl}/api/v1/office/schedule`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
+// Dashboard pags functions end here
 
 const showAlert = message => {
   alert(message);

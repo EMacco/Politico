@@ -176,6 +176,60 @@ class OfficeController {
     });
     return null;
   }
+
+  static scheduleElection(req, res) {
+    const details = {
+      officeId: req.body.officeId,
+      date: req.body.date
+    };
+    const schema = {
+      officeId: Joi.number()
+        .required()
+        .label('Please enter office ID as a number'),
+      date: Joi.required().label('Please enter a valid date')
+    };
+
+    const { error } = Joi.validate(details, schema);
+    if (error) return res.status(400).json({ status: 400, error: error.details[0].context.label });
+
+    // Check if the office has at least two candidates
+    OfficeModel.fetchOfficeById(parseInt(details.officeId, 10), ({ success, data }) => {
+      if (!success)
+        return res.status(500).json({
+          status: 500,
+          error: data
+        });
+
+      if (data.length === 0)
+        return res.status(404).json({
+          status: 404,
+          error: 'Office does not exist'
+        });
+
+      // Check if the office has a candidate
+      OfficeModel.fetchCandidatesByOfficeId(parseInt(details.officeId, 10), candRes => {
+        if (!candRes.success)
+          return res.status(500).json({
+            status: 500,
+            error: candRes.data
+          });
+
+        if (candRes.data.length < 2)
+          return res.status(400).json({
+            status: 400,
+            error: 'Office must have at least two candidates to conduct an election'
+          });
+
+        // Set the date of the election
+        OfficeModel.setElectionDate(parseInt(details.officeId, 10), details.date, updateRes => {
+          if (updateRes.success) return res.status(200).json({ status: 200, data: updateRes.data });
+          return res.status(500).json({ status: 400, error: updateRes.data });
+        });
+      });
+      return null;
+    });
+    return null;
+  }
 }
 
 export default OfficeController;

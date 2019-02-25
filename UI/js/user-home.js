@@ -226,21 +226,20 @@ const extractCandidateInfoFromOffice = (candidates, officeId) => {
   let electionDate = 'Not set';
 
   for (let ind = 0; ind < candidates.length; ind += 1) {
-    // Check if current user is candidate
-    if (
-      candidates[ind].candidateid === userDetails.user.id &&
-      officeId === candidates[ind].officeid
-    ) {
-      isCandidate = true;
-    }
-
-    // Get the election date
-    if (candidates[ind].date) {
-      electionDate = candidates[ind].date;
-    }
-
     // Check if this candidate is for the current office
     if (candidates[ind].officeid === officeId) {
+      // Check if current user is candidate
+      if (
+        candidates[ind].candidateid === userDetails.user.id &&
+        officeId === candidates[ind].officeid
+      ) {
+        isCandidate = true;
+      }
+
+      // Get the election date
+      if (candidates[ind].date) {
+        electionDate = candidates[ind].date;
+      }
       count += 1;
     }
   }
@@ -309,6 +308,11 @@ const fetchGovernmentOffices = () => {
             candidateStatus = 'Express Interest';
             officeBtn = 'add-party-btn';
           }
+          let electionDateString = new Date(electionDate).toDateString();
+          if (electionDate === 'Not set') {
+           electionDateString = 'Not set'
+          } 
+          
 
           // Display the details in the card
           cardDesign += `
@@ -319,7 +323,7 @@ const fetchGovernmentOffices = () => {
           <div class="profile-description-text">
               <label><span class="profile-answers">${officeData[ind].name}</span></label>
               <label>Type: <span class="profile-answers">${officeData[ind].type}</span></label>
-              <label>Date: <span class="profile-answers">${electionDate}</span></label>
+              <label>Date: <span class="profile-answers">${electionDateString}</span></label>
               <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${count} Candidates</a></span></label>`;
 
           if (candidateStatus === 'Approved candidate' || candidateStatus === 'Awaiting approval') {
@@ -360,7 +364,6 @@ const expressInterestBtnClicked = id => {
 
   expressInterest(userToken, id, userDetails.user.partyid, res => {
     if (res.status === 400) {
-      console.log(res);
       // User is not a member of a party
       showAlert('You have to join a party before you can contest for any office');
     } else {
@@ -373,9 +376,4 @@ const expressInterestBtnClicked = id => {
 signoutBtnClicked = () => {
   window.localStorage.removeItem('userDetails');
   window.location.href = './signin.html';
-};
-
-dashboardSignoutBtnClicked = () => {
-  window.localStorage.removeItem('userDetails');
-  window.location.href = '../signin.html';
 };
