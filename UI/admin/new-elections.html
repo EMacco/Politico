@@ -10,7 +10,8 @@
     <title>POLITICO | Schedule Election</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script src="../js/index.js"></script>
-    <script src="../js/user-home.js"></script>
+    <script src="../js/myFunctions.js"></script>
+    <script src="../js/dashboard.js"></script>
 </head>
 
 <body class="signed-in-page">
@@ -103,18 +104,38 @@
                     <div class="content-group-create">
                         <h3>Schedule Election</h3>
                         <form>
+                            <center><label id="errorMessage"></label></center>
+                            <center><label id="successMessage"></label></center>
                             <div class="input-with-icon-create">
-                                <select class="dropdown-btn">
-                                    <option>Member Kogi State House Of Assemblies</option>
-                                    <option>New Direction Blueprint Team</option>
-                                    <option>House of Representatives</option>
+                                <select class="dropdown-btn" id="officesNameSelectSlot">
+                                    <script>
+                                        getEligibleOfficesForElection();    
+                                    </script>
                                 </select>
                             </div>
                             <div class="input-with-icon-create">
                                 <img src="../img/calendar-icon2.png">
-                                <input type="date" class="signin-text-field" />
+                                <input type="date" class="signin-text-field" id="scheduleElectionDateField"/>
+                                <script>
+                                    // Set minimum date as today
+                                    let today = new Date();
+                                    let dd = today.getDate();
+                                    let mm = today.getMonth() + 1; //January is 0!
+                                    const yyyy = today.getFullYear();
+
+                                    if (dd < 10) {
+                                    dd = `0${dd}`;
+                                    }
+
+                                    if (mm < 10) {
+                                    mm = `0${mm}`;
+                                    }
+
+                                    today = `${yyyy}-${mm}-${dd}`;
+                                    document.getElementById("scheduleElectionDateField").min = today
+                                </script>
                             </div>
-                            <input type="submit" value="Create Schedule" class="signin-submit-btn" />
+                            <input type="button" value="Create Schedule" class="signin-submit-btn" onclick="scheduleElectionDate()" />
                         </form>
                     </div>
                 </div>

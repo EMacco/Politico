@@ -59,7 +59,7 @@ class OfficeModel extends OfficesModel {
         completionHandler({ successs: true, dataa: res.rows });
       })
       .catch(err => {
-        completionHandler({ successs: false, dataaa: err });
+        completionHandler({ successs: false, dataa: err });
       });
     return null;
   }
@@ -72,7 +72,33 @@ class OfficeModel extends OfficesModel {
         completionHandler({ successs: true, dataa: res.rows });
       })
       .catch(err => {
-        completionHandler({ successs: false, dataaa: err });
+        completionHandler({ successs: false, dataa: err });
+      });
+    return null;
+  }
+
+  static fetchCandidatesByOfficeId(officeId, completionHandler) {
+    const queryText = `SELECT * FROM candidates WHERE officeid=${officeId}`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+    return null;
+  }
+
+  static setElectionDate(officeId, date, completionHandler) {
+    const queryText = `UPDATE candidates SET date='${date}' WHERE officeid=${officeId} RETURNING *`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
       });
     return null;
   }

@@ -4,8 +4,8 @@ import Authorization from '../controllers/authorization';
 
 const routes = Router();
 
-// Express Interest
-
+// Schedule election
+routes.post('/schedule', Authorization.isAdmin, OfficeController.scheduleElection);
 
 // Register new election candidate
 routes.post('/:candidateId/register', Authorization.isUser, OfficeController.registerCandidate);

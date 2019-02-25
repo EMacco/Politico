@@ -899,3 +899,7 @@ label {
 #errorMessage {
   color: red;
 }
+
+#successMessage {
+  color: green;
+}
