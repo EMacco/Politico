@@ -104,20 +104,37 @@
                     <div class="content-group-create">
                         <h3>Create Government Office</h3>
                         <form>
+                            <center><label id="errorMessage"></label></center>
+                            <center><label id="successMessage"></label></center>
                             <div class="input-with-icon-create">
                                 <img src="../img/office-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Office name..." />
+                                <input type="text" class="signin-text-field" placeholder="Office name..." id="newOfficeNameLbl" />
                             </div>
-                            <div class="input-with-icon-create">
-                                <img src="../img/calendar-icon2.png">
-                                <input type="date" class="signin-text-field" />
+                            <div class="input-with-icon-create" name="newOfficeTypeSelect">
+                                <select class="dropdown-btn" id="officesTypeSelectSlot">
+                                    <option>Select office type...</option>
+                                    <option>Federal</option>
+                                    <option>Legislative</option>
+                                    <option>State</option>
+                                    <option>Local</option>
+                                </select>
                             </div>
                             <div class="input-profile">
-                                <img src="../img/person-large.png">
-                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" />
+                                <img src="../img/person-large.png" id="office-img-preview">
+                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="office-file-upload" />
                             </div>
 
-                            <input type="submit" value="Create Office" class="signin-submit-btn" />
+                            <input type="button" value="Create Office" class="signin-submit-btn" onclick="createOfficeBtnClicked()" />
+
+                            <script>
+                                const imgPreview = document.getElementById('office-img-preview');
+                                var fileUploadBtn = document.getElementById('office-file-upload');
+
+                                fileUploadBtn.addEventListener('change', () => {
+                                    // Change the image of the preview tag
+                                    imgPreview.src = URL.createObjectURL(event.target.files[0])
+                                })
+                            </script>
                         </form>
                     </div>
                 </div>
@@ -128,6 +145,8 @@
             Politico Website Designed by Okwara Emmanuel &copy; 2019
         </footer>
     </main>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

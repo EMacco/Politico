@@ -48,6 +48,7 @@
     "prettier": "^1.16.2"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
