@@ -49,7 +49,13 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="../img/person-large.png" />
+                    <img src="../img/person-large.png" id="profile-img-preview" />
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+                    </script>
                 </div>
                 <div class="profile-description-text">
                     <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
@@ -105,20 +111,32 @@
                     <div class="content-group-create">
                         <h3>Create Political Party</h3>
                         <form>
+                            <center><label id="errorMessage"></label></center>
+                            <center><label id="successMessage"></label></center>
                             <div class="input-with-icon-create">
                                 <img src="../img/person-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Party name..." />
+                                <input type="text" class="signin-text-field" placeholder="Party name..." id="newPartyNameLbl" />
                             </div>
                             <div class="input-with-icon-create">
                                 <img src="../img/office-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="HQ address..." />
+                                <input type="text" class="signin-text-field" placeholder="HQ address..." id="newPartyAddressLbl" />
                             </div>
                             <div class="input-profile">
-                                <img src="../img/person-large.png">
-                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" />
+                                <img src="../img/person-large.png" id="party-img-preview">
+                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="party-file-upload" />
                             </div>
 
-                            <input type="submit" value="Create Party" class="signin-submit-btn" />
+                            <input type="button" value="Create Party" class="signin-submit-btn" onclick="createPartyBtnClicked()" />
+
+                            <script>
+                                const imgPreview = document.getElementById('party-img-preview');
+                                var fileUploadBtn = document.getElementById('party-file-upload');
+
+                                fileUploadBtn.addEventListener('change', () => {
+                                    // Change the image of the preview tag
+                                    imgPreview.src = URL.createObjectURL(event.target.files[0])
+                                })
+                            </script>
                         </form>
                     </div>
                 </div>
@@ -129,6 +147,7 @@
             Politico Website Designed by Okwara Emmanuel &copy; 2019
         </footer>
     </main>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

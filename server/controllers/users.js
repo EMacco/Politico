@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Joi from 'joi';
 import UsersModel from '../models/users';
 import { validateUserLogin, validateUser } from './validationFunctions';
+import Authorization from './authorization';
 
 class UsersController {
   static fetchSpecificUser(req, res) {
@@ -170,6 +172,66 @@ class UsersController {
       return null;
     });
     return null;
+  }
+
+  static updateUserProfilePicture(req, res) {
+    Authorization.getUserDetails(req, res, userDetails => {
+      try {
+        if (req.body.imageUrl) {
+          req.body.imageUrl = req.body.imageUrl
+            .replace(/\s\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+        }
+      } catch (error) {}
+
+      const details = {
+        imageUrl: req.body.imageUrl,
+        userId: userDetails.id
+      };
+      const schema = {
+        userId: Joi.number()
+          .required()
+          .label('Please enter user ID as a number'),
+        imageUrl: Joi.string()
+          .required()
+          .uri()
+          .label('Please enter a valid image URL')
+      };
+
+      const { error } = Joi.validate(details, schema);
+      if (error)
+        return res.status(400).json({ status: 400, error: error.details[0].context.label });
+
+      // Check if the user exists
+      UsersModel.fetchUserById(parseInt(details.userId, 10), ({ success, data }) => {
+        if (!success) {
+          // It is a server error
+          return res.status(500).json({ status: 500, error: data });
+        }
+
+        // Check if the user exists
+        if (data.length === 0)
+          // The user does not exist
+          return res.status(404).json({ status: 404, error: 'The user does not exist' });
+
+        // Update the profile picture
+        UsersModel.updateProfilePicture(
+          parseInt(details.userId, 10),
+          details.imageUrl,
+          updateRes => {
+            if (!updateRes.success) {
+              return res.status(500).json({ status: 500, error: updateRes.data });
+            }
+
+            // Successuful
+            return res.status(200).json({ status: 200, data: [updateRes.data[0]] });
+          }
+        );
+        return null;
+      });
+      return null;
+    });
   }
 }
 

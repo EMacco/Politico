@@ -308,6 +308,30 @@ const createOffice = (userToken, name, type, logoUrl, completionHandler) => {
     .catch(() => {});
 };
 
+const createParty = (userToken, name, hqAddress, logoUrl, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ name, hqAddress, logoUrl })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
 const uploadImage = (file, completionHandler) => {
   const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dn4pokov0/upload';
   const CLOUDINARY_UPLOAD_PRESET = 'y2xpulok';
@@ -329,6 +353,30 @@ const uploadImage = (file, completionHandler) => {
       completionHandler(false, err);
     });
 };
+
+const updateUserProfilePicture = (userToken, imageUrl, completionHandler) => {
+  const options = {
+    method: 'PATCH',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ imageUrl })
+  };
+
+  fetch(`${serverUrl}/api/v1/users/passport`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+}
 
 // Dashboard pags functions end here
 

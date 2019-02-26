@@ -45,7 +45,52 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="img/person-large.png" />
+                    <img src="img/person-large.png" id="profile-img-preview" />
+                    <i><label id="uploadingText"></label></i>
+                    <!-- Button to set profile picture -->
+                    <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="profile-file-upload" />
+                    
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+
+                        // Add listener for if a new profile picture is selected
+                        const imgPreview = document.getElementById('profile-img-preview');
+                        var fileUploadBtn = document.getElementById('profile-file-upload');
+
+                        fileUploadBtn.addEventListener('change', () => {
+                            document.getElementById('uploadingText').innerHTML = 'Uploading...';
+                            // Change the image of the preview tag
+                            if (event.target.files.length > 0) {
+                                const previousImage = imgPreview.src;
+                                imgPreview.src = URL.createObjectURL(event.target.files[0]);
+                                uploadImage(event.target.files[0], (success, url) => {
+                                    if (success) {
+                                        const userToken = userDetails.token;
+                                        // Go ahead and create office
+                                        updateUserProfilePicture(userToken, url, res => {
+                                            // Check if it was successful
+                                            if (res.status === 200) {
+                                                document.getElementById('uploadingText').innerHTML = 'Upload successful';
+                                                // Clear the input file
+                                                document.getElementById('profile-file-upload').value = ''
+
+                                                // Update local storage
+                                                let newUserDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+                                                newUserDetails.user.passporturl = res.data[0].passporturl;
+                                                window.localStorage.setItem('userDetails', JSON.stringify(newUserDetails));
+                                            } else {
+                                                document.getElementById('uploadingText').innerHTML = 'Upload failed';
+                                                imgPreview.src = previousImage;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                    </script>
                 </div>
                 <div class="profile-description-text">
                     <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
@@ -132,6 +177,7 @@
 		<footer class="user-home-footer">
 			Politico Website Designed by Okwara Emmanuel &copy; 2019
 		</footer>
-	</main>
+    </main>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>

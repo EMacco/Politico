@@ -52,6 +52,18 @@ class UsersModel {
         completionHandler({ successs: false, dataa: err });
       });
   }
+
+  static updateProfilePicture(userId, url, completionHandler) {
+    const queryText = `UPDATE users SET passporturl='${url}' WHERE id=${userId} RETURNING passporturl`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+  }
 }
 
 export default UsersModel;
