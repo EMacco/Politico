@@ -84,7 +84,6 @@ const createOfficeBtnClicked = () => {
   const officeName = document.getElementById('newOfficeNameLbl').value.toLowerCase();
   const e = document.getElementById('officesTypeSelectSlot');
   const officeType = e.options[e.selectedIndex].value.toLowerCase();
-  let imgName = '';
 
   // Check if the fields are occupied
   try {
@@ -95,8 +94,6 @@ const createOfficeBtnClicked = () => {
     } else if (uploadBtn.files.length === 0) {
       errorLbl.innerHTML = 'Please select an image';
     } else {
-      imgName = uploadBtn.files[0].name.toLowerCase();
-
       // Upload the image to the server
       uploadImage(uploadBtn.files[0], (success, url) => {
         if (success) {
@@ -105,6 +102,49 @@ const createOfficeBtnClicked = () => {
             // Check if it was successful
             if (res.status === 201) {
               successLbl.innerHTML = 'Office successfully created';
+            } else {
+              errorLbl.innerHTML = res.error;
+            }
+          });
+        } else {
+          // Display error
+          errorLbl.innerHTML = url;
+        }
+      });
+    }
+  } catch (err) {
+    console.log('Error: ', err);
+  }
+};
+
+const createPartyBtnClicked = () => {
+  const userToken = userDetails.token;
+  const errorLbl = document.getElementById('errorMessage');
+  const successLbl = document.getElementById('successMessage');
+  errorLbl.innerHTML = '';
+  successLbl.innerHTML = '';
+
+  const uploadBtn = document.getElementById('party-file-upload');
+  const partyName = document.getElementById('newPartyNameLbl').value.toLowerCase();
+  const partyAddress = document.getElementById('newPartyAddressLbl').value.toLowerCase();
+
+  // Check if the fields are occupied
+  try {
+    if (partyName === '') {
+      errorLbl.innerHTML = 'Please enter party name';
+    } else if (partyAddress === '') {
+      errorLbl.innerHTML = 'Please enter party address';
+    } else if (uploadBtn.files.length === 0) {
+      errorLbl.innerHTML = 'Please select an image';
+    } else {
+      // Upload the image to the server
+      uploadImage(uploadBtn.files[0], (success, url) => {
+        if (success) {
+          // Go ahead and create office
+          createParty(userToken, partyName, partyAddress, url, res => {
+            // Check if it was successful
+            if (res.status === 201) {
+              successLbl.innerHTML = 'Political party successfully created';
             } else {
               errorLbl.innerHTML = res.error;
             }

@@ -46,7 +46,13 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="img/person-large.png" />
+                    <img src="img/person-large.png" id="profile-img-preview" />
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+                    </script>
                 </div>
                 <div class="profile-description-text">
                     <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
