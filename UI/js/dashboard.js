@@ -66,11 +66,57 @@ const scheduleElectionDate = () => {
     setElectionDate(userToken, selectedOfficeID, date, res => {
       if (res.status === 200) {
         successLbl.innerHTML = 'Election date has been set';
-        console.log(res.data);
       } else {
         errorLbl.innerHTML = res.data.error;
       }
     });
+  }
+};
+
+const createOfficeBtnClicked = () => {
+  const userToken = userDetails.token;
+  const errorLbl = document.getElementById('errorMessage');
+  const successLbl = document.getElementById('successMessage');
+  errorLbl.innerHTML = '';
+  successLbl.innerHTML = '';
+
+  const uploadBtn = document.getElementById('office-file-upload');
+  const officeName = document.getElementById('newOfficeNameLbl').value.toLowerCase();
+  const e = document.getElementById('officesTypeSelectSlot');
+  const officeType = e.options[e.selectedIndex].value.toLowerCase();
+  let imgName = '';
+
+  // Check if the fields are occupied
+  try {
+    if (officeName === '') {
+      errorLbl.innerHTML = 'Please enter office name';
+    } else if (officeType === 'select office type...') {
+      errorLbl.innerHTML = 'Please select office type';
+    } else if (uploadBtn.files.length === 0) {
+      errorLbl.innerHTML = 'Please select an image';
+    } else {
+      imgName = uploadBtn.files[0].name.toLowerCase();
+
+      // Upload the image to the server
+      uploadImage(uploadBtn.files[0], (success, url) => {
+        if (success) {
+          // Go ahead and create office
+          createOffice(userToken, officeName, officeType, url, res => {
+            // Check if it was successful
+            if (res.status === 201) {
+              successLbl.innerHTML = 'Office successfully created';
+            } else {
+              errorLbl.innerHTML = res.error;
+            }
+          });
+        } else {
+          // Display error
+          errorLbl.innerHTML = url;
+        }
+      });
+    }
+  } catch (err) {
+    console.log('Error: ', err);
   }
 };
 

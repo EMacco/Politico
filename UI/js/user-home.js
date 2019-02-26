@@ -310,9 +310,8 @@ const fetchGovernmentOffices = () => {
           }
           let electionDateString = new Date(electionDate).toDateString();
           if (electionDate === 'Not set') {
-           electionDateString = 'Not set'
-          } 
-          
+            electionDateString = 'Not set';
+          }
 
           // Display the details in the card
           cardDesign += `
