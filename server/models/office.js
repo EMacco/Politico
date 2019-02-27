@@ -15,12 +15,16 @@ class OfficeModel extends OfficesModel {
     return null;
   }
 
-  static removeInterest(officeId, partyId, candidateId) {
+  static removeInterest(officeId, partyId, candidateId, completionHandler) {
     const queryText = `DELETE FROM interests WHERE candidateid=${candidateId} AND officeid=${officeId} AND partyid=${partyId}`;
     pool
       .query(queryText)
-      .then(() => {})
-      .catch(() => {});
+      .then(() => {
+        completionHandler();
+      })
+      .catch(() => {
+        completionHandler();
+      });
   }
 
   static collateResult(officeId, completionHandler) {
@@ -92,6 +96,19 @@ class OfficeModel extends OfficesModel {
 
   static setElectionDate(officeId, date, completionHandler) {
     const queryText = `UPDATE candidates SET date='${date}' WHERE officeid=${officeId} RETURNING *`;
+    pool
+      .query(queryText)
+      .then(res => {
+        completionHandler({ success: true, data: res.rows });
+      })
+      .catch(err => {
+        completionHandler({ success: false, data: err });
+      });
+    return null;
+  }
+
+  static deleteRequest(candidateId, officeId, partyId, completionHandler) {
+    const queryText = `DELETE FROM interests WHERE candidateid=${candidateId} AND officeid=${officeId} AND partyid=${partyId} RETURNING *`;
     pool
       .query(queryText)
       .then(res => {

@@ -19,4 +19,7 @@ routes.get('/:userId/user-votes', Authorization.isUser, OfficeController.fetchVo
 // Fetch result for specific office
 routes.post('/:officeId/result', Authorization.isUser, OfficeController.collateResult);
 
+// Delete interest
+routes.delete('/:userId/delete-interest', Authorization.isUser, OfficeController.declineInterest);
+
 export default routes;

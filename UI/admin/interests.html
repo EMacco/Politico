@@ -7,7 +7,7 @@
     <meta name="description" content="Simple website for elections">
     <meta name="keywords" content="voting, election, politician, politics">
     <meta name="author" content="Okwara Emmanuel">
-    <title>POLITICO | Create Office</title>
+    <title>POLITICO | User Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script src="../js/index.js"></script>
     <script src="../js/myFunctions.js"></script>
@@ -84,8 +84,8 @@
                         My Dashboard
                     </div>
                 </a>
-                <a href="interests.html">
-                    <div class="nav-menu">
+                <a href="interests.html" id="current-side-bar">
+                    <div class="nav-menu" id="current-side-bar">
                         Interests
                     </div>
                 </a>
@@ -94,8 +94,8 @@
                         New Political Party
                     </div>
                 </a>
-                <a href="new-government-office.html" id="current-side-bar">
-                    <div class="nav-menu" id="current-side-bar">
+                <a href="new-government-office.html">
+                    <div class="nav-menu">
                         New Government Office
                     </div>
                 </a>
@@ -113,41 +113,11 @@
 
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <div class="content-group-create">
-                        <h3>Create Government Office</h3>
-                        <form>
-                            <center><label id="errorMessage"></label></center>
-                            <center><label id="successMessage"></label></center>
-                            <div class="input-with-icon-create">
-                                <img src="../img/office-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Office name..." id="newOfficeNameLbl" />
-                            </div>
-                            <div class="input-with-icon-create" name="newOfficeTypeSelect">
-                                <select class="dropdown-btn" id="officesTypeSelectSlot">
-                                    <option>Select office type...</option>
-                                    <option>Federal</option>
-                                    <option>Legislative</option>
-                                    <option>State</option>
-                                    <option>Local</option>
-                                </select>
-                            </div>
-                            <div class="input-profile">
-                                <img src="../img/person-large.png" id="office-img-preview">
-                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="office-file-upload" />
-                            </div>
-
-                            <input type="button" value="Create Office" class="signin-submit-btn" onclick="createOfficeBtnClicked()" />
-
-                            <script>
-                                const imgPreview = document.getElementById('office-img-preview');
-                                var fileUploadBtn = document.getElementById('office-file-upload');
-
-                                fileUploadBtn.addEventListener('change', event => {
-                                    // Change the image of the preview tag
-                                    imgPreview.src = URL.createObjectURL(event.target.files[0])
-                                })
-                            </script>
-                        </form>
+                    <h3 id="interested-office-header">Potential Candidates (<span id="numberOfInterestsLbl"></span>)</h3>
+                    <div class="content-group" id="interestsSlot">
+                        <script>
+                            fetchOfficeInterests();
+                        </script>
                     </div>
                 </div>
             </section>
@@ -157,8 +127,6 @@
             Politico Website Designed by Okwara Emmanuel &copy; 2019
         </footer>
     </main>
-
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

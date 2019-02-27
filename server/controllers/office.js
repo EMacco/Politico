@@ -51,12 +51,14 @@ class OfficeController {
             OfficeModel.removeInterest(
               parseInt(req.body.officeId, 10),
               parseInt(req.body.partyId, 10),
-              parseInt(req.body.candidateId, 10)
+              parseInt(req.params.candidateId, 10),
+              () => {
+                return res.status(201).json({
+                  status: 201,
+                  data: { office: data[0].officeid, user: data[0].candidateid }
+                });
+              }
             );
-
-            return res
-              .status(201)
-              .json({ status: 201, data: { office: data[0].officeid, user: data[0].candidateid } });
           }
         );
       }
@@ -229,6 +231,38 @@ class OfficeController {
       return null;
     });
     return null;
+  }
+
+  static declineInterest(req, res) {
+    // Validate the data
+    const details = {
+      candidateId: req.params.userId,
+      officeId: req.body.officeId,
+      partyId: req.body.partyId
+    };
+    req.body.createdBy = details.createdBy;
+
+    const schema = {
+      partyId: Joi.number()
+        .required()
+        .label('Please enter party id as a number'),
+      officeId: Joi.number()
+        .required()
+        .label('Please enter office id as a number'),
+      candidateId: Joi.number()
+        .required()
+        .label('Please enter candidate id as a number')
+    };
+
+    const { error } = Joi.validate(details, schema);
+    if (error) {
+      return res.status(400).json({ status: 400, error: error.details[0].context.label });
+    }
+
+    // Delete the interest
+    OfficeModel.deleteRequest(details.candidateId, details.officeId, details.partyId, delRes => {
+      return res.status(200).json({ status: 200, data: delRes.data });
+    });
   }
 }
 
