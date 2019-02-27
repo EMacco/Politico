@@ -60,7 +60,7 @@
                         const imgPreview = document.getElementById('profile-img-preview');
                         var fileUploadBtn = document.getElementById('profile-file-upload');
 
-                        fileUploadBtn.addEventListener('change', () => {
+                        fileUploadBtn.addEventListener('change', event => {
                             document.getElementById('uploadingText').innerHTML = 'Uploading...';
                             // Change the image of the preview tag
                             if (event.target.files.length > 0) {

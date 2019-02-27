@@ -25,6 +25,7 @@
                 <ul>
                     <li><a href="../user-home.html">Home</a></li>
                     <li><a href="user-home.html">My Dashboard</a></li>
+                    <li><a href="interests.html">Interests</a></li>
                     <li><a href="new-political-party.html">New Political Party</a></li>
                     <li><a href="new-government-office.html">New Government Office</a></li>
                     <li><a href="new-elections.html">Schedule Election</a></li>
@@ -84,6 +85,11 @@
                         My Dashboard
                     </div>
                 </a>
+                <a href="interests.html">
+                    <div class="nav-menu">
+                        Interests
+                    </div>
+                </a>
                 <a href="new-political-party.html" id="current-side-bar">
                     <div class="nav-menu" id="current-side-bar">
                         New Political Party
@@ -132,7 +138,7 @@
                                 const imgPreview = document.getElementById('party-img-preview');
                                 var fileUploadBtn = document.getElementById('party-file-upload');
 
-                                fileUploadBtn.addEventListener('change', () => {
+                                fileUploadBtn.addEventListener('change', event => {
                                     // Change the image of the preview tag
                                     imgPreview.src = URL.createObjectURL(event.target.files[0])
                                 })

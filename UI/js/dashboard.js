@@ -160,6 +160,111 @@ const createPartyBtnClicked = () => {
   }
 };
 
+const fetchOfficeInterests = () => {
+  const userToken = userDetails.token;
+  fetchAllInterests(userToken, interestsRes => {
+    const interests = interestsRes.data;
+    let cardDesign = '';
+    // Fetch the user Details
+    for (let ind = 0; ind < interests.length; ind += 1) {
+      // eslint-disable-next-line no-loop-func
+      fetchUserByID(interests[ind].candidateid, userToken, userRes => {
+        const candUserDetails = userRes.data[0];
+
+        // Fetch the name of the office
+        fetchOfficeDetailsByID(interests[ind].officeid, userToken, officeRes => {
+          const candOfficeDetails = officeRes.data[0];
+
+          // Fetch the name of the party
+          fetchPartyDetailsByID(interests[ind].partyid, userToken, partyRes => {
+            const candPartyDetails = partyRes.data[0];
+
+            let imgUrl = candUserDetails.passporturl;
+            if (imgUrl === 'https://') {
+              imgUrl = '../img/person-large.png';
+            }
+
+            // Display the details in the card
+            cardDesign += `
+              <div class="individual-person-container">
+                  <div>
+                      <img src="${imgUrl}" />
+                  </div>
+                  <div class="profile-description-text">
+                      <label><span class="profile-answers">${candUserDetails.firstname} ${
+              candUserDetails.lastname
+            }</span></label>
+                      <label>Email: <span class="profile-answers">${
+                        candUserDetails.email
+                      }</span></label>
+                      <label>Party: <span class="profile-answers">${
+                        candPartyDetails.name
+                      }</span></label>
+                      <label>Office: <span class="profile-answers">${
+                        candOfficeDetails.name
+                      }</span></label>
+                      <input type="submit" class="add-party-btn" value="Approve" name="${
+                        candUserDetails.id
+                      } ${candOfficeDetails.id} ${
+              candPartyDetails.id
+            }" onclick="approveInterest(this.name)" />
+                      <input type="submit" class="remove-party-btn" value="Decline" name="${
+                        candUserDetails.id
+                      } ${candOfficeDetails.id} ${
+              candPartyDetails.id
+            }" onclick="declineInterest(this.name)" />
+                  </div>
+              </div>`;
+
+            // Check how many results there are
+            if (ind + 1 === interests.length && interests.length % 2 !== 0) {
+              cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+            }
+
+            // Set the card in the provided slot
+            document.getElementById('interestsSlot').innerHTML = cardDesign;
+          });
+        });
+      });
+    }
+    // Display number of votes this user has at the title
+    document.getElementById('numberOfInterestsLbl').innerHTML = interests.length;
+  });
+};
+
+const approveInterest = dets => {
+  const userToken = userDetails.token;
+  const registrationDetails = dets.split(' ');
+  registerCandidate(
+    userToken,
+    registrationDetails[0],
+    registrationDetails[1],
+    registrationDetails[2],
+    registrationRes => {
+      if (registrationRes.status !== 201) {
+        showAlert(registrationRes.error);
+      } else {
+        // Refresh the page
+        window.location.reload();
+      }
+    }
+  );
+};
+
+const declineInterest = dets => {
+  const userToken = userDetails.token;
+  const registrationDetails = dets.split(' ');
+  declineCandidateRequest(
+    userToken,
+    registrationDetails[0],
+    registrationDetails[1],
+    registrationDetails[2],
+    res => {
+      window.location.reload();
+    }
+  );
+};
+
 dashboardSignoutBtnClicked = () => {
   window.localStorage.removeItem('userDetails');
   window.location.href = '../signin.html';

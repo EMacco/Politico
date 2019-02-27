@@ -190,4 +190,44 @@ describe('Political Offices', () => {
         });
     });
   });
+
+  describe('DELETE /', () => {
+    // Tests for declining interest for an office
+    it('should not work because user is not signed in', done => {
+      chai
+        .request(app)
+        .delete('/api/v1/office/0/delete-interest')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should not work because officeId is a string', done => {
+      chai
+        .request(app)
+        .delete('/api/v1/office/0/delete-interest')
+        .send({ officeId: 'dssdfd', partyId: 0 })
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should work since details are correct', done => {
+      chai
+        .request(app)
+        .delete('/api/v1/office/0/delete-interest')
+        .send({ officeId: 0, partyId: 0 })
+        .set('x-access-token', process.env.TEST_TOKEN)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });

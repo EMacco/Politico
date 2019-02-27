@@ -376,7 +376,55 @@ const updateUserProfilePicture = (userToken, imageUrl, completionHandler) => {
       }
     })
     .catch(() => {});
-}
+};
+
+const registerCandidate = (userToken, candidateId, officeId, partyId, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ officeId, partyId })
+  };
+
+  fetch(`${serverUrl}/api/v1/office/${candidateId}/register`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
+const declineCandidateRequest = (userToken, candidateId, officeId, partyId, completionHandler) => {
+  const options = {
+    method: 'DELETE',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ officeId, partyId })
+  };
+
+  fetch(`${serverUrl}/api/v1/office/${candidateId}/delete-interest`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
 
 // Dashboard pags functions end here
 
