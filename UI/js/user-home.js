@@ -22,10 +22,6 @@ const fetchPageInterestedOffice = () => {
           // Create a card for this user
           const fullData = res.data[0];
 
-          // Check if the date is before or after today
-          let status = '';
-          let statusStyle = '';
-
           // Get the number of candidates for this office
           let numberOfCandidates = 0;
           for (let ind2 = 0; ind2 < data.length; ind2 += 1) {
@@ -50,7 +46,9 @@ const fetchPageInterestedOffice = () => {
           <div class="profile-description-text">
               <label><span class="profile-answers">${fullData.name.charAt(0).toUpperCase() +
                 fullData.name.substr(1)}</span></label>
-              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${numberOfCandidates} Candidates</a></span></label>
+              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html?officeId=${
+                fullData.id
+              }&officeName=${fullData.name}">${numberOfCandidates} Candidates</a></span></label>
               <label>Date: <span class="profile-answers">${electionDate}</span></label>
           </div>
         </div>`;
@@ -332,7 +330,9 @@ const fetchGovernmentOffices = () => {
               <label><span class="profile-answers">${officeData[ind].name}</span></label>
               <label>Type: <span class="profile-answers">${officeData[ind].type}</span></label>
               <label>Date: <span class="profile-answers">${electionDateString}</span></label>
-              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${count} Candidates</a></span></label>`;
+              <label>Candidates: <span class="profile-answers"><a href="office-candidates.html?officeId=${
+                officeData[ind].id
+              }&officeName=${officeData[ind].name}">${count} Candidates</a></span></label>`;
 
           if (candidateStatus === 'Approved candidate' || candidateStatus === 'Awaiting approval') {
             // The container should be a span not a button
@@ -509,8 +509,8 @@ const fetchTodaysVotes = () => {
   const userToken = userDetails.token;
 
   // Get all the votes casted by this user
-  fetchVotesForUser(userDetails.user.id, userToken, votesRes => {
-    const myVotes = votesRes.dataa;
+  fetchVotesForUser(userDetails.user.id, userToken, votesRess => {
+    const myVotes = votesRess.dataa;
 
     // Fetch all candidates
     fetchInterestedOffice(userToken, res => {
@@ -584,6 +584,66 @@ const fetchTodaysVotes = () => {
         }
       });
     });
+  });
+};
+
+const candidatePageFetchOffice = (officeId, officeName) => {
+  const userToken = userDetails.token;
+
+  document.getElementById('officeNameLbl').innerHTML = officeName;
+
+  // Get the candidates for this office
+  fetchInterestedOffice(userToken, res => {
+    const candidates = res.data;
+    const officeCands = [];
+    for (let ind = 0; ind < candidates.length; ind += 1) {
+      if (candidates[ind].officeid === parseInt(officeId, 10)) {
+        officeCands.push(candidates[ind]);
+      }
+    }
+
+    let cardDesign = '';
+    let count = 0;
+    for (let ind = 0; ind < officeCands.length; ind += 1) {
+      // Get the candidates information
+      // eslint-disable-next-line no-loop-func
+      fetchUserByID(officeCands[ind].candidateid, userToken, userRes => {
+        const candidateFullDetails = userRes.data[0];
+
+        // Fetch the party name
+        fetchPartyDetailsByID(officeCands[ind].partyid, userToken, partyRes => {
+          const partyDetails = partyRes.data[0];
+          // Display the information on the page
+          cardDesign += `<div class="individual-person-container">
+          <div>
+              <img src="${partyDetails.logourl}" />
+          </div>
+          <div class="profile-description-text">
+              <label><span class="profile-answers">${candidateFullDetails.firstname} ${
+            candidateFullDetails.lastname
+          }</span></label>
+              <label>Email: <span class="profile-answers">${
+                candidateFullDetails.email
+              }</span></label>
+              <label>Phone: <span class="profile-answers">${
+                candidateFullDetails.phonenumber
+              }</span></label>
+              <label>Party: <span class="profile-answers">${partyDetails.name}</span></label>
+          </div>
+      </div>`;
+
+          // Check if number of candidates is an even number
+          if (count + 1 === officeCands.length && officeCands.length % 2 !== 0) {
+            cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+          }
+
+          // Check if t is the last item
+          document.getElementById('officeCandidatesSlot').innerHTML = cardDesign;
+          count += 1;
+        });
+      });
+    }
+    document.getElementById('numberOfCandidateLbl').innerHTML = officeCands.length;
   });
 };
 
