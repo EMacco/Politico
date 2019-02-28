@@ -4,7 +4,7 @@ import Authorization from '../controllers/authorization';
 
 const routes = Router();
 
-// Register new election candidate
+// Cast user vote
 routes.post('/', Authorization.isUser, VotesController.registerVote);
 
 export default routes;

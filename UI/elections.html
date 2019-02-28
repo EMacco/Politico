@@ -9,6 +9,7 @@
 	<title>POLITICO | Vote Page</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
     <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
@@ -115,69 +116,11 @@
     
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <h3 id="interested-office-header">(Election) President of the Republic of Nigeria</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Current votes: <span class="ongoing-election">17,534,231</span></label>
-                                <label><span class="casted-vote">Vote Casted</span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Current votes: <span class="ongoing-election">1,324,565</span></label>
-                                <label><span class="casted-vote"></span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">John Doe</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Current votes: <span class="ongoing-election">34,421</span></label>
-                                <label><span class="casted-vote"></span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Jane Doe</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Current votes: <span class="ongoing-election">124,134</span></label>
-                                <label><span class="casted-vote"></span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Peter Griffin</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Current votes: <span class="ongoing-election">5,349,565</span></label>
-                                <label><span class="casted-vote"></span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container hidden-div"></div>
+                    <h3 id="interested-office-header">Elections for today (<span id="numberOfElectionsLbll"></span>)</h3>
+                    <div class="content-group" id="electionCandidatesSlot">
+                        <script>
+                            fetchTodaysVotes();
+                        </script>
                     </div>
                 </div>
             </section>

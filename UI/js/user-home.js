@@ -40,16 +40,6 @@ const fetchPageInterestedOffice = () => {
             electionDate = 'Not set';
           } else {
             electionDate = new Date(electionDate).toDateString();
-            const today = new Date();
-
-            if (today < new Date(electionDate)) {
-              status = 'pending';
-              statusStyle = 'pending-election';
-            } else {
-              // TODO check if this user won or lost the election
-              status = 'won';
-              statusStyle = 'won-election';
-            }
           }
 
           cardDesign += `
@@ -62,7 +52,6 @@ const fetchPageInterestedOffice = () => {
                 fullData.name.substr(1)}</span></label>
               <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">${numberOfCandidates} Candidates</a></span></label>
               <label>Date: <span class="profile-answers">${electionDate}</span></label>
-              <label><span class="${statusStyle}">${status}</span></label>
           </div>
         </div>`;
 
@@ -89,7 +78,7 @@ const fetchPageVotes = () => {
     for (let ind = 0; ind < dataa.length; ind += 1) {
       // Get the candidate's name
       // eslint-disable-next-line no-loop-func
-      fetchUserByID(dataa[ind].candidateid, userToken, ({ userDets }) => {
+      fetchUserByID(dataa[ind].candidateid, userToken, userDets => {
         // Get name
         const name = `${userDets.data[0].firstname} ${userDets.data[0].lastname}`;
         const officeId = dataa[ind].officeid;
@@ -99,6 +88,7 @@ const fetchPageVotes = () => {
         let partyName = '';
         let partyLogo = '';
         let result = 0;
+        let resultStyle = 'won';
         let resultString = 'won';
 
         // Get the office name
@@ -112,33 +102,52 @@ const fetchPageVotes = () => {
 
             // Call the collate result and get the number of votes this candidate got check if it was the highest among other candidates
             collateResult(officeId, userToken, resultRes => {
+              let winningCandidate;
+              let winningCandidateVote = 0;
               for (let rInd = 0; rInd < resultRes.data.length; rInd += 1) {
                 if (resultRes.data[rInd].candidateid === myCandidateId) {
                   result = resultRes.data[rInd].count;
+                }
+
+                if (resultRes.data[rInd].count > winningCandidateVote) {
+                  winningCandidate = resultRes.data[rInd].candidateid;
+                  winningCandidateVote = resultRes.data[rInd].count;
+                }
+
+                if (winningCandidate === myCandidateId) {
+                  resultStyle = 'won';
+                  resultString = 'won';
                 } else {
-                  // eslint-disable-next-line no-lonely-if
-                  if (result > resultRes.data[rInd].count) {
-                    resultString = 'won';
-                  } else {
-                    resultString = 'lost';
+                  resultStyle = 'lost';
+                  resultString = 'lost';
+                }
+
+                // Check if the election is today
+                const today = new Date().toDateString();
+                const elecDate = new Date(dataa[ind].createdon).toDateString();
+                // Check if the election date is today
+                if (today === elecDate) {
+                  if (resultString === 'won') {
+                    resultString = 'wining';
+                  } else if (resultString === 'lost') {
+                    resultString = 'losing';
                   }
                 }
               }
-
-              // Display the details in the card
+              // Display the details in the card for my candidate
               cardDesign += `
-              <div class="individual-person-container">
-                  <div>
-                      <img src="${partyLogo}" />
-                  </div>
-                  <div class="profile-description-text">
-                      <label><span class="profile-answers">${name}</span></label>
-                      <label>Party: <span class="profile-answers">${partyName}</span></label>
-                      <label>Office: <span class="profile-answers">${officeName}</span></label>
-                      <label>Result: <span class="profile-answers">${result}</span> Votes</label>
-                      <label><span class="${resultString}-election">${resultString}</span></label>
-                  </div>
-              </div>`;
+                  <div class="individual-person-container">
+                      <div>
+                          <img src="${partyLogo}" />
+                      </div>
+                      <div class="profile-description-text">
+                          <label><span class="profile-answers">${name}</span></label>
+                          <label>Party: <span class="profile-answers">${partyName}</span></label>
+                          <label>Office: <span class="profile-answers">${officeName}</span></label>
+                          <label>Result: <span class="profile-answers">${result}</span> Votes</label>
+                          <label><span class="${resultStyle}-election">${resultString}</span></label>
+                      </div>
+                  </div>`;
 
               // Check how many results there are
               if (ind + 1 === dataa.length && dataa.length % 2 !== 0) {
@@ -369,6 +378,212 @@ const expressInterestBtnClicked = id => {
       // Refresh the government offices page
       window.location.reload();
     }
+  });
+};
+
+const officesWithElectionToday = candidates => {
+  const offices = [];
+  for (let ind = 0; ind < candidates.length; ind += 1) {
+    if (!offices.includes(candidates[ind].officeid)) {
+      // Set minimum date as today
+      const today = new Date().toDateString();
+      const elecDate = new Date(candidates[ind].date).toDateString();
+      // Check if the election date is today
+      if (today === elecDate) {
+        offices.push(candidates[ind].officeid);
+      }
+    }
+  }
+
+  return offices;
+};
+
+const extractElectionCandidatesFromOffice = (
+  candidates,
+  officeId,
+  resultRes,
+  completionHandler
+) => {
+  const userToken = userDetails.token;
+  const officeCand = [];
+
+  let max = 0;
+  // Check how many candidates this office has
+  for (let ind = 0; ind < candidates.length; ind += 1) {
+    if (candidates[ind].officeid === officeId) {
+      max += 1;
+    }
+  }
+
+  for (let ind = 0; ind < candidates.length; ind += 1) {
+    // Check if this candidate is for the current office
+    if (candidates[ind].officeid === officeId) {
+      // Get the user profile info
+      // eslint-disable-next-line no-loop-func
+      fetchUserByID(candidates[ind].candidateid, userToken, userDets => {
+        // Get name
+        const name = `${userDets.data[0].firstname} ${userDets.data[0].lastname}`;
+        const partyId = candidates[ind].partyid;
+        const myCandidateId = candidates[ind].candidateid;
+        let partyName = '';
+        let partyLogo = '';
+        let result = 0;
+
+        // Get the profile image and name of party using partyID
+        fetchPartyDetailsByID(partyId, userToken, partyRes => {
+          partyName = partyRes.data[0].name;
+          partyLogo = partyRes.data[0].logourl;
+
+          // Calculate the result for this candidate
+          for (let rInd = 0; rInd < resultRes.data.length; rInd += 1) {
+            if (resultRes.data[rInd].candidateid === myCandidateId) {
+              result = resultRes.data[rInd].count;
+            }
+          }
+
+          // Add this user details
+          const cand = {
+            id: myCandidateId,
+            name,
+            partyName,
+            partyLogo,
+            result
+          };
+          // Append user to the array of candidates
+          officeCand.push(cand);
+
+          // Check if this is the last candidate
+          if (officeCand.length === max) {
+            completionHandler(officeCand);
+          }
+        });
+      });
+    }
+  }
+};
+
+const getOfficesNamesFromID = (officesIDs, userToken, completionHandler) => {
+  const officesNames = [];
+  let count = 0;
+  for (let ind = 0; ind < officesIDs.length; ind += 1) {
+    // eslint-disable-next-line no-loop-func
+    fetchOfficeDetailsByID(officesIDs[ind], userToken, res => {
+      officesNames.push(res.data[0].name);
+      if (count === officesIDs.length - 1) {
+        completionHandler(officesNames);
+      }
+      count += 1;
+    });
+  }
+};
+
+const castVote = dets => {
+  const userToken = userDetails.token;
+  const values = dets.split(' ');
+
+  registerVote(userToken, values[0], values[1], res => {
+    if (res.status === 201) {
+      window.location.reload();
+    } else {
+      showAlert(res.error);
+    }
+  });
+};
+
+const checkIfVoteCasted = (officeId, myVotes) => {
+  const result = {
+    voteCasted: false,
+    choice: null
+  };
+  for (let ind = 0; ind < myVotes.length; ind += 1) {
+    if (myVotes[ind].createdby === userDetails.user.id && myVotes[ind].officeid === officeId) {
+      // I have casted vote for this office
+      result.voteCasted = true;
+      result.choice = myVotes[ind].candidateid;
+    }
+  }
+  return result;
+};
+
+const fetchTodaysVotes = () => {
+  const userToken = userDetails.token;
+
+  // Get all the votes casted by this user
+  fetchVotesForUser(userDetails.user.id, userToken, votesRes => {
+    const myVotes = votesRes.dataa;
+
+    // Fetch all candidates
+    fetchInterestedOffice(userToken, res => {
+      const candidates = res.data;
+
+      // Get the offices that have election today
+      const electionOffices = officesWithElectionToday(candidates);
+      document.getElementById('numberOfElectionsLbll').innerHTML = electionOffices.length;
+      let cardDesign = '';
+      getOfficesNamesFromID(electionOffices, userToken, officesNames => {
+        // Get the results for each office
+        for (let ind = 0; ind < electionOffices.length; ind += 1) {
+          // Call the collate result and get the number of votes this candidate got
+          // eslint-disable-next-line no-loop-func
+          collateResult(electionOffices[ind], userToken, votesRes => {
+            // Get the candidates for this office
+            extractElectionCandidatesFromOffice(
+              candidates,
+              electionOffices[ind],
+              votesRes,
+              fullDetails => {
+                for (let ind2 = 0; ind2 < fullDetails.length; ind2 += 1) {
+                  cardDesign += `<div class="individual-person-container">
+                <div>
+                    <img src="${fullDetails[ind2].partyLogo}" />
+                </div>
+                <div class="profile-description-text">
+                    <label><span class="profile-answers">${fullDetails[ind2].name}</span></label>
+                    <label>Party: <span class="profile-answers">${
+                      fullDetails[ind2].partyName
+                    }</span></label>
+                    <label>Office: <span class="profile-answers">${officesNames[ind]}</span></label>
+                    <label>Current votes: <span class="ongoing-election">${
+                      fullDetails[ind2].result
+                    }</span></label>`;
+
+                  // Check if the user has voted before and if this is the person
+                  const { voteCasted, choice } = checkIfVoteCasted(electionOffices[ind], myVotes);
+
+                  if (voteCasted) {
+                    // Check if this candidate is the one i voted for
+                    if (choice === fullDetails[ind2].id) {
+                      // I voted this guy
+                      cardDesign += `<label><span class="casted-vote">Vote Casted</span></label>`;
+                    }
+                  } else {
+                    cardDesign += `<input type="button" name="${electionOffices[ind]} ${
+                      fullDetails[ind2].id
+                    }" class="add-party-btn" value="Cast Vote" onclick="castVote(this.name)" />`;
+                  }
+
+                  // Close div tags
+                  cardDesign += `</div>
+            </div>`;
+
+                  // Check if number of candidates is an even number
+                  if (ind2 + 1 === fullDetails.length && fullDetails.length % 2 !== 0) {
+                    cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+                  }
+
+                  if (ind2 + 1 === fullDetails.length) {
+                    // Another Office Election
+                    cardDesign += `<div class="individual-person-container hidden-div"></div><div class="individual-person-container hidden-div"></div><div class="individual-person-container hidden-div"></div><div class="individual-person-container hidden-div"></div>`;
+                    document.getElementById('electionCandidatesSlot').innerHTML = cardDesign;
+                  }
+                  document.getElementById('electionCandidatesSlot').innerHTML = cardDesign;
+                }
+              }
+            );
+          });
+        }
+      });
+    });
   });
 };
 
