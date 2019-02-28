@@ -257,6 +257,30 @@ const expressInterest = (userToken, officeId, partyId, completionHandler) => {
     .catch(() => {});
 };
 
+const registerVote = (userToken, officeId, candidateId, completionHandler) => {
+  const options = {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ officeId, candidateId })
+  };
+
+  fetch(`${serverUrl}/api/v1/votes`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
 // User page functions end here
 
 // These are the functions for the dashboard pages
