@@ -62,7 +62,6 @@ const signupBtnClicked = () => {
     return fetch('https://politico-okwara.herokuapp.com/api/v1/auth/signup', options)
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         // Check if the user details is valid
         if (res.status === 201) {
           window.localStorage.setItem('userDetails', JSON.stringify(res.data[0]));
