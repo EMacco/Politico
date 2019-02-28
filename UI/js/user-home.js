@@ -210,7 +210,6 @@ const fetchPoliticalParties = () => {
 
       // Set the card in the provided slot
       document.getElementById('politicalPartiesSlot').innerHTML = cardDesign;
-      document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
     }
     document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
   });
@@ -360,8 +359,8 @@ const fetchGovernmentOffices = () => {
 
           // Set the card in the provided slot
           document.getElementById('governmentOfficeSlot').innerHTML = cardDesign;
-          document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
         }
+        document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
       });
     });
   });

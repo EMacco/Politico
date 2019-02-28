@@ -15,7 +15,7 @@ const createPetitionTable = () => {
           id SERIAL PRIMARY KEY, 
           createdOn DATE NOT NULL, 
           createdBy INT NOT NULL, 
-          officeId INT NOT NULL REFERENCES offices(id),
+          officeId INT NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
           body TEXT NOT NULL
           )`;
 
@@ -53,9 +53,9 @@ const createVotesTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS votes(
           id SERIAL PRIMARY KEY, 
           createdOn DATE NOT NULL DEFAULT CURRENT_DATE, 
-          createdBy INT NOT NULL REFERENCES users(id), 
-          officeId INT NOT NULL REFERENCES offices(id),
-          candidateId INT NOT NULL REFERENCES users(id)
+          createdBy INT NOT NULL REFERENCES users(id) ON DELETE CASCADE, 
+          officeId INT NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
+          candidateId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE
           )`;
 
   pool
@@ -147,7 +147,7 @@ const createUserTable = () => {
       debugg(res);
 
       // Instantiate the initial Admin user
-      const createUserQuery = `INSERT INTO users(firstName, lastName, otherName, email, password, phoneNumber, passportUrl, isAdmin) VALUES ('Emmanuel', 'Okwara', 'Nduka', 'emma4real37@gmail.com', '$2b$10$gAeAektVtOq1bdlr.CXHJuGolSV5Sl2/.k6V675/PwXtubcS.Ph/m', '08124185320', 'http://www.google.com/emmanuel-okwara', true)`;
+      const createUserQuery = `INSERT INTO users(firstName, lastName, otherName, email, password, phoneNumber, passportUrl, isAdmin) VALUES ('Emmanuel', 'Okwara', 'Nduka', 'emma4real37@gmail.com', '$2b$10$gAeAektVtOq1bdlr.CXHJuGolSV5Sl2/.k6V675/PwXtubcS.Ph/m', '08124185320', 'https://', true)`;
       pool
         .query(createUserQuery)
         .then(() => {

@@ -113,99 +113,20 @@
 
             <section id="user-home-content-div">
                 <div class="profile-page-section">
-                    <h3 id="interested-office-header">Political Parties (2)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Email: <span class="profile-answers"><input type="text" class="dashboard-fields" value="apc_nigeria@gmail.com" /></span></label>
-                                <label>Phone: <span class="profile-answers"><input type="text" class="dashboard-fields" value="08037483744" /></span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Email: <span class="profile-answers"><input type="text" class="dashboard-fields" value="pdp_nigeria@gmail.com" /></span></label>
-                                <label>Phone: <span class="profile-answers"><input type="text" class="dashboard-fields" value="080263647333" /></span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-
-
+                    <h3 id="interested-office-header">Political Parties (<span id="dasboardNumberOfPartiesLbl"></span>)</h3>
+                    <div class="content-group" id="dashboardPoliticalPartiesSlot">
+                        <script>
+                            fetchPoliticalParties();
+                        </script>
                     </div>
                 </div>
 
                 <div class="profile-page-section">
-                    <h3>Government Offices (3)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/kogi-logo.png" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Member Kogi State House Of Assemblies</span></label>
-                                <label>Date: <span class="profile-answers"><input type="text" class="dashboard-fields" value="31th feb, 2019" /></span></label>
-                                <label>Candidates: <span class="profile-answers">6 Candidates</span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/new direction.jpg" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">New Direction Blueprint Team</span></label>
-                                <label>Date: <span class="profile-answers"><input type="text" class="dashboard-fields"  value="2nd june, 2019" /></span></label>
-                                <label>Candidates: <span class="profile-answers">3 Candidates</span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/kogi-logo.png" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">House of Representatives</span></label>
-                                <label>Date: <span class="profile-answers"><input type="text" class="dashboard-fields" value="20st sept, 2019" /></span></label>
-                                <label>Candidates: <span class="profile-answers">11 Candidates</span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-                        <div class="individual-person-container hidden-div"></div>
-                    </div>
-                </div>
-
-                <div class="profile-page-section">
-                    <h3>Elections (1)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="../img/new direction.jpg" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">New Direction Blueprint Team</span></label>
-                                <label>Date: <span class="profile-answers"><input type="text" class="dashboard-fields"  value="2nd june, 2019" /></span></label>
-                                <label>Candidates: <span class="profile-answers">3
-                                            Candidates</span></label>
-                                <label><span class="pending-election">Pending</span></label>
-                                <input type="submit" class="add-party-btn" value="Update" />
-                                <input type="submit" class="remove-party-btn" value="Delete" />
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container hidden-div"></div>
+                    <h3>Government Offices (<span id="numberOfOfficessLbl"></span>)</h3>
+                    <div class="content-group" id="dashboardOfficesSlot">
+                        <script>
+                            fetchGovernmentOffices();
+                        </script>
                     </div>
                 </div>
             </section>

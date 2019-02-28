@@ -131,7 +131,7 @@ class OfficesController {
         // It is a server error
         return res.status(500).json({ status: 500, error: data });
       }
-
+      
       // Check if the office exists
       if (data.length === 0) {
         return res.status(404).json({ status: 404, error: 'Office does not exist' });
