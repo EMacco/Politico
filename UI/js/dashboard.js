@@ -265,6 +265,112 @@ const declineInterest = dets => {
   );
 };
 
+const updatePartyClicked = partyId => {
+  const userToken = userDetails.token;
+  const newPartyName = document.getElementById(`party-id-${partyId}`).value;
+
+  updatePartyName(userToken, partyId, newPartyName, updateRes => {
+    if (updateRes.status === 200) {
+      window.location.reload();
+    } else {
+      showAlert(updateRes.error);
+    }
+  });
+};
+
+const deletePartyClicked = partyId => {
+  const userToken = userDetails.token;
+  deleteParty(userToken, partyId, deleteRes => {
+    if (deleteRes.status === 200) {
+      window.location.reload();
+    }
+  });
+};
+
+const deleteOfficeClicked = officeId => {
+  const userToken = userDetails.token;
+  deleteOffice(userToken, officeId, deleteRes => {
+    if (deleteRes.status === 200) {
+      window.location.reload();
+    }
+  });
+};
+
+const fetchPoliticalParties = () => {
+  const userToken = userDetails.token;
+
+  fetchAllParties(userToken, res => {
+    const { data } = res;
+    let cardDesign = '';
+
+    for (let ind = 0; ind < data.length; ind += 1) {
+      // Display the details in the card
+      cardDesign += `
+      <div class="individual-person-container">
+        <div>
+            <img src="${data[ind].logourl}" />
+        </div>
+        <div class="profile-description-text">
+        <span class="profile-answers"><input type="text" value="${
+          data[ind].name
+        }" class="dashboard-fields" id="party-id-${data[ind].id}" /></span>
+            <label>HQ Address: <span class="profile-answers">${data[ind].hqaddress}</span></label>
+            <input type="button" class="add-party-btn" value="Update" name="${
+              data[ind].id
+            }" onclick="updatePartyClicked(this.name)" />
+            <input type="button" class="remove-party-btn" value="Delete" name="${
+              data[ind].id
+            }" onclick="deletePartyClicked(this.name)" />
+                    </div>
+                  </div>`;
+
+      // Check how many results there are
+      if (ind + 1 === data.length && data.length % 2 !== 0) {
+        cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+      }
+
+      // Set the card in the provided slot
+      document.getElementById('dashboardPoliticalPartiesSlot').innerHTML = cardDesign;
+    }
+    document.getElementById('dasboardNumberOfPartiesLbl').innerHTML = data.length;
+  });
+};
+
+const fetchGovernmentOffices = () => {
+  const userToken = userDetails.token;
+
+  // Fetch the offices
+  fetchAllOffices(userToken, officeRes => {
+    const officeData = officeRes.data;
+    let cardDesign = '';
+    for (let ind = 0; ind < officeData.length; ind += 1) {
+      // Display the details in the card
+      cardDesign += `
+    <div class="individual-person-container">
+      <div>
+          <img src="${officeData[ind].logourl}" />
+      </div>
+      <div class="profile-description-text">
+          <label><span class="profile-answers">${officeData[ind].name}</span></label>
+          <label>Type: <span class="profile-answers">${officeData[ind].type}</span></label>
+          <input type="button" class="remove-party-btn" value="Delete" name="${
+            officeData[ind].id
+          }" onclick="deleteOfficeClicked(this.name)" />
+      </div>
+    </div>`;
+
+      // Check how many results there are
+      if (ind + 1 === officeData.length && officeData.length % 2 !== 0) {
+        cardDesign += `<div class="individual-person-container hidden-div"></div>`;
+      }
+
+      // Set the card in the provided slot
+      document.getElementById('dashboardOfficesSlot').innerHTML = cardDesign;
+    }
+    document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
+  });
+};
+
 dashboardSignoutBtnClicked = () => {
   window.localStorage.removeItem('userDetails');
   window.location.href = '../signin.html';

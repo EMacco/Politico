@@ -450,6 +450,75 @@ const declineCandidateRequest = (userToken, candidateId, officeId, partyId, comp
     .catch(() => {});
 };
 
+const deleteParty = (userToken, partyId, completionHandler) => {
+  const options = {
+    method: 'DELETE',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties/${partyId}`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
+const deleteOffice = (userToken, officeId, completionHandler) => {
+  const options = {
+    method: 'DELETE',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    })
+  };
+
+  fetch(`${serverUrl}/api/v1/offices/${officeId}`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
+
+const updatePartyName = (userToken, partyId, newName, completionHandler) => {
+  const options = {
+    method: 'PATCH',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': userToken
+    }),
+    body: JSON.stringify({ name: newName })
+  };
+
+  fetch(`${serverUrl}/api/v1/parties/${partyId}/name`, options)
+    .then(res => res.json())
+    .then(res => {
+      if (res.status === 401) {
+        // Invalid token
+        window.localStorage.removeItem('userDetails');
+        window.location.href = './signin.html';
+      } else {
+        completionHandler(res);
+      }
+    })
+    .catch(() => {});
+};
 // Dashboard pags functions end here
 
 const showAlert = message => {

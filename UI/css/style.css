@@ -27,8 +27,8 @@ body {
   text-shadow: 2px 2px 2px #111;
 }
 
-img {
-  background-color: #ccc; 
+.individual-person-container img {
+  background-color: #fff;
 }
 
 main {
