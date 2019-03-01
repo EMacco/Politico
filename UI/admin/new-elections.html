@@ -10,6 +10,8 @@
     <title>POLITICO | Schedule Election</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script src="../js/index.js"></script>
+    <script src="../js/myFunctions.js"></script>
+    <script src="../js/dashboard.js"></script>
 </head>
 
 <body class="signed-in-page">
@@ -22,15 +24,16 @@
                 <ul>
                     <li><a href="../user-home.html">Home</a></li>
                     <li><a href="user-home.html">My Dashboard</a></li>
+                    <li><a href="interests.html">Interests</a></li>
                     <li><a href="new-political-party.html">New Political Party</a></li>
                     <li><a href="new-government-office.html">New Government Office</a></li>
                     <li><a href="new-elections.html">Schedule Election</a></li>
-                    <li><a href="../index.html">Log out</a></li>
+                    <li><a onclick="dashboardSignoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
                 <ul>
-                    <li>Welcome, Emmanuel Okwara</li>
+                    <li>Welcome, <span id="welcomeUserLbl">Emmanuel Okwara</span></li>
                 </ul>
             </div>
         </nav>
@@ -46,14 +49,28 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="../img/person-large.png" />
+                    <img src="../img/person-large.png" id="profile-img-preview" />
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+                    </script>
                 </div>
                 <div class="profile-description-text">
-                    <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                    <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                    <label>Phone: <span class="profile-answers">08124185320</span></label>
-                    <a href="resetPassword.html">Reset Password</a>
+                    <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
+                    <label>Email: <span class="profile-answers" id="welcomeEmailLbl">okwarae.n@gmail.com</span></label>
+                    <label>Phone: <span class="profile-answers" id="welcomePhoneLbl">08124185320</span></label>
                 </div>
+
+                <script>
+                    // Set the values of the profile 
+                    // Set the name 
+                    document.getElementById('welcomeUserLbl').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeUserLbl2').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeEmailLbl').innerHTML = userDetails.user.email;
+                    document.getElementById('welcomePhoneLbl').innerHTML = userDetails.user.phonenumber;
+                </script>
                 <hr class="separate-profile-nav" />
 
                 <a href="../user-home.html">
@@ -64,6 +81,11 @@
                 <a href="user-home.html">
                     <div class="nav-menu">
                         My Dashboard
+                    </div>
+                </a>
+                <a href="interests.html">
+                    <div class="nav-menu">
+                        Interests
                     </div>
                 </a>
                 <a href="new-political-party.html">
@@ -81,7 +103,7 @@
                         Schedule Election
                     </div>
                 </a>
-                <a href="../index.html">
+                <a onclick="dashboardSignoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>
@@ -89,22 +111,43 @@
             </section>
 
             <section id="user-home-content-div">
+                <div id="loadingIconContainer"></div>
                 <div class="profile-page-section">
                     <div class="content-group-create">
                         <h3>Schedule Election</h3>
                         <form>
+                            <center><label id="errorMessage"></label></center>
+                            <center><label id="successMessage"></label></center>
                             <div class="input-with-icon-create">
-                                <select class="dropdown-btn">
-                                    <option>Member Kogi State House Of Assemblies</option>
-                                    <option>New Direction Blueprint Team</option>
-                                    <option>House of Representatives</option>
+                                <select class="dropdown-btn" id="officesNameSelectSlot">
+                                    <script>
+                                        getEligibleOfficesForElection();    
+                                    </script>
                                 </select>
                             </div>
                             <div class="input-with-icon-create">
                                 <img src="../img/calendar-icon2.png">
-                                <input type="date" class="signin-text-field" />
+                                <input type="date" class="signin-text-field" id="scheduleElectionDateField"/>
+                                <script>
+                                    // Set minimum date as today
+                                    let today = new Date();
+                                    let dd = today.getDate();
+                                    let mm = today.getMonth() + 1; //January is 0!
+                                    const yyyy = today.getFullYear();
+
+                                    if (dd < 10) {
+                                    dd = `0${dd}`;
+                                    }
+
+                                    if (mm < 10) {
+                                    mm = `0${mm}`;
+                                    }
+
+                                    today = `${yyyy}-${mm}-${dd}`;
+                                    document.getElementById("scheduleElectionDateField").min = today
+                                </script>
                             </div>
-                            <input type="submit" value="Create Schedule" class="signin-submit-btn" />
+                            <input type="button" value="Create Schedule" class="signin-submit-btn" onclick="scheduleElectionDate()" />
                         </form>
                     </div>
                 </div>

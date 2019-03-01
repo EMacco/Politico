@@ -7,12 +7,11 @@
     <meta name="description" content="Simple website for elections">
     <meta name="keywords" content="voting, election, politician, politics">
     <meta name="author" content="Okwara Emmanuel">
-    <title>POLITICO | Create Party</title>
+    <title>POLITICO | User Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <script src="../js/index.js"></script>
     <script src="../js/myFunctions.js"></script>
     <script src="../js/dashboard.js"></script>
-    
 </head>
 
 <body class="signed-in-page">
@@ -84,13 +83,13 @@
                         My Dashboard
                     </div>
                 </a>
-                <a href="interests.html">
-                    <div class="nav-menu">
+                <a href="interests.html" id="current-side-bar">
+                    <div class="nav-menu" id="current-side-bar">
                         Interests
                     </div>
                 </a>
-                <a href="new-political-party.html" id="current-side-bar">
-                    <div class="nav-menu" id="current-side-bar">
+                <a href="new-political-party.html">
+                    <div class="nav-menu">
                         New Political Party
                     </div>
                 </a>
@@ -112,38 +111,13 @@
             </section>
 
             <section id="user-home-content-div">
-                <div id="loadingIconContainer"></div>
+            <div id="loadingIconContainer"></div>
                 <div class="profile-page-section">
-                    <div class="content-group-create">
-                        <h3>Create Political Party</h3>
-                        <form>
-                            <center><label id="errorMessage"></label></center>
-                            <center><label id="successMessage"></label></center>
-                            <div class="input-with-icon-create">
-                                <img src="../img/person-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="Party name..." id="newPartyNameLbl" />
-                            </div>
-                            <div class="input-with-icon-create">
-                                <img src="../img/office-icon.png">
-                                <input type="text" class="signin-text-field" placeholder="HQ address..." id="newPartyAddressLbl" />
-                            </div>
-                            <div class="input-profile">
-                                <img src="../img/person-large.png" id="party-img-preview">
-                                <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="party-file-upload" />
-                            </div>
-
-                            <input type="button" value="Create Party" class="signin-submit-btn" onclick="createPartyBtnClicked()" />
-
-                            <script>
-                                const imgPreview = document.getElementById('party-img-preview');
-                                var fileUploadBtn = document.getElementById('party-file-upload');
-
-                                fileUploadBtn.addEventListener('change', event => {
-                                    // Change the image of the preview tag
-                                    imgPreview.src = URL.createObjectURL(event.target.files[0])
-                                })
-                            </script>
-                        </form>
+                    <h3 id="interested-office-header">Potential Candidates (<span id="numberOfInterestsLbl"></span>)</h3>
+                    <div class="content-group" id="interestsSlot">
+                        <script>
+                            fetchOfficeInterests();
+                        </script>
                     </div>
                 </div>
             </section>
@@ -153,7 +127,6 @@
             Politico Website Designed by Okwara Emmanuel &copy; 2019
         </footer>
     </main>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

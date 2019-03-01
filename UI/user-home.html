@@ -9,6 +9,7 @@
 	<title>POLITICO | User Home Page</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
     <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
@@ -18,25 +19,25 @@
 		<input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
 		<nav>
             <div class="header-nav">
-                <ul>
+                <ul id="hideDashboard">
                     <li><a href="user-home.html">Home</a></li>
                     <li><a href="admin/user-home.html">My Dashboard</a></li>
                     <li><a href="political-parties.html">Political Parties</a></li>
                     <li><a href="government-offices.html">Government Offices</a></li>
                     <li><a href="elections.html">Vote</a></li>
-                    <li><a href="index.html">Log out</a></li>
+                    <li><a onclick="signoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
                 <ul>
-                    <li>Welcome, Emmanuel Okwara</li>
+                    <li>Welcome, <span id="welcomeUserLbl">Emmanuel Okwara</span></li>
                 </ul>
             </div>
         </nav>
 		<label for="nav-toggle" class="nav-toggle-label" >
 			<span></span>
 		</label>
-	</header>
+    </header>
 
     <div id="overlay" class="overlay"></div>
     
@@ -44,14 +45,68 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="img/person-large.png" />
+                    <img src="img/person-large.png" id="profile-img-preview" />
+                    <i><label id="uploadingText"></label></i>
+                    <!-- Button to set profile picture -->
+                    <input type="file" accept="image/x-png,image/gif,image/jpeg" class="select-btn" id="profile-file-upload" />
+                    
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+
+                        // Add listener for if a new profile picture is selected
+                        const imgPreview = document.getElementById('profile-img-preview');
+                        var fileUploadBtn = document.getElementById('profile-file-upload');
+
+                        fileUploadBtn.addEventListener('change', event => {
+                            document.getElementById('uploadingText').innerHTML = 'Uploading...';
+                            // Change the image of the preview tag
+                            if (event.target.files.length > 0) {
+                                const previousImage = imgPreview.src;
+                                imgPreview.src = URL.createObjectURL(event.target.files[0]);
+                                uploadImage(event.target.files[0], (success, url) => {
+                                    if (success) {
+                                        const userToken = userDetails.token;
+                                        // Go ahead and create office
+                                        updateUserProfilePicture(userToken, url, res => {
+                                            // Check if it was successful
+                                            if (res.status === 200) {
+                                                document.getElementById('uploadingText').innerHTML = 'Upload successful';
+                                                // Clear the input file
+                                                document.getElementById('profile-file-upload').value = ''
+
+                                                // Update local storage
+                                                let newUserDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+                                                newUserDetails.user.passporturl = res.data[0].passporturl;
+                                                window.localStorage.setItem('userDetails', JSON.stringify(newUserDetails));
+                                            } else {
+                                                document.getElementById('uploadingText').innerHTML = 'Upload failed';
+                                                imgPreview.src = previousImage;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                    </script>
                 </div>
                 <div class="profile-description-text">
-                    <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                    <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                    <label>Phone: <span class="profile-answers">08124185320</span></label>
-                    <a href="resetPassword.html">Reset Password</a>
+                    <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
+                    <label>Email: <span class="profile-answers" id="welcomeEmailLbl">okwarae.n@gmail.com</span></label>
+                    <label>Phone: <span class="profile-answers" id="welcomePhoneLbl">08124185320</span></label>
                 </div>
+
+                <script>
+                    // Set the values of the profile 
+                    // Set the name 
+                    document.getElementById('welcomeUserLbl').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeUserLbl2').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeEmailLbl').innerHTML = userDetails.user.email;
+                    document.getElementById('welcomePhoneLbl').innerHTML = userDetails.user.phonenumber;
+                </script>
+
                 <hr class="separate-profile-nav"/>
 
                 <a href="user-home.html" id="current-side-bar">
@@ -59,7 +114,7 @@
                         My Profile
                     </div>
                 </a>
-                <a href="admin/user-home.html">
+                <a href="admin/user-home.html" id="hideDashboardDiv">
                     <div class="nav-menu">
                         My Dashboard
                     </div>
@@ -79,105 +134,41 @@
                         Vote
                     </div>
                 </a>
-                <a href="index.html">
+                <a onclick="signoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>
                 </a>
             </section>
+
+            <script>
+                // Check if user is admin
+                if (userDetails.user.isadmin === false) {
+                    // Hide the dashboard
+                    const navListItem = document.getElementById('hideDashboard');
+                    navListItem.children[1].style.display = 'none';
+                    const dashboardNavDiv = document.getElementById('hideDashboardDiv');
+                    dashboardNavDiv.style.display = 'none'
+                }
+            </script>
     
             <section id="user-home-content-div">
+                <div id="loadingIconContainer"></div>
                 <div class="profile-page-section">
                     <h3 id="interested-office-header">Interested Office</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Member of the House of Representatives</span></label>
-                                <label>Candidates: <span class="profile-answers"><a href="office-candidates.html">6 Candidates</a></span></label>
-                                <label>Date: <span class="profile-answers">20th Dec, 2019</span></label>
-                                <label><span class="pending-election">Pending</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container hidden-div"></div>
+                    <div class="content-group" id="interestedOfficeSlot"> 
+                        <script>
+                            fetchPageInterestedOffice();
+                        </script>
                     </div>
                 </div>
 
                 <div class="profile-page-section">
-                    <h3>My Votes (5)</h3>
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Office: <span class="profile-answers">Presidency</span></label>
-                                <label>Result: <span class="profile-answers">17 million</span> Votes</label>
-                                <label><span class="won-election">Won</span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                                <label>Office: <span class="profile-answers">Presidency</span></label>
-                                <label>Result: <span class="profile-answers">17 million</span> Votes</label>
-                                <label><span class="won-election">Won</span></label>
-                            </div>
-                        </div>
-        
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Atiku Abubakar</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                                <label>Office: <span class="profile-answers">Governorship</span></label>
-                                <label>Result: <span class="profile-answers">10 thousand</span> Votes</label>
-                                <label><span class="lost-election">Lost</span></label>
-                            </div>
-                        </div>
-
-                        <div class="individual-person-container hidden-div"></div>
+                    <h3>My Votes (<span id="numberOfVotesLbl"></span>)</h3>
+                    <div class="content-group" id="userVotesSlot">
+                        <script>
+                            fetchPageVotes();
+                        </script>
                     </div>
                 </div>
             </section>
@@ -186,6 +177,7 @@
 		<footer class="user-home-footer">
 			Politico Website Designed by Okwara Emmanuel &copy; 2019
 		</footer>
-	</main>
+    </main>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>

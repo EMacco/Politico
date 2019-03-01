@@ -9,6 +9,8 @@
 	<title>POLITICO | Contesting Candidates</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="./js/index.js"></script>
+    <script src="./js/myFunctions.js"></script>
+    <script src="./js/user-home.js"></script>
 </head>
 <body class="signed-in-page">
 	<header class="index-header">
@@ -17,18 +19,18 @@
 		<input type="checkbox" class="nav-toggle" id="nav-toggle" onclick="toggleMenu(this)">
 		<nav>
             <div class="header-nav">
-                <ul>
+                <ul id="hideDashboard">
                     <li><a href="user-home.html">Home</a></li>
                     <li><a href="admin/user-home.html">My Dashboard</a></li>
                     <li><a href="political-parties.html">Political Parties</a></li>
                     <li><a href="government-offices.html">Government Offices</a></li>
                     <li><a href="elections.html">Vote</a></li>
-                    <li><a href="index.html">Log out</a></li>
+                    <li><a onclick="signoutBtnClicked()">Log out</a></li>
                 </ul>
             </div>
             <div class="header-nav-big-screen">
                 <ul>
-                    <li>Welcome, Emmanuel Okwara</li>
+                    <li>Welcome, <span id="welcomeUserLbl">Emmanuel Okwara</span></li>
                 </ul>
             </div>
 		</nav>
@@ -44,14 +46,28 @@
         <div class="container">
             <section id="user-profile-container">
                 <div>
-                    <img src="img/person-large.png" />
+                    <img src="img/person-large.png" id="profile-img-preview" />
+                    <script>
+                        const imgUrl = userDetails.user.passporturl
+                        if (imgUrl !== 'https://') {
+                            document.getElementById('profile-img-preview').src = imgUrl;
+                        } 
+                    </script>
                 </div>
                 <div class="profile-description-text">
-                    <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                    <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                    <label>Phone: <span class="profile-answers">08124185320</span></label>
-                    <a href="resetPassword.html">Reset Password</a>
+                    <label><span class="profile-answers" id="welcomeUserLbl2">Emmanuel Okwara</span></label>
+                    <label>Email: <span class="profile-answers" id="welcomeEmailLbl">okwarae.n@gmail.com</span></label>
+                    <label>Phone: <span class="profile-answers" id="welcomePhoneLbl">08124185320</span></label>
                 </div>
+
+                <script>
+                    // Set the values of the profile 
+                    // Set the name 
+                    document.getElementById('welcomeUserLbl').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeUserLbl2').innerHTML = `${userDetails.user.firstname} ${userDetails.user.lastname}`;
+                    document.getElementById('welcomeEmailLbl').innerHTML = userDetails.user.email;
+                    document.getElementById('welcomePhoneLbl').innerHTML = userDetails.user.phonenumber;
+                </script>
                 <hr class="separate-profile-nav"/>
 
                 <a href="user-home.html">
@@ -59,7 +75,7 @@
                         My Profile
                     </div>
                 </a>
-                <a href="admin/user-home.html">
+                <a href="admin/user-home.html" id="hideDashboardDiv">
                     <div class="nav-menu">
                         My Dashboard
                     </div>
@@ -79,84 +95,46 @@
                         Vote
                     </div>
                 </a>
-                <a href="index.html">
+                <a onclick="signoutBtnClicked()">
                     <div class="nav-menu">
                         Log out
                     </div>
                 </a>
             </section>
+
+            <script>
+                // Check if user is admin
+                if (userDetails.user.isadmin === false) {
+                    // Hide the dashboard
+                    const navListItem = document.getElementById('hideDashboard');
+                    navListItem.children[1].style.display = 'none';
+                    const dashboardNavDiv = document.getElementById('hideDashboardDiv');
+                    dashboardNavDiv.style.display = 'none'
+                }
+            </script>
             
             <section id="user-home-content-div">
+                <div id="loadingIconContainer"></div>
                 <div class="profile-page-section">
-                    <h3 id="interested-office-header"><p>Member Kogi State House Of Assemblies</p>Contesting Candidates  (6)</h3>
+                    <h3 id="interested-office-header"><p><span id="officeNameLbl"></span></p>Contesting Candidates  (<span id="numberOfCandidateLbl"></span>)</h3>
                     
-                    <div class="content-group">
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Uzoh Okwara</span></label>
-                                <label>Email: <span class="profile-answers">uzohokwara@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08135512122</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">John Doe</span></label>
-                                <label>Email: <span class="profile-answers">jdoe@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08138333231</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Emmanuel Okwara</span></label>
-                                <label>Email: <span class="profile-answers">okwarae.n@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08124185320</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/apc-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">Uzoh Okwara</span></label>
-                                <label>Email: <span class="profile-answers">uzohokwara@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08135512122</span></label>
-                                <label>Party: <span class="profile-answers">All Progressive Congress</span></label>
-                            </div>
-                        </div>
-                        <div class="individual-person-container">
-                            <div>
-                                <img src="img/pdp-logo.JPG" />
-                            </div>
-                            <div class="profile-description-text">
-                                <label><span class="profile-answers">John Doe</span></label>
-                                <label>Email: <span class="profile-answers">jdoe@gmail.com</span></label>
-                                <label>Phone: <span class="profile-answers">08138333231</span></label>
-                                <label>Party: <span class="profile-answers">People's Democratic Party</span></label>
-                            </div>
-                        </div>
+                    <div class="content-group" id="officeCandidatesSlot">
+                        <script>
+                            // Extract the office id from the url
+                            const getQueryVariable = variable => {
+                                const query = window.location.search.substring(1);
+                                const vars = query.split("&");
+                                for (let i = 0; i < vars.length; i += 1) {
+                                    const pair = vars[i].split("=");
+                                    if (pair[0] == variable) return pair[1]; 
+                                }
+                                return(false);
+                            };   
+
+                            const officeId = getQueryVariable('officeId');
+                            const officeName = getQueryVariable('officeName');
+                            candidatePageFetchOffice(officeId, unescape(officeName));
+                        </script>
                     </div>
                 </div>
             </section>
