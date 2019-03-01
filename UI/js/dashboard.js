@@ -20,6 +20,7 @@ const extractCandidateInfoFromOffice = (candidates, officeId) => {
 
 const getEligibleOfficesForElection = () => {
   const userToken = userDetails.token;
+  startLoading();
   // Get all the candidates
   fetchInterestedOffice(userToken, res => {
     const candidates = res.data;
@@ -39,6 +40,7 @@ const getEligibleOfficesForElection = () => {
           officeNames += `<option value="${officeData[ind].id}">${officeData[ind].name}</option>`;
         }
       }
+      stopLoading();
 
       // Update the select tag
       document.getElementById('officesNameSelectSlot').innerHTML = officeNames;
@@ -63,12 +65,14 @@ const scheduleElectionDate = () => {
   } else if (date === '') {
     document.getElementById('errorMessage').innerHTML = 'Please select date';
   } else {
+    startLoading();
     setElectionDate(userToken, selectedOfficeID, date, res => {
       if (res.status === 200) {
         successLbl.innerHTML = 'Election date has been set';
       } else {
         errorLbl.innerHTML = res.data.error;
       }
+      stopLoading();
     });
   }
 };
@@ -95,6 +99,7 @@ const createOfficeBtnClicked = () => {
       errorLbl.innerHTML = 'Please select an image';
     } else {
       // Upload the image to the server
+      startLoading();
       uploadImage(uploadBtn.files[0], (success, url) => {
         if (success) {
           // Go ahead and create office
@@ -105,10 +110,12 @@ const createOfficeBtnClicked = () => {
             } else {
               errorLbl.innerHTML = res.error;
             }
+            stopLoading();
           });
         } else {
           // Display error
           errorLbl.innerHTML = url;
+          stopLoading();
         }
       });
     }
@@ -138,6 +145,7 @@ const createPartyBtnClicked = () => {
       errorLbl.innerHTML = 'Please select an image';
     } else {
       // Upload the image to the server
+      startLoading();
       uploadImage(uploadBtn.files[0], (success, url) => {
         if (success) {
           // Go ahead and create office
@@ -148,10 +156,12 @@ const createPartyBtnClicked = () => {
             } else {
               errorLbl.innerHTML = res.error;
             }
+            stopLoading();
           });
         } else {
           // Display error
           errorLbl.innerHTML = url;
+          stopLoading();
         }
       });
     }
@@ -161,6 +171,7 @@ const createPartyBtnClicked = () => {
 };
 
 const fetchOfficeInterests = () => {
+  startLoading();
   const userToken = userDetails.token;
   fetchAllInterests(userToken, interestsRes => {
     const interests = interestsRes.data;
@@ -223,9 +234,14 @@ const fetchOfficeInterests = () => {
 
             // Set the card in the provided slot
             document.getElementById('interestsSlot').innerHTML = cardDesign;
+            stopLoading();
           });
         });
       });
+    }
+
+    if (interests.length === 0) {
+      stopLoading();
     }
     // Display number of votes this user has at the title
     document.getElementById('numberOfInterestsLbl').innerHTML = interests.length;
@@ -235,6 +251,7 @@ const fetchOfficeInterests = () => {
 const approveInterest = dets => {
   const userToken = userDetails.token;
   const registrationDetails = dets.split(' ');
+  startLoading();
   registerCandidate(
     userToken,
     registrationDetails[0],
@@ -243,6 +260,7 @@ const approveInterest = dets => {
     registrationRes => {
       if (registrationRes.status !== 201) {
         showAlert(registrationRes.error);
+        stopLoading();
       } else {
         // Refresh the page
         window.location.reload();
@@ -252,6 +270,7 @@ const approveInterest = dets => {
 };
 
 const declineInterest = dets => {
+  startLoading();
   const userToken = userDetails.token;
   const registrationDetails = dets.split(' ');
   declineCandidateRequest(
@@ -266,6 +285,7 @@ const declineInterest = dets => {
 };
 
 const updatePartyClicked = partyId => {
+  startLoading();
   const userToken = userDetails.token;
   const newPartyName = document.getElementById(`party-id-${partyId}`).value;
 
@@ -274,30 +294,36 @@ const updatePartyClicked = partyId => {
       window.location.reload();
     } else {
       showAlert(updateRes.error);
+      stopLoading();
     }
   });
 };
 
 const deletePartyClicked = partyId => {
+  startLoading();
   const userToken = userDetails.token;
   deleteParty(userToken, partyId, deleteRes => {
     if (deleteRes.status === 200) {
       window.location.reload();
     }
+    stopLoading();
   });
 };
 
 const deleteOfficeClicked = officeId => {
   const userToken = userDetails.token;
+  startLoading();
   deleteOffice(userToken, officeId, deleteRes => {
     if (deleteRes.status === 200) {
       window.location.reload();
     }
+    stopLoading();
   });
 };
 
 const fetchPoliticalParties = () => {
   const userToken = userDetails.token;
+  startLoading();
 
   fetchAllParties(userToken, res => {
     const { data } = res;
@@ -332,13 +358,14 @@ const fetchPoliticalParties = () => {
       // Set the card in the provided slot
       document.getElementById('dashboardPoliticalPartiesSlot').innerHTML = cardDesign;
     }
+    stopLoading();
     document.getElementById('dasboardNumberOfPartiesLbl').innerHTML = data.length;
   });
 };
 
 const fetchGovernmentOffices = () => {
   const userToken = userDetails.token;
-
+  startLoading();
   // Fetch the offices
   fetchAllOffices(userToken, officeRes => {
     const officeData = officeRes.data;
@@ -367,6 +394,7 @@ const fetchGovernmentOffices = () => {
       // Set the card in the provided slot
       document.getElementById('dashboardOfficesSlot').innerHTML = cardDesign;
     }
+    stopLoading();
     document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
   });
 };
