@@ -522,9 +522,22 @@ const updatePartyName = (userToken, partyId, newName, completionHandler) => {
 // Dashboard pags functions end here
 
 const showAlert = message => {
-  alert(message);
+  const loader = document.getElementById('loadingIconContainer');
+  loader.style.display = 'block';
+  loader.style.background = 'rgba(0, 0, 0, 0.3)';
+  loader.innerHTML = `<span class="centerLoadingIcon" id="alertMessageContainer">${message}<br /> <br /><input type="button" value="close" onclick="stopLoading()" /></span>
+
+  
+  `;
 };
 
-const startLoading = () => {};
+const startLoading = () => {
+  const loader = document.getElementById('loadingIconContainer');
+  loader.style.display = 'block';
+  loader.style.background = 'null';
+  loader.innerHTML = `<img src="./img/output.gif" class="centerLoadingIcon"/>`;
+};
 
-const stopLoading = () => {};
+const stopLoading = () => {
+  document.getElementById('loadingIconContainer').style.display = 'none';
+};

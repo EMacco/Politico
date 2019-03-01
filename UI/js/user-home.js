@@ -7,6 +7,7 @@ if (!userDetails) {
 
 const fetchPageInterestedOffice = () => {
   const userToken = userDetails.token;
+  startLoading();
 
   // Get the interested offices
   fetchInterestedOffice(userToken, res => {
@@ -58,9 +59,14 @@ const fetchPageInterestedOffice = () => {
 
           // Set the card in the provided slot
           document.getElementById('interestedOfficeSlot').innerHTML = cardDesign;
+          stopLoading();
         });
         break;
       }
+    }
+
+    if (data.length === 0) {
+      stopLoading();
     }
   });
 };
@@ -68,7 +74,7 @@ const fetchPageInterestedOffice = () => {
 const fetchPageVotes = () => {
   // Get votes that have been casted by this user
   const userToken = userDetails.token;
-
+  startLoading();
   // Get the interested offices
   fetchVotesForUser(userDetails.user.id, userToken, res => {
     const { dataa } = res;
@@ -154,10 +160,15 @@ const fetchPageVotes = () => {
 
               // Set the card in the provided slot
               document.getElementById('userVotesSlot').innerHTML = cardDesign;
+              stopLoading();
             });
           });
         });
       });
+    }
+
+    if (dataa.length === 0) {
+      stopLoading();
     }
     // Display number of votes this user has at the title
     document.getElementById('numberOfVotesLbl').innerHTML = dataa.length;
@@ -166,6 +177,7 @@ const fetchPageVotes = () => {
 
 const fetchPoliticalParties = () => {
   const userToken = userDetails.token;
+  startLoading();
 
   fetchAllParties(userToken, res => {
     const { data } = res;
@@ -211,12 +223,14 @@ const fetchPoliticalParties = () => {
       // Set the card in the provided slot
       document.getElementById('politicalPartiesSlot').innerHTML = cardDesign;
     }
+    stopLoading();
     document.getElementById('numberOfPartiesLbl').innerHTML = data.length;
   });
 };
 
 const joinParty = id => {
   const userToken = userDetails.token;
+  startLoading();
 
   changeUserParty(userToken, id, res => {
     // Update the local storage with new information
@@ -269,7 +283,7 @@ const checkIfUserExpressedInterest = (interests, officeId) => {
 
 const fetchGovernmentOffices = () => {
   const userToken = userDetails.token;
-
+  startLoading();
   fetchInterestedOffice(userToken, res => {
     const candidates = res.data;
     // Fetch all interests
@@ -360,6 +374,7 @@ const fetchGovernmentOffices = () => {
           // Set the card in the provided slot
           document.getElementById('governmentOfficeSlot').innerHTML = cardDesign;
         }
+        stopLoading();
         document.getElementById('numberOfOfficessLbl').innerHTML = officeData.length;
       });
     });
@@ -368,7 +383,7 @@ const fetchGovernmentOffices = () => {
 
 const expressInterestBtnClicked = id => {
   const userToken = userDetails.token;
-
+  startLoading();
   expressInterest(userToken, id, userDetails.user.partyid, res => {
     if (res.status === 400) {
       // User is not a member of a party
@@ -474,11 +489,15 @@ const getOfficesNamesFromID = (officesIDs, userToken, completionHandler) => {
       count += 1;
     });
   }
+  if (officesIDs.length === 0) {
+    completionHandler(officesNames);
+  }
 };
 
 const castVote = dets => {
   const userToken = userDetails.token;
   const values = dets.split(' ');
+  startLoading();
 
   registerVote(userToken, values[0], values[1], res => {
     if (res.status === 201) {
@@ -506,6 +525,7 @@ const checkIfVoteCasted = (officeId, myVotes) => {
 
 const fetchTodaysVotes = () => {
   const userToken = userDetails.token;
+  startLoading();
 
   // Get all the votes casted by this user
   fetchVotesForUser(userDetails.user.id, userToken, votesRess => {
@@ -576,10 +596,14 @@ const fetchTodaysVotes = () => {
                     document.getElementById('electionCandidatesSlot').innerHTML = cardDesign;
                   }
                   document.getElementById('electionCandidatesSlot').innerHTML = cardDesign;
+                  stopLoading();
                 }
               }
             );
           });
+        }
+        if (electionOffices.length === 0) {
+          stopLoading();
         }
       });
     });
@@ -588,6 +612,8 @@ const fetchTodaysVotes = () => {
 
 const candidatePageFetchOffice = (officeId, officeName) => {
   const userToken = userDetails.token;
+
+  startLoading();
 
   document.getElementById('officeNameLbl').innerHTML = officeName;
 
@@ -638,9 +664,14 @@ const candidatePageFetchOffice = (officeId, officeName) => {
 
           // Check if t is the last item
           document.getElementById('officeCandidatesSlot').innerHTML = cardDesign;
+          stopLoading();
           count += 1;
         });
       });
+    }
+
+    if (officeCands.length === 0) {
+      stopLoading();
     }
     document.getElementById('numberOfCandidateLbl').innerHTML = officeCands.length;
   });

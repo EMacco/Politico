@@ -895,6 +895,14 @@ label {
   display: none;
 }
 
+#loadingIconContainer {
+  position: fixed;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 120px);
+  z-index: 100;
+  display: none;
+}
+
 .makeUnscrollable {
   overflow: hidden;
   height: calc(100vh);
@@ -906,4 +914,38 @@ label {
 
 #successMessage {
   color: green;
+}
+
+@media only screen and (min-width: 768px) {
+  #loadingIconContainer {
+    position: fixed;
+    width: calc(100vw - 243px);
+    height: calc(100vh - 70px);
+    z-index: 100;
+    display: none;
+  }
+}
+
+.centerLoadingIcon {
+  width: 300px;
+  height: 120px;
+
+  position:absolute;
+  left:0; right:0;
+  top:0; bottom:0;
+  margin:auto;
+
+  /*this to solve "the content will not be cut when the window is smaller than the content": */
+  max-width:100%;
+  max-height:100%;
+  overflow:auto;
+}
+
+#alertMessageContainer {
+  width: 80%;
+  text-align: center;
+  background: #fff;
+  padding-top: 50px;
+  border-radius: 10px;
+  max-width: 300px;
 }
