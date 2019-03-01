@@ -524,8 +524,8 @@ const updatePartyName = (userToken, partyId, newName, completionHandler) => {
 const showAlert = message => {
   const loader = document.getElementById('loadingIconContainer');
   loader.style.display = 'block';
-  loader.style.background = 'rgba(0, 0, 0, 0.3)';
-  loader.innerHTML = `<span class="centerLoadingIcon" id="alertMessageContainer">${message}<br /> <br /><input type="button" value="close" onclick="stopLoading()" /></span>
+  loader.style.background = 'rgba(0, 0, 0, 0.1)';
+  loader.innerHTML = `<span class="centerLoadingIcon" id="alertMessageContainer"><b>Alert</b><br /> <br />${message}<br /> <br /><input type="button" value="close" onclick="stopLoading()" /></span>
 
   
   `;

@@ -911,8 +911,6 @@ label {
 #errorMessage {
   color: red;
 }
-<<<<<<< HEAD
-=======
 
 #successMessage {
   color: green;
@@ -947,8 +945,8 @@ label {
   width: 80%;
   text-align: center;
   background: #fff;
-  padding-top: 50px;
+  padding: 10px 5px;
   border-radius: 10px;
   max-width: 300px;
+  box-shadow: 1px 3px 3px #888888;
 }
->>>>>>> develop
