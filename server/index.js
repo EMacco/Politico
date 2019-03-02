@@ -4,6 +4,9 @@ import bodyparser from 'body-parser';
 import debug from 'debug';
 import cors from 'cors';
 import { config } from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json';
+
 
 // Import my routers
 import partiesRoutes from './routes/parties';
@@ -24,6 +27,10 @@ const debugg = debug('index');
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 app.use(cors());
+
+// Swagger Documentation
+app.use('/', swaggerUi.serve);
+app.get('/', swaggerUi.setup(swaggerDocument));
 
 // Use the political parties routes
 app.use('/api/v1/parties', partiesRoutes);

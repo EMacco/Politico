@@ -1,0 +1,1930 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Politico API",
+    "description": "",
+    "contact": {}
+  },
+  "host": "politico-okwara.herokuapp.com",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/auth/signup": {
+      "post": {
+        "description": "Create an account for a new user on Politico",
+        "summary": "userSignup",
+        "operationId": "ApiV1AuthSignupPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "First name of the user"
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Last name of the user"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Phone number of the user"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Email address of the user"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Password of the user"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully created account",
+            "schema": {
+              "$ref": "#/definitions/userSignupResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "409": {
+            "description": "User already exists (Conflict)",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Login User to the main application",
+        "summary": "userSignin",
+        "operationId": "ApiV1AuthLoginPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Email address of the user"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Password of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid login credentials",
+            "schema": {
+              "$ref": "#/definitions/userSigninResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/": {
+      "post": {
+        "description": "Create new political office",
+        "summary": "createOffice",
+        "operationId": "ApiV1OfficesPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Name of the office"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Type of office"
+          },
+          {
+            "name": "logoUrl",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Office logo url"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully created office",
+            "schema": {
+              "$ref": "#/definitions/createOfficeResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "409": {
+            "description": "Office already exists",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/schedule": {
+      "post": {
+        "description": "Schedule an election for an office",
+        "summary": "scheduleElection",
+        "operationId": "ApiV1OfficeSchedulePost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "officeId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the office to be occupied"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Date of the election"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid login credentials",
+            "schema": {
+              "$ref": "#/definitions/scheduleElectionResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Office must have more than 1 candidate",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/:candidateId/register": {
+      "post": {
+        "description": "Register a user as an election candidate",
+        "summary": "registerElection",
+        "operationId": "ApiV1OfficeCandidateIdRegisterPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "officeId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the office to be occupied"
+          },
+          {
+            "name": "partyId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the party the candidate is running under"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valid login credentials",
+            "schema": {
+              "$ref": "#/definitions/registerElectionResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid data supplied",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office, Party or Candidate does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "409": {
+            "description": "Party already has a candidate registered",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/:officeId/result": {
+      "post": {
+        "description": "Fetch election result for an office",
+        "summary": "fetchElectionResult",
+        "operationId": "ApiV1OfficeOfficeIdResultPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Result of election for a particular political office",
+            "schema": {
+              "$ref": "#/definitions/fetchElectionResultResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid officeId supplied",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/interests/": {
+      "post": {
+        "description": "Express interest for a political office",
+        "summary": "createInterest",
+        "operationId": "ApiV1InterestsPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "candidateId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the candidate"
+          },
+          {
+            "name": "officeid",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the office"
+          },
+          {
+            "name": "partyId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the party"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully created office",
+            "schema": {
+              "$ref": "#/definitions/createInterestResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office, Party, or Candidate does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/": {
+      "post": {
+        "description": "Create new political party",
+        "summary": "createParty",
+        "operationId": "ApiV1PartiesPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Name of the party"
+          },
+          {
+            "name": "hqAddress",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Address of political party"
+          },
+          {
+            "name": "logoUrl",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Party logo url"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully created party",
+            "schema": {
+              "$ref": "#/definitions/createPartyResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "409": {
+            "description": "Party already exists",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/join": {
+      "post": {
+        "description": "Become a member of a particular political party",
+        "summary": "joinParty",
+        "operationId": "ApiV1PartiesJoinPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "partyId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the party the user wants to join"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully updated user's party",
+            "schema": {
+              "$ref": "#/definitions/joinPartyResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Party or User does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/:id": {
+      "post": {
+        "description": "Fetch specific user",
+        "summary": "fetchUser",
+        "operationId": "ApiV1UsersIdPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched user details",
+            "schema": {
+              "$ref": "#/definitions/fetchUserResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/votes": {
+      "post": {
+        "description": "Cast your vote",
+        "summary": "castVote",
+        "operationId": "ApiV1VotesPost",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "officeId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the office"
+          },
+          {
+            "name": "candidateId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the candidate"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Votes",
+            "schema": {
+              "$ref": "#/definitions/castVoteResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid userId supplied",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "User does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices": {
+      "get": {
+        "description": "Get all political office",
+        "summary": "fetchOffices",
+        "operationId": "ApiV1OfficesGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Offices Details",
+            "schema": {
+              "$ref": "#/definitions/fetchOfficesResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/:id": {
+      "get": {
+        "description": "Get specific political office",
+        "summary": "fetchOffice",
+        "operationId": "ApiV1OfficesIdGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Office Details",
+            "schema": {
+              "$ref": "#/definitions/fetchOfficeResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/candidates": {
+      "get": {
+        "description": "Get all candidates",
+        "summary": "fetchCandidates",
+        "operationId": "ApiV1OfficesCandidatesGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Candidates' Details",
+            "schema": {
+              "$ref": "#/definitions/fetchCandidatesResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/interests": {
+      "get": {
+        "description": "Get all interestsi",
+        "summary": "fetchInterests",
+        "operationId": "ApiV1OfficesInterestsGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Interests Details",
+            "schema": {
+              "$ref": "#/definitions/fetchInterestsResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/:officeId/office-votes": {
+      "get": {
+        "description": "Get all the votes for an office",
+        "summary": "fetchOfficeVotes",
+        "operationId": "ApiV1OfficeOfficeIdOfficeVotesGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Office votes",
+            "schema": {
+              "$ref": "#/definitions/fetchOfficeVotesResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid officeId supplied",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/:userId/user-votes": {
+      "get": {
+        "description": "Get all the votes for a user",
+        "summary": "fetchUserVotes",
+        "operationId": "ApiV1OfficeUserIdUserVotesGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Votes",
+            "schema": {
+              "$ref": "#/definitions/fetchUserVotesResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Invalid userId supplied",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "User does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties": {
+      "get": {
+        "description": "Get all political parties",
+        "summary": "fetchParties",
+        "operationId": "ApiV1PartiesGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Parties details successfully fetched",
+            "schema": {
+              "$ref": "#/definitions/fetchPartiesResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/:id": {
+      "get": {
+        "description": "Get specific political party",
+        "summary": "fetchParty",
+        "operationId": "ApiV1PartiesIdGet",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Party details successfully fetched",
+            "schema": {
+              "$ref": "#/definitions/fetchPartyResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/passport": {
+      "patch": {
+        "description": "Update the profile picture of a user",
+        "summary": "updateProfilePicture",
+        "operationId": "ApiV1UsersPassportPatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "imageUrl",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "New passport url"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated user profile picture",
+            "schema": {
+              "$ref": "#/definitions/updateProfilePictureResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "User does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/:id/name": {
+      "patch": {
+        "description": "Update the name of a political office",
+        "summary": "updateOfficeName",
+        "operationId": "ApiV1OfficesIdNamePatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "New name of the office"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated office name",
+            "schema": {
+              "$ref": "#/definitions/updateOfficeNameResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/:id/type": {
+      "patch": {
+        "description": "Update the type of a political office",
+        "summary": "updateOfficeType",
+        "operationId": "ApiV1OfficesIdTypePatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully updated office type",
+            "schema": {
+              "$ref": "#/definitions/updateOfficeTypeResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/:id/name": {
+      "patch": {
+        "description": "Update the name of a political party",
+        "summary": "updatePartyName",
+        "operationId": "ApiV1PartiesIdNamePatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "New name of the party"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated party name",
+            "schema": {
+              "$ref": "#/definitions/updatePartyNameResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/:id/address": {
+      "patch": {
+        "description": "Update the address of a political party",
+        "summary": "updatePartyAddress",
+        "operationId": "ApiV1PartiesIdAddressPatch",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hqAddress",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "New address of the party"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated party address",
+            "schema": {
+              "$ref": "#/definitions/updatePartyAddressResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/:id/": {
+      "delete": {
+        "description": "Delete specific user",
+        "summary": "deleteUser",
+        "operationId": "ApiV1UsersIdDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted user details",
+            "schema": {
+              "$ref": "#/definitions/deleteUserResponse"
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "User does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/offices/:id/": {
+      "delete": {
+        "description": "Delete a particular political office",
+        "summary": "deleteOffice",
+        "operationId": "ApiV1OfficesIdDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted office",
+            "schema": {
+              "$ref": "#/definitions/deleteOfficeResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Office does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/office/:userId/delete-interest": {
+      "delete": {
+        "description": "Decline user's request to become a candidate for an office",
+        "summary": "declineRequest",
+        "operationId": "ApiV1OfficeUserIdDeleteInterestDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "officeId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the office"
+          },
+          {
+            "name": "partyId",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "format": "double",
+            "description": "ID of the party"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Votes",
+            "schema": {
+              "$ref": "#/definitions/declineRequestResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/parties/:id/": {
+      "delete": {
+        "description": "Delete a particular political parties",
+        "summary": "deleteParty",
+        "operationId": "ApiV1PartiesIdDelete",
+        "deprecated": false,
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted party",
+            "schema": {
+              "$ref": "#/definitions/deletePartyResponse"
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "401": {
+            "description": "User does not have access to use this service",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          },
+          "404": {
+            "description": "Party does not exist",
+            "schema": {
+              "$ref": "#/definitions/deletePartyException"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "userSignupResponse": {
+      "title": "userSignupResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "token": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum"
+          }
+        }
+      }
+    },
+    "Datum": {
+      "title": "Datum",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passporturl": {
+          "type": "string"
+        },
+        "partyid": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "userSigninResponse": {
+      "title": "userSigninResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "token": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum"
+          }
+        }
+      }
+    },
+    "createOfficeResponse": {
+      "title": "createOfficeResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "Datum2": {
+      "title": "Datum2",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "logourl": {
+          "type": "string"
+        }
+      }
+    },
+    "scheduleElectionResponse": {
+      "title": "scheduleElectionResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum3"
+          }
+        }
+      }
+    },
+    "Datum3": {
+      "title": "Datum3",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "officeid": {
+          "type": "number",
+          "format": "double"
+        },
+        "partyid": {
+          "type": "number",
+          "format": "double"
+        },
+        "candidateid": {
+          "type": "number",
+          "format": "double"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "registerElectionResponse": {
+      "title": "registerElectionResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum4"
+          }
+        }
+      }
+    },
+    "Datum4": {
+      "title": "Datum4",
+      "type": "object",
+      "properties": {
+        "office": {
+          "type": "number",
+          "format": "double"
+        },
+        "user": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "fetchElectionResultResponse": {
+      "title": "fetchElectionResultResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum5"
+          }
+        }
+      }
+    },
+    "Datum5": {
+      "title": "Datum5",
+      "type": "object",
+      "properties": {
+        "officeid": {
+          "type": "number",
+          "format": "double"
+        },
+        "candidateid": {
+          "type": "number",
+          "format": "double"
+        },
+        "count": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "createInterestResponse": {
+      "title": "createInterestResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum6"
+          }
+        }
+      }
+    },
+    "Datum6": {
+      "title": "Datum6",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "officeid": {
+          "type": "string"
+        },
+        "partyid": {
+          "type": "string"
+        },
+        "candidateid": {
+          "type": "string"
+        }
+      }
+    },
+    "createPartyResponse": {
+      "title": "createPartyResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum7"
+          }
+        }
+      }
+    },
+    "Datum7": {
+      "title": "Datum7",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "name": {
+          "type": "string"
+        },
+        "hqaddress": {
+          "type": "string"
+        },
+        "logourl": {
+          "type": "string"
+        }
+      }
+    },
+    "joinPartyResponse": {
+      "title": "joinPartyResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "token": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum"
+          }
+        }
+      }
+    },
+    "fetchUserResponse": {
+      "title": "fetchUserResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum"
+          }
+        }
+      }
+    },
+    "castVoteResponse": {
+      "title": "castVoteResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum10"
+          }
+        }
+      }
+    },
+    "Datum10": {
+      "title": "Datum10",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdon": {
+          "type": "string"
+        },
+        "createdby": {
+          "type": "number",
+          "format": "double"
+        },
+        "officeid": {
+          "type": "number",
+          "format": "double"
+        },
+        "candidateid": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "fetchOfficesResponse": {
+      "title": "fetchOfficesResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "fetchOfficeResponse": {
+      "title": "fetchOfficeResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "fetchCandidatesResponse": {
+      "title": "fetchCandidatesResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum13"
+          }
+        }
+      }
+    },
+    "Datum13": {
+      "title": "Datum13",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "officeid": {
+          "type": "number",
+          "format": "double"
+        },
+        "partyid": {
+          "type": "number",
+          "format": "double"
+        },
+        "candidateid": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "fetchInterestsResponse": {
+      "title": "fetchInterestsResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum13"
+          }
+        }
+      }
+    },
+    "fetchOfficeVotesResponse": {
+      "title": "fetchOfficeVotesResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum15"
+          }
+        }
+      }
+    },
+    "Datum15": {
+      "title": "Datum15",
+      "type": "object",
+      "properties": {
+        "createdon": {
+          "type": "string"
+        },
+        "createdby": {
+          "type": "number",
+          "format": "double"
+        },
+        "officeid": {
+          "type": "number",
+          "format": "double"
+        },
+        "candidateid": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "fetchUserVotesResponse": {
+      "title": "fetchUserVotesResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum15"
+          }
+        }
+      }
+    },
+    "fetchPartiesResponse": {
+      "title": "fetchPartiesResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum7"
+          }
+        }
+      }
+    },
+    "fetchPartyResponse": {
+      "title": "fetchPartyResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum7"
+          }
+        }
+      }
+    },
+    "updateProfilePictureResponse": {
+      "title": "updateProfilePictureResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum19"
+          }
+        }
+      }
+    },
+    "Datum19": {
+      "title": "Datum19",
+      "type": "object",
+      "properties": {
+        "passporturl": {
+          "type": "string"
+        }
+      }
+    },
+    "updateOfficeNameResponse": {
+      "title": "updateOfficeNameResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "updateOfficeTypeResponse": {
+      "title": "updateOfficeTypeResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "updatePartyNameResponse": {
+      "title": "updatePartyNameResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum7"
+          }
+        }
+      }
+    },
+    "updatePartyAddressResponse": {
+      "title": "updatePartyAddressResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum7"
+          }
+        }
+      }
+    },
+    "deleteUserResponse": {
+      "title": "deleteUserResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum"
+          }
+        }
+      }
+    },
+    "deleteOfficeResponse": {
+      "title": "deleteOfficeResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "declineRequestResponse": {
+      "title": "declineRequestResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum13"
+          }
+        }
+      }
+    },
+    "deletePartyResponse": {
+      "title": "deletePartyResponse",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Datum2"
+          }
+        }
+      }
+    },
+    "deletePartyException": {
+      "title": "deletePartyException",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "tags": []
+}
