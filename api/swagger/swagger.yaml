@@ -1,0 +1,1517 @@
+swagger: "2.0"
+info: 
+  version: "1.0.0"
+  title: Politico API
+host: politico-okwara.herokuapp.com
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  "/api/v1/auth/signup":
+    post:
+      description: Create an account for a new user on Politico
+      summary: Register new User
+      operationId: userSignup
+      parameters: 
+        - name: firstName
+          in: query
+          description: First name of the user
+          type: string
+          required: true
+        - name: lastName
+          in: query
+          description: Last name of the user
+          type: string
+          required: true
+        - name: phone
+          in: query
+          description: Phone number of the user
+          type: string
+          required: true
+        - name: email
+          in: query
+          description: Email address of the user
+          type: string
+          required: true
+        - name: password
+          in: query
+          description: Password of the user
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Successfully created account
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              token:
+                type: string
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    firstname: 
+                      type: string
+                    lastname: 
+                      type: string
+                    phone: 
+                      type: string
+                    email: 
+                      type: string
+                    password: 
+                      type: string
+                    passporturl:
+                      type: string
+                    partyid:
+                      type: number
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "409":
+          description: User already exists (Conflict)
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/auth/login":
+    post:
+      description: Login User to the main application
+      summary: Login User
+      operationId: userSignin
+      parameters: 
+        - name: email
+          in: query
+          description: Email address of the user
+          type: string
+          required: true
+        - name: password
+          in: query
+          description: Password of the user
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Valid login credentials
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              token:
+                type: string
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    firstname: 
+                      type: string
+                    lastname: 
+                      type: string
+                    phone: 
+                      type: string
+                    email: 
+                      type: string
+                    password: 
+                      type: string
+                    passporturl:
+                      type: string
+                    partyid: 
+                      type: number
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: Invalid credentials
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/":
+    post:
+      description: Create new political office
+      summary: Create new office
+      operationId: createOffice
+      parameters: 
+        - name: name
+          in: query
+          description: Name of the office
+          type: string
+          required: true
+        - name: type
+          in: query
+          description: Type of office
+          type: string
+          required: true
+        - name: logoUrl
+          in: query
+          description: Office logo url
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Successfully created office
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    type: 
+                      type: string
+                    logourl: 
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "409":
+          description: Office already exists
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/schedule":
+    post:
+      description: Schedule an election for an office
+      summary: Schedule Election
+      operationId: scheduleElection
+      parameters: 
+        - name: officeId
+          in: query
+          description: ID of the office to be occupied
+          type: number
+          required: true
+        - name: date
+          in: query
+          description: Date of the election
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Valid login credentials
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    officeid: 
+                      type: number
+                    partyid: 
+                      type: number
+                    candidateid: 
+                      type: number
+                    date: 
+                      type: string
+        "400":
+          description: Office must have more than 1 candidate
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/:candidateId/register":
+    post:
+      description: Register a user as an election candidate
+      summary: Election registration
+      operationId: registerElection
+      parameters: 
+        - name: officeId
+          in: query
+          description: ID of the office to be occupied
+          type: string
+          required: true
+        - name: partyId
+          in: query
+          description: ID of the party the candidate is running under
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Valid login credentials
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    office: 
+                      type: number
+                    user: 
+                      type: number
+        "400":
+          description: Invalid data supplied
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office, Party or Candidate does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "409":
+          description: Party already has a candidate registered
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/:officeId/result":
+    post:
+      description: Fetch election result for an office
+      summary: Fetch election result
+      operationId: fetchElectionResult
+      responses:
+        "200":
+          description: Result of election for a particular political office
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    officeid:
+                      type: number
+                    candidateid: 
+                      type: number
+                    count: 
+                      type: number
+        "400":
+          description: Invalid officeId supplied
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/interests/":
+    post:
+      description: Express interest for a political office
+      summary: Express Interest
+      operationId: createInterest
+      parameters: 
+        - name: candidateId
+          in: query
+          description: ID of the candidate
+          type: string
+          required: true
+        - name: officeid
+          in: query
+          description: ID of the office
+          type: string
+          required: true
+        - name: partyId
+          in: query
+          description: ID of the party
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Successfully created office
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    officeid:
+                      type: string
+                    partyid: 
+                      type: string
+                    candidateid: 
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office, Party, or Candidate does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/":
+    post:
+      description: Create new political party
+      summary: Create new party
+      operationId: createParty
+      parameters: 
+        - name: name
+          in: query
+          description: Name of the party
+          type: string
+          required: true
+        - name: hqAddress
+          in: query
+          description: Address of political party
+          type: string
+          required: true
+        - name: logoUrl
+          in: query
+          description: Party logo url
+          type: string
+          required: true
+      responses:
+        "201":
+          description: Successfully created party
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    hqaddress: 
+                      type: string
+                    logourl: 
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "409":
+          description: Party already exists
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/join":
+    post:
+      description: Become a member of a particular political party
+      summary: Join party
+      operationId: joinParty
+      parameters: 
+        - name: partyId
+          in: query
+          description: ID of the party the user wants to join
+          type: number
+          required: true
+      responses:
+        "201":
+          description: Successfully updated user's party
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              token:
+                type: string
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    firstname: 
+                      type: string
+                    lastname: 
+                      type: string
+                    phone: 
+                      type: string
+                    email: 
+                      type: string
+                    password: 
+                      type: string
+                    passporturl:
+                      type: string
+                    partyid:
+                      type: number
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Party or User does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/users/:id":
+    post:
+      description: Fetch specific user
+      summary: Fetch User Details
+      operationId: fetchUser
+      responses:
+        "200":
+          description: Successfully fetched user details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    firstname: 
+                      type: string
+                    lastname: 
+                      type: string
+                    phone: 
+                      type: string
+                    email: 
+                      type: string
+                    password: 
+                      type: string
+                    passporturl:
+                      type: string
+                    partyid:
+                      type: number
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/votes":
+    post:
+      description: Cast your vote
+      summary: Cast vote
+      operationId: castVote
+      parameters: 
+        - name: officeId
+          in: query
+          description: ID of the office
+          type: number
+          required: true
+        - name: candidateId
+          in: query
+          description: ID of the candidate
+          type: number
+          required: true
+      responses:
+        "200":
+          description: Votes
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: string
+                    createdon:
+                      type: string
+                    createdby: 
+                      type: number
+                    officeid: 
+                      type: number
+                    candidateid:
+                      type: number
+        "400":
+          description: Invalid userId supplied
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: User does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices":
+    get:
+      description: Get all political office
+      summary: Fetch offices
+      operationId: fetchOffices
+      responses:
+        "200":
+          description: Offices Details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl: 
+                      type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/:id":
+    get:
+      description: Get specific political office
+      summary: Fetch office
+      operationId: fetchOffice
+      responses:
+        "200":
+          description: Office Details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl: 
+                      type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/candidates":
+    get:
+      description: Get all candidates
+      summary: Fetch candidates
+      operationId: fetchCandidates
+      responses:
+        "200":
+          description: Candidates' Details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    officeid: 
+                      type: number
+                    partyid: 
+                      type: number
+                    candidateid: 
+                      type: number
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/interests":
+    get:
+      description: Get all interestsi
+      summary: Fetch interests
+      operationId: fetchInterests
+      responses:
+        "200":
+          description: Interests Details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    officeid: 
+                      type: number
+                    partyid: 
+                      type: number
+                    candidateid: 
+                      type: number
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/:officeId/office-votes":
+    get:
+      description: Get all the votes for an office
+      summary: Fetch office votes
+      operationId: fetchOfficeVotes
+      responses:
+        "200":
+          description: Office votes
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    createdon:
+                      type: string
+                    createdby: 
+                      type: number
+                    officeid: 
+                      type: number
+                    candidateid:
+                      type: number
+        "400":
+          description: Invalid officeId supplied
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/:userId/user-votes":
+    get:
+      description: Get all the votes for a user
+      summary: Fetch User's votes
+      operationId: fetchUserVotes
+      responses:
+        "200":
+          description: Votes
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    createdon:
+                      type: string
+                    createdby: 
+                      type: number
+                    officeid: 
+                      type: number
+                    candidateid:
+                      type: number
+        "400":
+          description: Invalid userId supplied
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: User does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties":
+    get:
+      description: Get all political parties
+      summary: Fetch parties
+      operationId: fetchParties
+      responses:
+        "200":
+          description: Parties details successfully fetched
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    hqaddress: 
+                      type: string
+                    logourl: 
+                      type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/:id":
+    get:
+      description: Get specific political party
+      summary: Fetch party
+      operationId: fetchParty
+      responses:
+        "200":
+          description: Party details successfully fetched
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    hqaddress: 
+                      type: string
+                    logourl: 
+                      type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/users/passport":
+    patch:
+      description: Update the profile picture of a user
+      summary: Update profile picture
+      operationId: updateProfilePicture
+      parameters: 
+        - name: imageUrl
+          in: query
+          description: New passport url
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully updated user profile picture
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    passporturl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: User does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/:id/name":
+    patch:
+      description: Update the name of a political office
+      summary: Update office name
+      operationId: updateOfficeName
+      parameters: 
+        - name: name
+          in: query
+          description: New name of the office
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully updated office name
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/:id/type":
+    patch:
+      description: Update the type of a political office
+      summary: Update office type
+      operationId: updateOfficeType
+      responses:
+        "200":
+          description: Successfully updated office type
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/:id/name":
+    patch:
+      description: Update the name of a political party
+      summary: Update party name
+      operationId: updatePartyName
+      parameters: 
+        - name: name
+          in: query
+          description: New name of the party
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully updated party name
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    hqaddress: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/:id/address":
+    patch:
+      description: Update the address of a political party
+      summary: Update party hq address
+      operationId: updatePartyAddress
+      parameters: 
+        - name: hqAddress
+          in: query
+          description: New address of the party
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully updated party address
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    hqaddress: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/users/:id/":
+    delete:
+      description: Delete specific user
+      summary: Delete User Details
+      operationId: deleteUser
+      responses:
+        "200":
+          description: Successfully deleted user details
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id: 
+                      type: number
+                    firstname: 
+                      type: string
+                    lastname: 
+                      type: string
+                    phone: 
+                      type: string
+                    email: 
+                      type: string
+                    password: 
+                      type: string
+                    passporturl:
+                      type: string
+                    partyid:
+                      type: number
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: User does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/offices/:id/":
+    delete:
+      description: Delete a particular political office
+      summary: Delete office
+      operationId: deleteOffice
+      responses:
+        "200":
+          description: Successfully deleted office
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Office does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/office/:userId/delete-interest":
+    delete:
+      description: Decline user's request to become a candidate for an office
+      summary: Decline request
+      operationId: declineRequest
+      parameters: 
+        - name: officeId
+          in: query
+          description: ID of the office
+          type: number
+          required: true
+        - name: partyId
+          in: query
+          description: ID of the party
+          type: number
+          required: true
+      responses:
+        "200":
+          description: Votes
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    partyid: 
+                      type: number
+                    officeid: 
+                      type: number
+                    candidateid:
+                      type: number
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+  "/api/v1/parties/:id/":
+    delete:
+      description: Delete a particular political parties
+      summary: Delete party
+      operationId: deleteParty
+      responses:
+        "200":
+          description: Successfully deleted party
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: number
+                    name: 
+                      type: string
+                    type: 
+                      type: string
+                    logourl:
+                      type: string
+        "400":
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "401":
+          description: User does not have access to use this service
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+        "404":
+          description: Party does not exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              error:
+                type: string
+                  
+                    
+          
+          
