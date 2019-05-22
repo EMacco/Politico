@@ -67,20 +67,6 @@ describe('Political Offices', () => {
           done();
         });
     });
-
-    // Do not express interest
-    it('should not express interest since candidateId is not provided', done => {
-      chai
-        .request(app)
-        .post('/api/v1/offices/interests')
-        .send({ officeId: 30, partyId: 29 })
-        .set('x-access-token', process.env.TEST_TOKEN)
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.a('object');
-          done();
-        });
-    });
   });
 
   describe('GET /', () => {
